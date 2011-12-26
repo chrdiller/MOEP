@@ -1,9 +1,11 @@
 
 package MoepClient;
 
-import Moep.Karte;
-import Moep.Moep;
-import Netzwerk.Netz;
+import MoepClient.gameGUI.GUI;
+import MoepClient.gameGUI.FarbeWuenschenDialog;
+import MoepClient.gameGUI.LoginPanel;
+import MoepClient.gameGUI.Hand;
+import moepclient.netzwerk.Netz;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.event.MouseAdapter;
@@ -21,7 +23,8 @@ import javax.swing.JPanel;
  * @version BETA 1.1
  */
 
-public class Interface {
+public class Interface
+{
 
     private boolean dran;
     private boolean eingeloggt;
@@ -300,4 +303,5 @@ public class Interface {
         AudioClip clip = Applet.newAudioClip(this.getClass().getResource("sound/" + soundName + ".au"));
         clip.play();
     }
+
 }
