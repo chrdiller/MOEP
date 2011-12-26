@@ -1,0 +1,9 @@
+MOEP, a clone of UNO, came to life as a school project in summer 2011
+Its name is derived from the pronounciation of the Africaans word for "eine"
+
+When finished, MOEP will support these features:
+- All the features known from UNO like 2+, 4+, wish cards ...
+- Playing with up to 3 players in a LAN
+- Creating own servers within the client to start multiplay games easily
+- Possibility to link in KIs while playing with friend(s)
+- (Maybe) joining servers on the internet
