@@ -4,7 +4,7 @@ package moepclient.netzwerk;
  * Beschreibt das Packet, mit dem der Client dem Server mitteilt, dass der MoepButton gedrückt wurde
  * Außerdem wird vom Server zurückgeschickt, ob der Button rechtzeitig gedrückt wurde
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet05MoepButton extends Packet{
     

@@ -1,10 +1,10 @@
 
 package MoepClient;
 
-import MoepClient.gameGUI.GUI;
-import MoepClient.gameGUI.FarbeWuenschenDialog;
-import MoepClient.gameGUI.LoginPanel;
-import MoepClient.gameGUI.Hand;
+import MoepClient.GUI.GUI;
+import MoepClient.GUI.FarbeWuenschenDialog;
+import MoepClient.GUI.LoginPanel;
+import MoepClient.GUI.Hand;
 import moepclient.netzwerk.Netz;
 import java.applet.Applet;
 import java.applet.AudioClip;
@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 /**
  * Die Interface-Klasse, der Knotenpunkt zwischen Netzwerk, GUI und Moep
  * @author Philipp Herrle & Christian Diller
- * @version BETA 1.1
+
  */
 
 public class Interface
@@ -109,7 +109,11 @@ public class Interface
         eingeloggt = false;
       
         m = new Moep();
-        netz = new Netz(this);
+        
+        
+        netz = new Netz(this, 0); //TODO: Zahl von UI holen!!
+        
+        
         g = new GUI(this, adapter);
     }
     

@@ -4,7 +4,7 @@ package moepserver.netzwerk;
 /**
  * Beschreibt das Packet, mit dem der Server dem Client mitteilt, ob er am Zug ist
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet03AmZug extends Packet{
     

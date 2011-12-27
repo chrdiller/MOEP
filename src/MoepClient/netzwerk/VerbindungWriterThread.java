@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  * Wird pro Verbindung erzeugt
  * Arbeitet eine Liste von zu sendenden Strings ab
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class VerbindungWriterThread extends Thread{
 

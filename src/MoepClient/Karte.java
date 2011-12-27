@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 /**
  * Stellt eine einzelne (Client-)Karte dar
  * @author Markus Klar, Michael Stoffels, Christian Diller 
- * @version BETA 1.1 GIT
+ GIT
  */
 public class Karte implements Comparable<Karte>
 {

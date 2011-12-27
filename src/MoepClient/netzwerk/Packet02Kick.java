@@ -3,7 +3,7 @@ package moepclient.netzwerk;
 /**
  * Beschreibt das Packet, mit dem der Server einen Client kicken kann
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet02Kick extends Packet{
     

@@ -6,7 +6,7 @@ package moepclient.netzwerk;
  * der dann dem Spieler angezeigt wird
  * Client <- Server
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet07Text extends Packet{
     

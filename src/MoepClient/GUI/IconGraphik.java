@@ -1,5 +1,5 @@
 
-package MoepClient.gameGUI;
+package MoepClient.GUI;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 /**
  * Beschreibt die Schnittstelle zwischen gespeichertem und gezeichneten Bild
  * @author Philipp Herrle
- * @version BETA 1.1
+
  */
 public class IconGraphik extends JLabel{
     

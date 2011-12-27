@@ -4,7 +4,7 @@ package moepserver.netzwerk;
 /**
  * Beschreibt das Packet, mit dem der Client dem Server mitteilt, dass eine Karte gezogen werden soll
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet14KarteZiehen extends Packet{
     

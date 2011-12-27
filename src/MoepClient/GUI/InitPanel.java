@@ -8,7 +8,7 @@
  *
  * Created on 26.12.2011, 21:04:14
  */
-package MoepClient.gameGUI;
+package MoepClient.GUI;
 
 /**
  *

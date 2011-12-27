@@ -10,7 +10,7 @@ import moepserver.MoepLogger;
 /**
  * Wartet auf neue Verbindungen
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class ServerListener extends Thread
 {

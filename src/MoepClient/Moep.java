@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Die Spielverwaltung auf Clientseite, vor allem Basis für die GUI
  * @author Markus Klar & Christian Diller
- * @version BETA 1.1
+
  */
 public class Moep
 {

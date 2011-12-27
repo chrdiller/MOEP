@@ -1,5 +1,5 @@
 
-package MoepClient.gameGUI;
+package MoepClient.GUI;
 
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -10,7 +10,7 @@ import javax.swing.SwingConstants;
 /**
  * Beschreibt die Statusleiste am rechten Rand mit Spielerliste, Meldungen und dem Moep-Button
  * @author Philipp Herrle
- * @version BETA 1.1
+
  */
 public class Status extends javax.swing.JPanel {
 

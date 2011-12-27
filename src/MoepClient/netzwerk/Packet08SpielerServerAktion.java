@@ -7,7 +7,7 @@ package moepclient.netzwerk;
  * Zudem wird der Spieler uebermittelt, der aktuell am Zug ist
  * Client <- Server
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet08SpielerServerAktion extends Packet{
     

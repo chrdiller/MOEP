@@ -1,5 +1,5 @@
 
-package MoepClient.gameGUI;
+package MoepClient.GUI;
 
 import MoepClient.Karte;
 import java.awt.Color;
@@ -11,7 +11,7 @@ import org.jdesktop.layout.GroupLayout;
 /**
  * Beschreibt den Tisch, auf dem die Karten liegen
  * @author Philipp Herrle
- * @version BETA 1.1
+
  */
 public class Tisch extends JPanel{
     

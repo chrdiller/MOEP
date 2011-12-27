@@ -1,5 +1,5 @@
 
-package MoepClient.gameGUI;
+package MoepClient.GUI;
 
 import MoepClient.Interface;
 import java.awt.Dimension;
@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 /**
  * Beschreibt den Farbe-Wuenschen-Dialog
  * @author Philipp Herrle
- * @version BETA 1.1
+
  */
 public class FarbeWuenschenDialog extends javax.swing.JFrame {
     

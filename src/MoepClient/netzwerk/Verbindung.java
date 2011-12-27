@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 /**
  * Die Verbindung, über die der gesamte Netzwerkverkehr läuft
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Verbindung extends Thread
 {

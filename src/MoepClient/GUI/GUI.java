@@ -1,5 +1,5 @@
 
-package MoepClient.gameGUI;
+package MoepClient.GUI;
 
 import MoepClient.Interface;
 import MoepClient.Karte;
@@ -21,7 +21,7 @@ import javax.swing.ScrollPaneLayout;
 /**
  * Beschreibt die GUI, ueber die der User mit dem Programm interagiert
  * @author Philipp Herrle
- * @version BETA 1.1
+
  */
 public class GUI extends JFrame{
     

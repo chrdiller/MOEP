@@ -1,12 +1,12 @@
 package moepserver.netzwerk;
 
 import moepserver.Server;
-import moepserver.Spieler;
+import moepserver.SpielerRemote;
 
 /**
  * Essentiell, um das Netzwerk zu initialisieren und neue Spieler zum Server hinzuzufügen
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Netz
 {
@@ -44,7 +44,7 @@ public class Netz
      * @param spieler Der dem Spiel hinzuzufügende Spieler
      */
     protected void loginEvent(Verbindung verbindung, String name) {
-        server.spielerHinzufuegen(new Spieler(verbindung, name, verbindung.gibIP()));
+        server.spielerHinzufuegen(new SpielerRemote(verbindung, name, verbindung.gibIP()));
     }
 
     private void broadcastStarten() {

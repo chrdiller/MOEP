@@ -1,5 +1,5 @@
 
-package MoepClient.gameGUI;
+package MoepClient.GUI;
 
 import java.awt.event.MouseAdapter;
 import javax.swing.BorderFactory;
@@ -7,7 +7,7 @@ import javax.swing.BorderFactory;
 /**
  * Beschreibt das LoginPanel, mit dem sich der User an einen Server anmelden kann
  * @author Philipp Herrle
- * @version BETA 1.1
+
  */
 public class LoginPanel extends javax.swing.JPanel {
 

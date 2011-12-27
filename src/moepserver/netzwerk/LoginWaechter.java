@@ -3,7 +3,7 @@ package moepserver.netzwerk;
 /**
  * Überbrückt die Zeit von einer neuen Verbindung bis zum Login
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class LoginWaechter extends Thread{
     

@@ -4,7 +4,7 @@ package moepserver;
 /**
  * Beschreibt eine einzelne (Server-)Karte
  * @author Markus Klar, Michael Stoffels 
- * @version BETA 1.1
+
  */
 public class Karte implements Comparable<Karte>
 {

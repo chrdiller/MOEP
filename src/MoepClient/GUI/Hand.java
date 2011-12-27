@@ -1,5 +1,5 @@
 
-package MoepClient.gameGUI;
+package MoepClient.GUI;
 
 import MoepClient.Karte;
 import java.awt.Color;
@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 /**
  * Beschreibt die (grafische) Hand eines Spielers
  * @author Philipp Herrle
- * @version BETA 1.1
+
  */
 public class Hand extends JLabel{
     

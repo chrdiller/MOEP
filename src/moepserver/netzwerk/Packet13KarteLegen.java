@@ -5,7 +5,7 @@ import moepserver.Karte;
 /**
  * Beschreibt das Packet, mit dem der Client dem Server die zu legende Karte übermittelt
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet13KarteLegen extends Packet{
     

@@ -2,7 +2,7 @@
 package moepserver.netzwerk;
 
 import java.util.logging.Level;
-import moepserver.Spieler;
+import moepserver.SpielerRemote;
 import moepserver.Karte;
 import moepserver.MoepLogger;
 
@@ -10,7 +10,7 @@ import moepserver.MoepLogger;
  * Beschreibt eine Verbindung zu einem Client
  * Jede Verbindung besitzt einen Reader und einen Writer, die die Lese- bzw. Schreibvorgänge in seperaten Threads ausführen
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Verbindung extends Thread
 {    
@@ -20,7 +20,7 @@ public class Verbindung extends Thread
     protected VerbindungReaderThread reader;
     private VerbindungWriterThread writer;
     
-    public Spieler spieler;
+    public SpielerRemote spieler;
     
     private int farbeWuenschenInt = -1;
     

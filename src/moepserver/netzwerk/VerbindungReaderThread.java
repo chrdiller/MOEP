@@ -13,7 +13,7 @@ import moepserver.MoepLogger;
  * Wird pro Verbindung erzeugt
  * Wartet auf eingehende Packets und setzt diese auf eine Liste, die dann von der Verbindung abgearbeitet wird
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class VerbindungReaderThread extends Thread{
     

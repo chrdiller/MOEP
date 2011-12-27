@@ -8,7 +8,7 @@ import java.util.logging.Level;
  * Die zentrale Logging-Klasse
  * (Der Java-Logger wird nicht verwendet, da sich dieser beim Formatieren querstellt)
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class MoepLogger 
 {

@@ -6,7 +6,7 @@ package moepclient.netzwerk;
  * Ausserdem kann einem Spieler so übermittelt werden, dass er gewonnen hat
  * Client <- Server
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet09Spielende extends Packet{
     

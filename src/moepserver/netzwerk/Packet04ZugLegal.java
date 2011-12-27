@@ -4,7 +4,7 @@ package moepserver.netzwerk;
 /**
  * Beschreibt das Packet, mit dem der Server dem Client mitteilt, dass der letze Zug ungültig war
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet04ZugLegal extends Packet{
     

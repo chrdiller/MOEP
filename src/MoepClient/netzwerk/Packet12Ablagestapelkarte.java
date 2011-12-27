@@ -4,7 +4,7 @@ import MoepClient.Karte;
 /**
  * Beschreibt das Packet, mit dem der Server dem Client eine Ablagestapelkarte übermittelt
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet12Ablagestapelkarte extends Packet{
     

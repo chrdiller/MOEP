@@ -4,7 +4,7 @@ package moepserver.netzwerk;
 /**
  * Beschreibt das für den Login verwendete Packet
  * @author Christian Diller
- * @version BETA 1.1
+
  */
 public class Packet01Login extends Packet{
     

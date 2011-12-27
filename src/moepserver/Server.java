@@ -11,7 +11,7 @@ import moepserver.netzwerk.Netz;
 /**
  * Die zentrale Serverklasse
  * @author Frank Kottler & Christian Diller
- * @version BETA 1.1
+
  */
 public class Server {
     private static final MoepLogger log = new MoepLogger();
@@ -85,7 +85,7 @@ public class Server {
         if(spieler.size() < 4) {
             neu.loginAkzeptieren();
             log.log(Level.INFO, "Spieler " + neu.spielername + " wurde akzeptiert (Spieler " + (aktuellerSpielerIndex + 1) + " von 4)");
-            for(Spieler s : spieler) //Übermittlung der aktuell angemeldeten Spieler an den neuen Spieler
+            for(Spieler s : spieler) //Übermittlung der aktuell angemeldeten Spieler an den neuen Remote-Spieler
             {
                 neu.spielerServerAktion(s.spielername, 0);                  
             }
@@ -95,7 +95,7 @@ public class Server {
 
             for(Spieler s : spieler)
             {
-                s.spielerServerAktion(neu.spielername, 0); //Login-Nachricht an alle
+                s.spielerServerAktion(neu.spielername, 0); //Login-Nachricht an alle Remote-Spieler
                 s.textSenden(neu.spielername + " ist dem Spiel beigetreten");
             }
 
@@ -107,7 +107,7 @@ public class Server {
                 broadcast("Ein neues Spiel wurde gestartet");
                 for(int i = 0; i<4; i++)  {
                     spieler.get(i).neueAblagekarte(offen);
-                    for(Karte k : spieler.get(i).getList()) {
+                    for(Karte k : spieler.get(i).gibHand()) {
                         spieler.get(i).karteBekommen(k);
                     }
                 }
@@ -210,7 +210,7 @@ public class Server {
      */
     private void erzeugeHand(Spieler sp) {
         sp.handReset();
-	for (int i = 0; i < STARTKARTEN; i++) { sp.getcards(this.gibZufaelligeKarte()); }
+	for (int i = 0; i < STARTKARTEN; i++) { sp.karteHinzufuegen(this.gibZufaelligeKarte()); }
     }
 
     /**
@@ -234,7 +234,7 @@ public class Server {
     {
         log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " zieht eine Karte");
         Karte neu = this.gibZufaelligeKarte();
-        spieler.get(aktuellerSpielerIndex).getcards(neu);
+        spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
         spieler.get(aktuellerSpielerIndex).karteBekommen(neu);
 		for (Spieler s : spieler) {
 		s.textSenden(spieler.get(aktuellerSpielerIndex).spielername + " zieht eine Karte");
@@ -261,7 +261,7 @@ public class Server {
                 return;
         }
 
-        if(!spieler.get(aktuellerSpielerIndex).inHand(karte)) { //Hat der Spieler die Karte in seiner Hand?
+        if(!spieler.get(aktuellerSpielerIndex).istInHand(karte)) { //Hat der Spieler die Karte in seiner Hand?
             spieler.get(aktuellerSpielerIndex).ungueltigerZug(1);
             log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " spielt eine Karte, die er nicht besitzt");
             return;
@@ -278,7 +278,7 @@ public class Server {
         if (istRichtungsWechsel) { richtung *= -1;  //Richtungswechsel durchführen
             log.log(Level.INFO, "Richtung wurde geändert");}
 
-        spieler.get(aktuellerSpielerIndex).legecards(karte); // Dem aktuellen Spieler OK geben
+        spieler.get(aktuellerSpielerIndex).karteEntfernen(karte); // Dem aktuellen Spieler OK geben
 
         alterSpielerIndex = aktuellerSpielerIndex;
 
@@ -301,10 +301,10 @@ public class Server {
             case 11:
                 Karte neu = this.gibZufaelligeKarte();
                 spieler.get(aktuellerSpielerIndex).karteBekommen(neu);
-                spieler.get(aktuellerSpielerIndex).getcards(neu);
+                spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
                 neu = this.gibZufaelligeKarte();
                 spieler.get(aktuellerSpielerIndex).karteBekommen(neu);
-                spieler.get(aktuellerSpielerIndex).getcards(neu);
+                spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
 
                 break;
             case 13:
@@ -316,7 +316,7 @@ public class Server {
                 for(int i = 0; i < 4; i++) {
                     neu = this.gibZufaelligeKarte();
                     spieler.get(aktuellerSpielerIndex).karteBekommen(neu);
-                    spieler.get(aktuellerSpielerIndex).getcards(neu);
+                    spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
                 }
 
                 neueFarbe = spieler.get(alterSpielerIndex).farbeFragen();
@@ -324,7 +324,7 @@ public class Server {
 
                 break;
         }
-        if((spieler.get(alterSpielerIndex).givekartenanzahl() == 1))
+        if((spieler.get(alterSpielerIndex).gibKartenanzahl() == 1))
         {
         spieler.get(alterSpielerIndex).moep = false;
         spieler.get(alterSpielerIndex).warteAufMoep();
@@ -335,7 +335,7 @@ public class Server {
                 broadcast(spieler.get(alterSpielerIndex).spielername + " hat nicht MOEP gerufen");
 
                 spieler.get(alterSpielerIndex).karteBekommen(neu); 
-                spieler.get(alterSpielerIndex).getcards(neu);
+                spieler.get(alterSpielerIndex).karteHinzufuegen(neu);
             }
             else if(spieler.get(alterSpielerIndex).moep) {
                 log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " ruft Moep");
@@ -346,7 +346,7 @@ public class Server {
         
         spieler.get(alterSpielerIndex).amZug(false);
         
-        if(spieler.get(alterSpielerIndex).givekartenanzahl() == 0) {
+        if(spieler.get(alterSpielerIndex).gibKartenanzahl() == 0) {
             
             this.spielGewonnen(spieler.get(alterSpielerIndex));
         }
