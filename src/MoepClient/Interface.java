@@ -3,8 +3,8 @@ package MoepClient;
 
 import MoepClient.GUI.GUI;
 import MoepClient.GUI.FarbeWuenschenDialog;
-import MoepClient.GUI.LoginPanel;
 import MoepClient.GUI.Hand;
+import MoepClient.GUI.InitPanel;
 import moepclient.netzwerk.Netz;
 import java.applet.Applet;
 import java.applet.AudioClip;
@@ -13,6 +13,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,9 +35,12 @@ public class Interface
     private Moep m;
     private Netz netz;
     
+    private Map<String, String> server;
     
-    public Interface (){
-        
+    
+    public Interface ()
+    {
+        server = new HashMap<String, String>();
         //<editor-fold defaultstate="collapsed" desc="Mouse-Adapter">
         MouseAdapter[] adapter = new MouseAdapter[] {
             
@@ -58,34 +63,31 @@ public class Interface
                 }
             },
             
-            new MouseAdapter() { //Login
+            new MouseAdapter() { //spielerDialog
                 @Override
                 public void mousePressed(MouseEvent me) {
-                    LoginPanel lP = (LoginPanel) me.getComponent().getParent();
-                    String[] information = lP.getInformation();
-                    
-                    if (information[0].isEmpty()){
-                        meldung("Bitte eine IP-Adresse angeben!");
-                    }
-                    else if(information[1].isEmpty()){
-                        meldung("Bitte einen Namen angeben!");
-                    }
-                    else{
-                        if(!eingeloggt)
-                            g.LoginOut(!netz.anmelden(information[0], information[1]));
-                        eingeloggt = true;
-                    }
-                    
+                    System.out.println("spielerDialog");
+                    InitPanel ip = (InitPanel)me.getComponent().getParent();
+                    ip.gibServername();
+                    /*if(!eingeloggt)
+                    {
+                        g.LoginOut(!netz.anmelden(information[0], information[1]));
+                        eingeloggt = true; 
+                    }*/
                 }
             },
             
-            new MouseAdapter() { //Logout
+            new MouseAdapter() { //Erstellen
                 @Override
                 public void mousePressed(MouseEvent me) {
-                    if(eingeloggt)
-                        if(yesNoDialog() == true){
-                            logout();
-                        }
+                    System.out.println("erstellen");
+                }
+            },
+            
+            new MouseAdapter() { //Beitreten
+                @Override
+                public void mousePressed(MouseEvent me) {
+                    System.out.println("beitreten");
                 }
             },
             
@@ -306,6 +308,12 @@ public class Interface
     {
         AudioClip clip = Applet.newAudioClip(this.getClass().getResource("sound/" + soundName + ".au"));
         clip.play();
+    }
+
+    public void serverGefunden(String serverName, String serverAdresse)
+    {
+        server.put(serverName, serverAdresse);
+        g.serverGefunden(serverName);
     }
 
 }

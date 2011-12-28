@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
@@ -15,7 +16,8 @@ import javax.swing.JLabel;
  * @author Philipp Herrle
 
  */
-public class FarbeWuenschenDialog extends javax.swing.JFrame {
+public class FarbeWuenschenDialog extends JFrame 
+{
     
     private Interface i;
     

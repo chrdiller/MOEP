@@ -11,8 +11,8 @@ import moepserver.netzwerk.Netz;
 /**
  * Die zentrale Serverklasse
  * @author Frank Kottler & Christian Diller
-
  */
+
 public class Server {
     private static final MoepLogger log = new MoepLogger();
     public static int STARTKARTEN;
@@ -31,7 +31,7 @@ public class Server {
     
 
     public Server() {
-        log.log(Level.INFO, "*** Starte MoepServer BETA 1.1 :) ***");
+        log.log(Level.INFO, "*** Starte MoepServer ***");
         loadProperties();
         netz = new Netz(this, Integer.valueOf(properties.getProperty("Port", "11111")).intValue());
     	verdeckt = this.kartenSet();

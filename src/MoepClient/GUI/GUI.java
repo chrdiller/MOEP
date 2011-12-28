@@ -7,7 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Rectangle;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -64,7 +64,7 @@ public class GUI extends JFrame{
         gbc.gridheight = 1;
         gbc.gridwidth = 1;
         
-        status = new Status(adapter[4]);
+        status = new Status(adapter[5]);
         
         gbl.setConstraints(status, gbc);
         this.add(status);
@@ -90,7 +90,7 @@ public class GUI extends JFrame{
         hand = new Hand(15, 20,adapter[1]);
         
         //loginP = new LoginPanel (adapter[2], adapter[3]);
-        initP = new InitPanel();
+        initP = new InitPanel(adapter[2], adapter[3], adapter[4]);
         
         JPanel container = new JPanel();
         
@@ -145,5 +145,9 @@ public class GUI extends JFrame{
     
     public void handAktualisieren(List<Karte> karten){
         hand.kartenAktualisieren(karten);
+    }
+
+    public void serverGefunden(String serverName) {
+        initP.serverGefunden(serverName);
     }
 }
