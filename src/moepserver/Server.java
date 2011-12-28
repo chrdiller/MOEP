@@ -108,7 +108,7 @@ public class Server {
                 for(int i = 0; i<4; i++)  {
                     spieler.get(i).neueAblagekarte(offen);
                     for(Karte k : spieler.get(i).gibHand()) {
-                        spieler.get(i).karteBekommen(k);
+                        spieler.get(i).neueHandkarte(k);
                     }
                 }
                 spieler.get(aktuellerSpielerIndex).amZug(true);
@@ -235,7 +235,7 @@ public class Server {
         log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " zieht eine Karte");
         Karte neu = this.gibZufaelligeKarte();
         spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
-        spieler.get(aktuellerSpielerIndex).karteBekommen(neu);
+        spieler.get(aktuellerSpielerIndex).neueHandkarte(neu);
 		for (Spieler s : spieler) {
 		s.textSenden(spieler.get(aktuellerSpielerIndex).spielername + " zieht eine Karte");
 	}
@@ -300,10 +300,10 @@ public class Server {
         switch(karte.gibNummer()) {
             case 11:
                 Karte neu = this.gibZufaelligeKarte();
-                spieler.get(aktuellerSpielerIndex).karteBekommen(neu);
+                spieler.get(aktuellerSpielerIndex).neueHandkarte(neu);
                 spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
                 neu = this.gibZufaelligeKarte();
-                spieler.get(aktuellerSpielerIndex).karteBekommen(neu);
+                spieler.get(aktuellerSpielerIndex).neueHandkarte(neu);
                 spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
 
                 break;
@@ -315,7 +315,7 @@ public class Server {
             case 14:
                 for(int i = 0; i < 4; i++) {
                     neu = this.gibZufaelligeKarte();
-                    spieler.get(aktuellerSpielerIndex).karteBekommen(neu);
+                    spieler.get(aktuellerSpielerIndex).neueHandkarte(neu);
                     spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
                 }
 
@@ -334,7 +334,7 @@ public class Server {
                 log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " hat nicht rechtzeitig Moep gerufen");
                 broadcast(spieler.get(alterSpielerIndex).spielername + " hat nicht MOEP gerufen");
 
-                spieler.get(alterSpielerIndex).karteBekommen(neu); 
+                spieler.get(alterSpielerIndex).neueHandkarte(neu); 
                 spieler.get(alterSpielerIndex).karteHinzufuegen(neu);
             }
             else if(spieler.get(alterSpielerIndex).moep) {

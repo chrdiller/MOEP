@@ -31,7 +31,7 @@ public abstract class Spieler
     public abstract void karteLegenEvent(Karte karte);
     public abstract void karteZiehenEvent();
     public abstract void moepButtonEvent();
-    public abstract void karteBekommen(Karte karte);
+    public abstract void neueHandkarte(Karte karte);
     public abstract void neueAblagekarte(Karte k);
     public abstract void amZug(boolean wert);
     public abstract void ungueltigerZug(int art);    

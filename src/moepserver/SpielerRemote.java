@@ -13,13 +13,6 @@ import moepserver.netzwerk.Verbindung;
 
 public class SpielerRemote extends Spieler
 {
-
-    public SpielerRemote(String n)
-    {
-        spielername = n;
-        hand = new ArrayList<Karte>();
-    }
-
     public SpielerRemote(Verbindung _verbindung, String _spielername, String _loginIP)
     {
         verbindung = _verbindung;
@@ -29,6 +22,7 @@ public class SpielerRemote extends Spieler
         hand = new ArrayList<Karte>();
     }
     
+    @Override
     public void handReset()
     {
         hand = new ArrayList();
@@ -110,7 +104,7 @@ public class SpielerRemote extends Spieler
     }
 
     @Override
-    public void karteBekommen(Karte karte) {
+    public void neueHandkarte(Karte karte) {
         verbindung.sendeHandkarte(karte);
     }
 

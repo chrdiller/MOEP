@@ -173,6 +173,6 @@ public class Netz
     private void serverStarten(int kis) {
         server = new Server();
         for(int i = 0; i < kis; i++)
-            server.spielerHinzufuegen(new SpielerKI("Thorstn_" + (i+1), "KI_" + (i+1)));
+            server.spielerHinzufuegen(new SpielerKI("Thorstn_" + (i+1)));
     }
 }
