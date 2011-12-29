@@ -126,27 +126,25 @@ public class SpielerKI extends Spieler
             log.log(Level.INFO, "Spieler " + spielername + " ist am Zug");
             
             //KI-Code
-            ArrayList<Karte> legbar = new ArrayList<Karte>();
+            final ArrayList<Karte> legbar = new ArrayList<Karte>();
             for(Karte legen : hand)
-                if((legen.gibFarbe() == server.gibOffen().gibFarbe()) || legen.gibNummer() == server.gibOffen().gibNummer())
+                if(((server.neueFarbe != 4) && (legen.gibFarbe() == server.neueFarbe)) ||((legen.gibFarbe() == server.gibOffen().gibFarbe()) || legen.gibNummer() == server.gibOffen().gibNummer()) || (legen.gibFarbe() == 4))
                     legbar.add(legen);
             if(legbar.isEmpty())
-                karteZiehenEvent();
+                new Thread(){public void run(){karteZiehenEvent();}}.start();
             else if(legbar.size() == 1)
-                karteLegenEvent(legbar.get(0));
+                new Thread(){public void run(){karteLegenEvent(legbar.get(0));}}.start();
             else if(legbar.size() > 1)
             {
-                karteLegenEvent(legbar.get(new Random().nextInt(legbar.size())));
+                try
+                {
+                Thread.currentThread().sleep(1500 + new Random().nextInt(1501)); 
+                }catch (InterruptedException ex) {}   
+                new Thread(){public void run(){karteLegenEvent(legbar.get(new Random().nextInt(legbar.size())));}}.start();
             }
             
             if(hand.size() == 1)
-                moepButtonEvent();
-            
-            try
-            {
-                Thread.currentThread().sleep(1000 + new Random().nextInt(501)); 
-            }        
-            catch (InterruptedException ex) {}   
+                new Thread(){public void run(){moepButtonEvent();}}.start();
         }      
     }
 

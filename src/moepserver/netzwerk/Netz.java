@@ -44,7 +44,7 @@ public class Netz
      * @param spieler Der dem Spiel hinzuzufügende Spieler
      */
     protected void loginEvent(Verbindung verbindung, String name) {
-        server.spielerHinzufuegen(new SpielerRemote(verbindung, name, verbindung.gibIP()));
+        server.spielerHinzufuegen(new SpielerRemote(verbindung, name, verbindung.gibIP()), -1);
     }
 
     private void broadcastStarten() {

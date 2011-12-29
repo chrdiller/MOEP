@@ -22,11 +22,11 @@ public class Server {
 
     private Karte offen;
     private ArrayList<Karte> verdeckt;
-    private ArrayList<Spieler> spieler;
-    private String[] realspieler;
+    private Spieler[] spieler;
+    private int spielerzahl;
     private int richtung; // 1 fuer im Uhrzeigersinn, -1 fuer gegen den UZS
     private int aktuellerSpielerIndex;
-    private int neueFarbe;
+    public int neueFarbe;
     private int alterSpielerIndex;
     private Properties properties;
     
@@ -36,10 +36,11 @@ public class Server {
         loadProperties();
         netz = new Netz(this, Integer.valueOf(properties.getProperty("Port", "11111")).intValue());
     	verdeckt = this.kartenSet();
-	spieler = new ArrayList();
+	spieler = new Spieler[4];
+        spielerzahl = 0;
 	richtung = 1;
         neueFarbe = 4;
-        realspieler = new String[4];
+        //realspieler = new String[4];
 	aktuellerSpielerIndex = 0;
 	deckeErsteKarteAuf();
         alterSpielerIndex = 0;
@@ -81,23 +82,34 @@ public class Server {
      * Fügt einen Spieler zum Spiel hinzu; wird von LoginWaechter ausgerufen
      * @param neu Der neue Spieler mit passender Verbindung
      */
-    public void spielerHinzufuegen(Spieler neu) {
+    public void spielerHinzufuegen(Spieler neu, int position) {
         log.log(Level.INFO, "Spieler " + neu.spielername + " (" + neu.gibIP() + ") hat sich verbunden");
-        if(spieler.size() < 4) {
+        if(spielerzahl < 4) {
             neu.loginAkzeptieren();
+            spielerzahl++;
             log.log(Level.INFO, "Spieler " + neu.spielername + " wurde akzeptiert (Spieler " + (aktuellerSpielerIndex + 1) + " von 4)");
             for(Spieler s : spieler) //Übermittlung der aktuell angemeldeten Spieler an den neuen Remote-Spieler
             {
-                neu.spielerServerAktion(s.spielername, 0);                  
+                if(s != null)
+                    neu.spielerServerAktion(s.spielername, 0);                  
             }
           
-            spieler.add(neu);
+
+            if(position >= 0 && spieler[position] == null)
+                spieler[position] = neu;
+            else{
+                for(int i = 0; i < 4; i++)
+                    if(spieler[i] == null)
+                        spieler[i] = neu; 
+            }
+            
             neu.server = this;
 
             for(Spieler s : spieler)
             {
+                if(s != null){
                 s.spielerServerAktion(neu.spielername, 0); //Login-Nachricht an alle Remote-Spieler
-                s.textSenden(neu.spielername + " ist dem Spiel beigetreten");
+                s.textSenden(neu.spielername + " ist dem Spiel beigetreten");}
             }
 
             this.erzeugeHand(neu);
@@ -107,15 +119,16 @@ public class Server {
                 log.log(Level.INFO, "Ein neues Spiel wurde gestartet");
                 broadcast("Ein neues Spiel wurde gestartet");
                 for(int i = 0; i<4; i++)  {
-                    spieler.get(i).neueAblagekarte(offen);
-                    for(Karte k : spieler.get(i).gibHand()) {
-                        spieler.get(i).neueHandkarte(k);
+                    spieler[i].neueAblagekarte(offen);
+                    for(Karte k : spieler[i].gibHand()) {
+                        spieler[i].neueHandkarte(k);
                     }
                 }
-                spieler.get(aktuellerSpielerIndex).amZug(true);
+                new Thread(){public void run(){spieler[aktuellerSpielerIndex].amZug(true);}}.start();
                 for(Spieler s : spieler)
                 {
-                    s.spielerServerAktion(spieler.get(aktuellerSpielerIndex).spielername, 2); //2 = Am Zug
+                    if(s != null)
+                    s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2); //2 = Am Zug
                 }
             }
         } else 
@@ -132,16 +145,19 @@ public class Server {
      */
     public void spielerEntfernen(Spieler entf)
     {
-        spieler.remove(entf);
+        for(int i = 0; i < 4; i++)
+            if(spieler[i].equals(entf))
+                spieler[i] = null;
         log.log(Level.INFO, "Spieler " + entf.spielername + " wurde vom Server entfernt");
         for(Spieler s : spieler)
         {
+            if(s != null){
             s.spielerServerAktion(entf.spielername, 1);
             s.amZug(false);            
             s.textSenden("Spieler " + entf.spielername + " hat das Spiel verlassen");
             s.textSenden("Das Spiel wurde beendet");
             s.textSenden("Spielneustart, sobald wieder 4 Spieler online sind");
-            s.spielEnde(false);
+            s.spielEnde(false);}
         }
         spielBeenden();
     }
@@ -149,6 +165,7 @@ public class Server {
     public void spielGewonnen(Spieler p) {
         log.log(Level.INFO, "Dieses Spiel wurde von " + p.spielername + " gewonnen");
         for(Spieler s : spieler) {
+            if(s != null){
             s.amZug(false);
             s.textSenden("Spieler " + p.spielername + " hat dieses Spiel gewonnen.");
             s.textSenden("Das Spiel wurde beendet.");
@@ -156,7 +173,7 @@ public class Server {
             if(s.equals(p))
                 s.spielEnde(true);
             else
-                s.spielEnde(false);
+                s.spielEnde(false);}
         }
         spielBeenden();
     }
@@ -193,7 +210,7 @@ public class Server {
      * Gibt die Spielerliste zurück
      * @return Die Spieler-Arraylist
      */
-    public ArrayList<Spieler> gibSpieler() {
+    public Spieler[] gibSpieler() {
     	return spieler;
     }
 
@@ -202,7 +219,7 @@ public class Server {
      * @return Der aktuelle Spieler
      */
     public Spieler gibAktuellenSpieler() {
-	return spieler.get(aktuellerSpielerIndex);
+	return spieler[aktuellerSpielerIndex];
     }
 
     /**
@@ -233,18 +250,19 @@ public class Server {
      */
     protected void karteZiehenEvent() 
     {
-        log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " zieht eine Karte");
+        log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " zieht eine Karte");
         Karte neu = this.gibZufaelligeKarte();
-        spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
-        spieler.get(aktuellerSpielerIndex).neueHandkarte(neu);
+        spieler[aktuellerSpielerIndex].karteHinzufuegen(neu);
+        spieler[aktuellerSpielerIndex].neueHandkarte(neu);
 		for (Spieler s : spieler) {
-		s.textSenden(spieler.get(aktuellerSpielerIndex).spielername + " zieht eine Karte");
+                    if(s != null)
+                        s.textSenden(spieler[aktuellerSpielerIndex].spielername + " zieht eine Karte");
 	}
-        spieler.get(aktuellerSpielerIndex).amZug(false);
+        spieler[aktuellerSpielerIndex].amZug(false);
         aktuellerSpielerIndex = (aktuellerSpielerIndex
 			+ richtung
-			+ spieler.size()) % spieler.size();
-        spieler.get(aktuellerSpielerIndex).amZug(true);
+			+ spieler.length) % spieler.length;
+        new Thread(){public void run(){spieler[aktuellerSpielerIndex].amZug(true);}}.start();
     }
 
 
@@ -254,20 +272,19 @@ public class Server {
      */
     protected void spielerzugEvent(Karte karte) 
     {
-        
-        log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " spielt " + karte.gibDaten());
+        log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " spielt " + karte.gibDaten());
         if (!this.kannGelegtWerdenAuf(karte, offen)) { //Kann die Karte gelegt werden?
-                spieler.get(aktuellerSpielerIndex).ungueltigerZug(0);
-                log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " spielt einen ungültigen Zug");
+                spieler[aktuellerSpielerIndex].ungueltigerZug(0);
+                log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " spielt einen ungültigen Zug");
                 return;
         }
 
-        if(!spieler.get(aktuellerSpielerIndex).istInHand(karte)) { //Hat der Spieler die Karte in seiner Hand?
-            spieler.get(aktuellerSpielerIndex).ungueltigerZug(1);
-            log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " spielt eine Karte, die er nicht besitzt");
+        if(!spieler[aktuellerSpielerIndex].istInHand(karte)) { //Hat der Spieler die Karte in seiner Hand?
+            spieler[aktuellerSpielerIndex].ungueltigerZug(1);
+            log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " spielt eine Karte, die er nicht besitzt");
             return;
         }
-        spieler.get(aktuellerSpielerIndex).gueltigerZug();
+        spieler[aktuellerSpielerIndex].gueltigerZug();
 
         int symbol = karte.gibNummer(); //Ist die Karte eine Sonderkarte?
         boolean istAussetzen        = symbol == 10;
@@ -279,13 +296,13 @@ public class Server {
         if (istRichtungsWechsel) { richtung *= -1;  //Richtungswechsel durchführen
             log.log(Level.INFO, "Richtung wurde geändert");}
 
-        spieler.get(aktuellerSpielerIndex).karteEntfernen(karte); // Dem aktuellen Spieler OK geben
+        spieler[aktuellerSpielerIndex].karteEntfernen(karte); // Dem aktuellen Spieler OK geben
 
         alterSpielerIndex = aktuellerSpielerIndex;
 
         aktuellerSpielerIndex = (aktuellerSpielerIndex //Nächsten Spieler bestimmen gemäß Richtung und Aussetzen
                 + (istAussetzen ? 2 : 1) * richtung
-                + spieler.size()) % spieler.size();
+                + spieler.length) % spieler.length;
 
         verdeckt.add(offen);
         offen = karte;
@@ -297,73 +314,79 @@ public class Server {
             p.neueAblagekarte(karte);
         }       
 
-        broadcast(spieler.get(alterSpielerIndex).spielername + " legt eine " + karteZuMeldung(karte));
+        broadcast(spieler[alterSpielerIndex].spielername + " legt eine " + karteZuMeldung(karte));
         switch(karte.gibNummer()) {
             case 11:
                 Karte neu = this.gibZufaelligeKarte();
-                spieler.get(aktuellerSpielerIndex).neueHandkarte(neu);
-                spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
+                spieler[aktuellerSpielerIndex].neueHandkarte(neu);
+                spieler[aktuellerSpielerIndex].karteHinzufuegen(neu);
                 neu = this.gibZufaelligeKarte();
-                spieler.get(aktuellerSpielerIndex).neueHandkarte(neu);
-                spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
+                spieler[aktuellerSpielerIndex].neueHandkarte(neu);
+                spieler[aktuellerSpielerIndex].karteHinzufuegen(neu);
 
                 break;
             case 13:
-                neueFarbe = spieler.get(alterSpielerIndex).farbeFragen();
-                broadcast(spieler.get(alterSpielerIndex).spielername + " wünscht sich " + intZuFarbe(neueFarbe));
+                neueFarbe = spieler[alterSpielerIndex].farbeFragen();
+                broadcast(spieler[alterSpielerIndex].spielername + " wünscht sich " + intZuFarbe(neueFarbe));
 
                 break;
             case 14:
                 for(int i = 0; i < 4; i++) {
                     neu = this.gibZufaelligeKarte();
-                    spieler.get(aktuellerSpielerIndex).neueHandkarte(neu);
-                    spieler.get(aktuellerSpielerIndex).karteHinzufuegen(neu);
+                    spieler[aktuellerSpielerIndex].neueHandkarte(neu);
+                    spieler[aktuellerSpielerIndex].karteHinzufuegen(neu);
                 }
 
-                neueFarbe = spieler.get(alterSpielerIndex).farbeFragen();
-		broadcast(spieler.get(alterSpielerIndex).spielername + " wünscht sich " + intZuFarbe(neueFarbe));
+                neueFarbe = spieler[alterSpielerIndex].farbeFragen();
+		broadcast(spieler[alterSpielerIndex].spielername + " wünscht sich " + intZuFarbe(neueFarbe));
 
                 break;
         }
-        if((spieler.get(alterSpielerIndex).gibKartenanzahl() == 1))
+        if((spieler[alterSpielerIndex].gibKartenanzahl() == 1))
         {
-        spieler.get(alterSpielerIndex).moep = false;
-        spieler.get(alterSpielerIndex).warteAufMoep();
+        spieler[alterSpielerIndex].moep = false;
+        spieler[alterSpielerIndex].warteAufMoep();
 
-            if(!spieler.get(alterSpielerIndex).moep) {
+            if(!spieler[alterSpielerIndex].moep) {
                 Karte neu = this.gibZufaelligeKarte();
-                log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " hat nicht rechtzeitig Moep gerufen");
-                broadcast(spieler.get(alterSpielerIndex).spielername + " hat nicht MOEP gerufen");
+                log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " hat nicht rechtzeitig Moep gerufen");
+                broadcast(spieler[alterSpielerIndex].spielername + " hat nicht MOEP gerufen");
 
-                spieler.get(alterSpielerIndex).neueHandkarte(neu); 
-                spieler.get(alterSpielerIndex).karteHinzufuegen(neu);
+                spieler[alterSpielerIndex].neueHandkarte(neu); 
+                spieler[alterSpielerIndex].karteHinzufuegen(neu);
             }
-            else if(spieler.get(alterSpielerIndex).moep) {
-                log.log(Level.INFO, "Spieler " + spieler.get(aktuellerSpielerIndex).spielername + " ruft Moep");
-                broadcast(spieler.get(alterSpielerIndex).spielername + " ruft MOEP");
+            else if(spieler[alterSpielerIndex].moep) {
+                log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " ruft Moep");
+                broadcast(spieler[alterSpielerIndex].spielername + " ruft MOEP");
             }
         }
-        spieler.get(alterSpielerIndex).moep = false;
+        spieler[alterSpielerIndex].moep = false;
         
-        spieler.get(alterSpielerIndex).amZug(false);
+        spieler[alterSpielerIndex].amZug(false);
         
-        if(spieler.get(alterSpielerIndex).gibKartenanzahl() == 0) {
+        if(spieler[alterSpielerIndex].gibKartenanzahl() == 0) {
             
-            this.spielGewonnen(spieler.get(alterSpielerIndex));
+            this.spielGewonnen(spieler[alterSpielerIndex]);
         }
         else
         {
-            spieler.get(aktuellerSpielerIndex).amZug(true);   
+            new Thread(){public void run(){spieler[aktuellerSpielerIndex].amZug(true);}}.start();
             for(Spieler s : spieler)
             {
-                s.spielerServerAktion(spieler.get(aktuellerSpielerIndex).spielername, 2); //2 = Am Zug
+                if(s != null)
+                s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2); //2 = Am Zug
             }
         }
 
     }
 
-    protected void moep(Spieler s) {
-        if(spieler.indexOf(s) == alterSpielerIndex) spieler.get(alterSpielerIndex).moep = true;
+    protected void moep(Spieler s) 
+    {
+        int index = 0;
+        for(int i = 0; i < 4; i++)
+            if(spieler[i].equals(s))
+                index = i;
+        if(index == alterSpielerIndex) spieler[alterSpielerIndex].moep = true;
     }
     
     private String karteZuMeldung(Karte karte)
@@ -403,6 +426,7 @@ public class Server {
     {
         for(Spieler s : spieler)
         {
+            if(s != null)
             s.textSenden(text);
         }
     }
@@ -411,12 +435,13 @@ public class Server {
         verdeckt = this.kartenSet();
 	richtung = 1;
         neueFarbe = 4;
-        realspieler = new String[4];
-	aktuellerSpielerIndex = spieler.size();
+        //realspieler = new String[4];
+	aktuellerSpielerIndex = spieler.length;
         for(Spieler s : spieler)
         {
+            if(s != null){
             s.moep = false;
-            this.erzeugeHand(s);
+            this.erzeugeHand(s);}
         }
 	deckeErsteKarteAuf();
         alterSpielerIndex = 0;

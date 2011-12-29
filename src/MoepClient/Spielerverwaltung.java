@@ -1,45 +1,57 @@
 
 package MoepClient;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author Christian Diller
  */
 public class Spielerverwaltung 
 {
-    String eigenerName;
-    ArrayList<String> kiSpieler;
+    String[][] spieler;
     
-    public Spielerverwaltung(String _eigenerName, ArrayList<String> _kiSpieler)
+    public Spielerverwaltung(String[][] _spieler)
     {
-        eigenerName = _eigenerName;
-        kiSpieler = _kiSpieler;
+        spieler = _spieler;
     }
     
     public int gibKISpielerAnzahl()
     {
-        return kiSpieler.size();
+        int anzahl = 0;
+        for(int i = 0; i < spieler.length; i++)
+            if(spieler[i][0] == "KI")
+                anzahl++;
+        return anzahl;
     }
     
-    public String[] gibKINamen()
+    public String[][] gibKINamen()
     {
-        String[] a = new String[kiSpieler.size()];
-        return kiSpieler.toArray(a);
+        String[][] ausgabe = new String[gibKISpielerAnzahl()][2];
+        int pos = 0;
+        for(int i = 0; i < spieler.length; i++)
+            if(spieler[i][0] == "KI"){
+                ausgabe[pos][0] = spieler[i][1];
+                ausgabe[pos][1] = i+"";
+                pos++;
+            }
+        return ausgabe;
+    }
+    
+    public String[][] gibSpielerListe()
+    {
+        return spieler;
     }
     
     public String gibEigenenNamen()
     {
-        return eigenerName;
+        return spieler[0][1];
     }
     
     public boolean istGueltig()
     {
-        for(String s : kiSpieler)
+        for(String s : spieler[1])
             if(s.equals(""))
                 return false;
-        if(eigenerName.equals(""))
+        if(spieler[0][1].equals(""))
             return false;
         return true;
     }

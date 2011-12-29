@@ -18,6 +18,7 @@ public class Netz
     private Interface client;
     private SpielerLokal spieler;
     private Server server;
+    private Spielerverwaltung spVerwaltung;
     private boolean lokal;
     public int farbeWuenschenInt;
 
@@ -27,13 +28,12 @@ public class Netz
         lokal = false;   
     }
     
-    public Netz(Interface _client, Spielerverwaltung spieler)
+    public Netz(Interface _client, Spielerverwaltung _spVerwaltung)
     {
         server = new Server();
         client = _client;
+        spVerwaltung = _spVerwaltung;
         lokal = true;
-        for(int i = 0; i < spieler.gibKISpielerAnzahl(); i++)
-            server.spielerHinzufuegen(new SpielerKI(spieler.gibKINamen()[i]));
     }
 
     /**
@@ -46,7 +46,9 @@ public class Netz
     {
         if(lokal) {
             spieler = new SpielerLokal(this, name, "localhost");
-            server.spielerHinzufuegen(spieler);
+            server.spielerHinzufuegen(spieler, 0);
+            for(int i = 0; i < spVerwaltung.gibKISpielerAnzahl(); i++)
+                server.spielerHinzufuegen(new SpielerKI(spVerwaltung.gibKINamen()[i][0]), Integer.parseInt(spVerwaltung.gibKINamen()[i][1]));
             return true;
         }
         else {
