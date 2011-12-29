@@ -1,6 +1,17 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
-import MoepClient.Karte;
+import MoepClient.netzwerk.Packet03AmZug;
+import MoepClient.netzwerk.Packet01Login;
+import MoepClient.netzwerk.Packet02Kick;
+import MoepClient.netzwerk.Packet06FarbeWuenschen;
+import MoepClient.netzwerk.Packet09Spielende;
+import MoepClient.netzwerk.Packet12Ablagestapelkarte;
+import MoepClient.netzwerk.Packet07Text;
+import MoepClient.netzwerk.Packet04ZugLegal;
+import MoepClient.netzwerk.Packet05MoepButton;
+import MoepClient.netzwerk.Packet11Handkarte;
+import MoepClient.netzwerk.Packet08SpielerServerAktion;
+import Moep.Karte;
 /**
  * Beschreibt die abstrakte Oberklasse der Packetklassen;
  * enthält die statische Methode zum Parsen von Strings in Packes
@@ -76,7 +87,7 @@ public abstract class Packet {
      * Ruft packetspezifische Events in netz auf
      * @param netz Das Netzobjekt, in dem die Events aufgerufen werden sollen
      */
-    public abstract void eventAufrufen(Netz netz);
+    public abstract void clientEventAufrufen(Netz netz);
     
     protected static String seperator = "#";
 }

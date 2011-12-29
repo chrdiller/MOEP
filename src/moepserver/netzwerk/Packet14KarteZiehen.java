@@ -20,15 +20,14 @@ public class Packet14KarteZiehen extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Verbindung verbindung)
+    public void serverEventAufrufen(final Verbindung verbindung)
     {
-        PacketInteractor pe = new PacketInteractor(this, verbindung);
-        pe.start();
-    }
-    
-    @Override
-    public void eventAusloesen(Verbindung verbindung)
-    {
-        verbindung.karteZiehenEvent();        
+        new Thread(){
+            @Override
+            public void run()
+            {
+                verbindung.karteZiehenEvent();   
+            }
+        }.start();
     }
 }

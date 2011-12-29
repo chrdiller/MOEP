@@ -1,5 +1,5 @@
 
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Server dem Client mitteilt, dass sich ein Spieler angemeldet/abgemeldet hat
@@ -27,7 +27,7 @@ public class Packet08SpielerServerAktion extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
         if(art == 0)
         {

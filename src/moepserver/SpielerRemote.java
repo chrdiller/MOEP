@@ -1,6 +1,7 @@
 
 package moepserver;
 
+import Moep.Karte;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import moepserver.netzwerk.Verbindung;

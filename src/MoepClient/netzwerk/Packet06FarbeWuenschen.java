@@ -1,5 +1,5 @@
 
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Server dem Client mitteilt, dass dieser dem Server
@@ -23,7 +23,7 @@ public class Packet06FarbeWuenschen extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
         netz.farbeWuenschenEvent();
     }

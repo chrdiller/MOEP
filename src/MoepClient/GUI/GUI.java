@@ -2,7 +2,7 @@
 package MoepClient.GUI;
 
 import MoepClient.Interface;
-import MoepClient.Karte;
+import Moep.Karte;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;

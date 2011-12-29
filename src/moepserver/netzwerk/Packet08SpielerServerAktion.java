@@ -27,14 +27,8 @@ public class Packet08SpielerServerAktion extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Verbindung verbindung)
+    public void serverEventAufrufen(Verbindung verbindung)
     {
         //Kein Serverevent!
     }    
-    
-    @Override
-    public void eventAusloesen(Verbindung verbindung)
-    {
-        
-    }
 }

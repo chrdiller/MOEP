@@ -1,6 +1,6 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
-import MoepClient.Karte;
+import Moep.Karte;
 /**
  * Beschreibt das Packet, mit dem der Client dem Server die zu legende Karte übermittelt
  * @author Christian Diller
@@ -22,7 +22,7 @@ public class Packet13KarteLegen extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
         //Kein ClientEvent
     }

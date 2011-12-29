@@ -1,6 +1,6 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
-import MoepClient.Karte;
+import Moep.Karte;
 /**
  * Beschreibt das Packet, mit dem der Server dem Client eine Ablagestapelkarte übermittelt
  * @author Christian Diller
@@ -22,7 +22,7 @@ public class Packet12Ablagestapelkarte extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
         netz.ablagestapelkarteEmpfangenEvent(karte);
     }

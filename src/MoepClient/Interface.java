@@ -1,13 +1,14 @@
 
 package MoepClient;
 
+import Moep.Karte;
 import MoepClient.GUI.GUI;
 import MoepClient.GUI.FarbeWuenschenDialog;
 import MoepClient.GUI.Hand;
 import MoepClient.GUI.InitPanel;
 import MoepClient.GUI.SpielerDialog;
 import java.awt.event.WindowEvent;
-import moepclient.netzwerk.Netz;
+import MoepClient.netzwerk.Netz;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.event.MouseAdapter;
@@ -71,7 +72,7 @@ public class Interface
                 @Override
                 public void mousePressed(final MouseEvent me) {
                     System.out.println("spielerDialog");
-                    SpielerDialog spDialog = new SpielerDialog();
+                    SpielerDialog spDialog = new SpielerDialog(spieler);
                     spDialog.addWindowListener(new WindowListener(){
                     @Override
                     public void windowClosing(WindowEvent e) {
@@ -115,6 +116,7 @@ public class Interface
                     if(spieler.istGueltig())
                     {
                         netz = new Netz(Interface.this, spieler);
+                        netz.anmelden("", spieler.gibEigenenNamen());
                     }
                 }
             },

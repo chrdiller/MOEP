@@ -2,8 +2,6 @@
 package MoepClient.GUI;
 
 import MoepClient.Spielerverwaltung;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
 
@@ -14,8 +12,9 @@ import javax.swing.JButton;
 public class SpielerDialog extends javax.swing.JFrame {
 
     /** Creates new form SpielerDialog */
-    public SpielerDialog() {
+    public SpielerDialog(Spielerverwaltung spieler) {
         initComponents();
+        spielerverwaltungAnwenden(spieler);
         setVisible(true);
     }
 
@@ -218,4 +217,31 @@ public class SpielerDialog extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
+
+    private void spielerverwaltungAnwenden(Spielerverwaltung sp) {
+        if(sp == null)
+            return;
+        jTextField4.setText(sp.gibEigenenNamen());
+        if(sp.gibKISpielerAnzahl() == 1)
+        {
+            jComboBox1.setSelectedItem("KI");    
+            jTextField1.setText(sp.gibKINamen()[0]);
+        }
+        else if(sp.gibKISpielerAnzahl() == 2)
+        {
+            jComboBox1.setSelectedItem("KI");    
+            jTextField1.setText(sp.gibKINamen()[0]);
+            jComboBox2.setSelectedItem("KI");    
+            jTextField2.setText(sp.gibKINamen()[1]);
+        }
+        else if(sp.gibKISpielerAnzahl() == 3)
+        {
+            jComboBox1.setSelectedItem("KI");    
+            jTextField1.setText(sp.gibKINamen()[0]);
+            jComboBox2.setSelectedItem("KI");    
+            jTextField2.setText(sp.gibKINamen()[1]);
+            jComboBox3.setSelectedItem("KI");    
+            jTextField3.setText(sp.gibKINamen()[2]);
+        }
+    }
 }

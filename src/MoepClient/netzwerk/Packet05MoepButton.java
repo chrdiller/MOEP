@@ -1,4 +1,4 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Client dem Server mitteilt, dass der MoepButton gedrückt wurde
@@ -22,7 +22,7 @@ public class Packet05MoepButton extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
         netz.moepButtonAntwortEvent(rechtzeitig);
     }

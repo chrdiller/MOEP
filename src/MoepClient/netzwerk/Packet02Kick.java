@@ -1,4 +1,4 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Server einen Client kicken kann
@@ -21,7 +21,7 @@ public class Packet02Kick extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
         netz.kickEvent(grund);
     }

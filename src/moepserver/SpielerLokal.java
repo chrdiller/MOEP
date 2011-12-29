@@ -2,24 +2,28 @@
 package moepserver;
 
 import Moep.Karte;
+import MoepClient.netzwerk.Netz;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.logging.Level;
 
 /**
- * Beschreibt einen KI-Spieler, also einen Spieler,
- * der vom Computer gesteuert wird
+ * Beschreibt einen Lokal-Spieler, also einen Spieler,
+ * der in dem Client spielt, über den der Server läuft
  * @author Christian Diller
  */
 
-public class SpielerKI extends Spieler
+public class SpielerLokal extends Spieler
 {
-    public SpielerKI(String _spielername)
+    private Netz clientNetz;
+    
+    public SpielerLokal(Netz _clientNetz, String _spielername, String _loginIP)
     {
+        clientNetz = _clientNetz;
+        loginIP = _loginIP;
         spielername = _spielername;
         hand = new ArrayList<Karte>();
     }
-
+    
     @Override
     public void handReset()
     {
@@ -76,121 +80,97 @@ public class SpielerKI extends Spieler
     }
 
     @Override
-    public void fehlerEvent(String beschreibung) 
-    {
+    public void fehlerEvent(String beschreibung) {
         log.log(Level.SEVERE, "Fehler: " + beschreibung);
     }
 
     @Override
-    public void verbindungVerlorenEvent() 
-    {
-        //Nichts
+    public void verbindungVerlorenEvent() {
+        log.log(Level.INFO, "Verbindung zu Spieler " + spielername + " verloren");
+        server.spielerEntfernen(this);
     }
 
     @Override
-    public void karteLegenEvent(Karte karte) 
-    {
+    public void karteLegenEvent(Karte karte) {
         server.spielerzugEvent(karte);
     }
 
     @Override
-    public void karteZiehenEvent() 
-    {
+    public void karteZiehenEvent() {
         server.karteZiehenEvent();
     }
 
     @Override
-    public void moepButtonEvent() 
-    {
+    public void moepButtonEvent() {
         server.moep(this);
     }
 
     @Override
-    public void neueHandkarte(Karte karte) 
-    {
-        //Nichts
+    public void neueHandkarte(Karte karte) {
+        clientNetz.handkarteEmpfangenEvent(karte);
     }
 
     @Override
-    public void neueAblagekarte(Karte k) 
-    {
-        //Nichts
+    public void neueAblagekarte(Karte k) {
+        clientNetz.ablagestapelkarteEmpfangenEvent(k);
     }
 
     @Override
-    public void amZug(boolean wert) 
-    {   
+    public void amZug(boolean wert) {
+        clientNetz.amZugEvent(wert);        
         if(wert)
         {
             server.broadcast(spielername + " ist am Zug");     
             log.log(Level.INFO, "Spieler " + spielername + " ist am Zug");
-            
-            //KI-Code
-            ArrayList<Karte> legbar = new ArrayList<Karte>();
-            for(Karte legen : hand)
-                if((legen.gibFarbe() == server.gibOffen().gibFarbe()) || legen.gibNummer() == server.gibOffen().gibNummer())
-                    legbar.add(legen);
-            if(legbar.isEmpty())
-                karteZiehenEvent();
-            else if(legbar.size() == 1)
-                karteLegenEvent(legbar.get(0));
-            else if(legbar.size() > 1)
-            {
-                karteLegenEvent(legbar.get(new Random().nextInt(legbar.size())));
-            }
-            
-            if(hand.size() == 1)
-                moepButtonEvent();
-            
-            try
-            {
-                Thread.currentThread().sleep(1000 + new Random().nextInt(501)); 
-            }        
-            catch (InterruptedException ex) {}   
-        }      
+        }
     }
 
     @Override
-    public void ungueltigerZug(int art) 
-    {
-        //Nichts
+    public void ungueltigerZug(int art) {
+        clientNetz.zugLegalEvent(false, art);
     }
     
     @Override
     public void gueltigerZug()
     {
-        //Nichts
+        clientNetz.zugLegalEvent(true, 0);
     }
 
     @Override
-    public void loginAblehnen() 
-    {
-        //Nichts
+    public void loginAblehnen() {
+        clientNetz.fehlerEvent("Vom Server nicht akzeptiert!");
     }
 
     @Override
-    public void textSenden(String t) 
-    {
-       //Nichts
+    public void textSenden(String t) {
+       clientNetz.textEmpfangenEvent(t);
     }
 
     @Override
-    public int farbeFragen()
-    {
-        Random r = new Random();
-        return r.nextInt(4) + 1;
+    public int farbeFragen() {
+        clientNetz.farbeWuenschenEvent();
+        while(clientNetz.farbeWuenschenInt == 0){try {
+                Thread.currentThread().sleep(200);
+            } catch (InterruptedException ex) {}}
+        int farbe = clientNetz.farbeWuenschenInt;
+        clientNetz.farbeWuenschenInt = 0;
+        return farbe;
     }
     
     @Override
-    public void loginAkzeptieren()
-    {
+    public void loginAkzeptieren() {
         //Nichts
     }
     
     @Override
     public void spielerServerAktion(String sn, int wert)
     {
-        //Nichts
+        if(wert == 0)
+            clientNetz.spielerLoginEvent(sn);
+        else if(wert == 1)
+            clientNetz.spielerLogoutEvent(sn);
+        else if(wert == 2)
+            clientNetz.spielerAmZugEvent(sn);
     }
     
     @Override
@@ -198,12 +178,13 @@ public class SpielerKI extends Spieler
     {
         hand = new ArrayList<Karte>();
         this.kartenanzahl = this.gibKartenanzahl();
+        clientNetz.spielEnde(gewonnen);
     }
 
     @Override
     public String gibIP()
     {
-        return " - ";
+        return loginIP;
     }
 
     @Override
@@ -218,8 +199,7 @@ public class SpielerKI extends Spieler
     @Override
     public void kick(String grund)
     {
-        //Nichts
+        clientNetz.kickEvent(grund);
     }
-    
-    
 }
+

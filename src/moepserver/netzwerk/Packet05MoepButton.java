@@ -23,15 +23,14 @@ public class Packet05MoepButton extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Verbindung verbindung)
+    public void serverEventAufrufen(final Verbindung verbindung)
     {
-        PacketInteractor pe = new PacketInteractor(this, verbindung);
-        pe.start();
-    }
-    
-    @Override
-    public void eventAusloesen(Verbindung verbindung)
-    {
-        verbindung.moepButtonEvent();        
+        new Thread(){
+            @Override
+            public void run()
+            {
+                verbindung.moepButtonEvent();   
+            }
+        }.start();
     }
 }

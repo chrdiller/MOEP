@@ -1,4 +1,4 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Server dem Client mitteilt, ob er am Zug ist
@@ -22,7 +22,7 @@ public class Packet03AmZug extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
         netz.amZugEvent(wert);
     }

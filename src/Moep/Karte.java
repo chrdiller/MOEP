@@ -1,11 +1,15 @@
+package Moep;
 
-package moepserver;
+import java.awt.image.CropImageFilter;
+import java.awt.image.FilteredImageSource;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 /**
- * Beschreibt eine einzelne (Server-)Karte
- * @author Markus Klar, Michael Stoffels 
-
+ * Stellt eine einzelne Karte dar
+ * @author Markus Klar, Michael Stoffels, Christian Diller 
  */
+
 public class Karte implements Comparable<Karte>
 {
     private int farbe;
@@ -37,6 +41,13 @@ public class Karte implements Comparable<Karte>
     public String gibDaten()
     {
         return farbe+"|"+nummer;
+    }
+    
+    public ImageIcon gibBild()
+    {
+        ImageIcon bild = new ImageIcon(this.getClass().getResource("../MoepClient/grafik/kartenSet.png"));
+        bild.setImage(new JPanel().createImage(new FilteredImageSource(bild.getImage().getSource(), new CropImageFilter((nummer - (farbe == 4 ? 13 : 0))* 166, farbe * 250, 166, 250))));
+        return bild;
     }
     
     @Override

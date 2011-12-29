@@ -1,5 +1,5 @@
 
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Server dem Client beliebigen Text sendet,
@@ -24,7 +24,7 @@ public class Packet07Text extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
         netz.textEmpfangenEvent(text);
     }    

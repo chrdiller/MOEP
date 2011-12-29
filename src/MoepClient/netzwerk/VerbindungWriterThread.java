@@ -1,5 +1,5 @@
 
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
 import java.io.PrintWriter;
 import java.net.Socket;

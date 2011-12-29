@@ -1,7 +1,7 @@
 
 package MoepClient.GUI;
 
-import MoepClient.Karte;
+import Moep.Karte;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

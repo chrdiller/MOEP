@@ -1,4 +1,4 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Server dem CLient mitteilt, 
@@ -24,7 +24,7 @@ public class Packet09Spielende extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
         netz.spielEnde(gewonnen);
     }    

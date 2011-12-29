@@ -1,4 +1,4 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
 /**
  * Beschreibt das für den Login verwendete Packet
@@ -24,7 +24,7 @@ public class Packet01Login extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
        netz.verbindung.angemeldetSetzen(akzeptiert);
     }

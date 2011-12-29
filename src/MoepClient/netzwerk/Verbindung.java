@@ -1,7 +1,13 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
+import MoepClient.netzwerk.Packet;
+import MoepClient.netzwerk.Packet13KarteLegen;
+import MoepClient.netzwerk.Packet01Login;
+import MoepClient.netzwerk.Packet14KarteZiehen;
+import MoepClient.netzwerk.Packet06FarbeWuenschen;
+import MoepClient.netzwerk.Packet05MoepButton;
 import java.net.Socket;
-import MoepClient.Karte;
+import Moep.Karte;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -89,11 +95,11 @@ public class Verbindung extends Thread
         
         if(packet == null)
             return false;
-        packet.eventAufrufen(netz);
+        packet.clientEventAufrufen(netz);
         return true;
     }
 
-    protected boolean sendeLogin(String _name)
+    public boolean sendeLogin(String _name)
     {
         letzterLoginFehlgeschlagen = false;
         name = _name;

@@ -1,29 +1,39 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
-import MoepClient.Karte;
+import Moep.Karte;
 import MoepClient.Interface;
 import MoepClient.Spielerverwaltung;
 import moepserver.Server;
 import moepserver.SpielerKI;
+import moepserver.SpielerLokal;
 
 /**
  * Schnittstelle, über die Moep mit dem Netzwerk kommuniziert und umgekehrt
  * @author Christian Diller
-
  */
+
 public class Netz
 {
-    protected Verbindung verbindung;
+    public Verbindung verbindung;
     private Interface client;
+    private SpielerLokal spieler;
     private Server server;
+    private boolean lokal;
+    public int farbeWuenschenInt;
 
-    public Netz(Interface _client, Spielerverwaltung spieler)
+    public Netz(Interface _client)
     {
         client = _client;
-        if(spieler.gibKISpielerAnzahl() > 0)
-            server = new Server();
-            for(int i = 0; i < spieler.gibKISpielerAnzahl(); i++)
-                server.spielerHinzufuegen(new SpielerKI(spieler.gibKINamen()[i]));
+        lokal = false;   
+    }
+    
+    public Netz(Interface _client, Spielerverwaltung spieler)
+    {
+        server = new Server();
+        client = _client;
+        lokal = true;
+        for(int i = 0; i < spieler.gibKISpielerAnzahl(); i++)
+            server.spielerHinzufuegen(new SpielerKI(spieler.gibKINamen()[i]));
     }
 
     /**
@@ -34,18 +44,20 @@ public class Netz
      */
     public boolean anmelden(String adresse, String name)
     {
-        verbindung = new Verbindung(this, adresse);
-        verbindung.start();
-        try{Thread.currentThread().sleep(500);}catch(Exception ex){};
-        
-        return verbindung.sendeLogin(name);
+        if(lokal) {
+            spieler = new SpielerLokal(this, name, "localhost");
+            server.spielerHinzufuegen(spieler);
+            return true;
+        }
+        else {
+            verbindung = new Verbindung(this, adresse);
+            verbindung.start();
+            try{Thread.currentThread().sleep(500);}catch(Exception ex){};
+
+            return verbindung.sendeLogin(name);
+        }
     }
     
-    public boolean anmelden(String name)
-    {
-        
-        return true;
-    }
 
     //Sende-Methoden
     /**
@@ -55,7 +67,12 @@ public class Netz
      */
     public boolean sendeKarteLegen(Karte karte)
     {
-        return verbindung.sendeKarteLegen(karte);
+        if(lokal) {
+            spieler.karteLegenEvent(karte);
+            return true;
+        }
+        else
+            return verbindung.sendeKarteLegen(karte);
     }
     
     /**
@@ -64,7 +81,12 @@ public class Netz
      */
     public boolean sendeKarteZiehen()
     {
-        return verbindung.sendeKarteZiehen();
+        if(lokal) {
+            spieler.karteZiehenEvent();
+            return true;
+        } 
+        else
+            return verbindung.sendeKarteZiehen();
     }
     
     /**
@@ -73,7 +95,12 @@ public class Netz
      */
     public boolean sendeMoepButtonDruecken()
     {
-        return verbindung.sendeMoepButton();
+        if(lokal) {
+            spieler.moepButtonEvent();
+            return true;
+        }
+        else
+            return verbindung.sendeMoepButton();
     }
     
     /**
@@ -84,6 +111,7 @@ public class Netz
      */
     public boolean sendeFarbeWuenschenAntwort(int farbe)
     {
+        farbeWuenschenInt = farbe;
         return verbindung.sendeFarbeWuenschenAntwort(farbe);
     }
     
@@ -94,81 +122,81 @@ public class Netz
     {
         try{
             verbindung.verbindungSchliessen();
-        }catch(NullPointerException exc){}
+        }catch(Exception ex){}
     }
     //Ende Sende-Methoden
     
 
     //Event-Methoden  
-    protected void kickEvent(String grund)
+    public void kickEvent(String grund)
     {
         client.kick(grund);
         
-        verbindung.verbindungSchliessen();
+        try{verbindung.verbindungSchliessen();}catch(Exception ex){}
     }
 
-    protected void amZugEvent(boolean wert, String text)
+    public void amZugEvent(boolean wert, String text)
     {
         client.status(text);
         client.dranSetzen(wert);
     }
 
-    protected void zugLegalEvent(boolean wert, int illegalArt)
+    public void zugLegalEvent(boolean wert, int illegalArt)
     {
         client.zugLegal(wert, illegalArt);
     }
 
-    protected void handkarteEmpfangenEvent(Karte karte)
+    public void handkarteEmpfangenEvent(Karte karte)
     {
         client.karteEmpfangen(karte);
     }
 
-    protected void ablagestapelkarteEmpfangenEvent(Karte karte)
+    public void ablagestapelkarteEmpfangenEvent(Karte karte)
     {
         client.ablageAkt(karte);
     }
 
-    protected void verbindungVerlorenEvent()
+    public void verbindungVerlorenEvent()
     {
         client.verbindungVerloren();
     }
 
 
-    protected void moepButtonAntwortEvent(boolean rechtzeitig) {
+    public void moepButtonAntwortEvent(boolean rechtzeitig) {
         //client.moepButtonAntwort(rechtzeitig);
     }
 
-    protected void farbeWuenschenEvent() {
+    public void farbeWuenschenEvent() {
         client.farbeWuenschenAnfrage();
     }
     
-    protected void fehlerEvent(String meldung)
+    public void fehlerEvent(String meldung)
     {
         client.meldung(meldung);
     }
     //Ende Event-Methoden
 
-    protected void textEmpfangenEvent(String text) {
+    public void textEmpfangenEvent(String text) {
         client.status(text);
     }
 
-    protected void amZugEvent(boolean wert) {
+    public void amZugEvent(boolean wert) {
         client.dranSetzen(wert);
     }
 
-    protected void spielerLoginEvent(String spielername) {
+    public void spielerLoginEvent(String spielername) {
         client.mitspielerLogin(spielername);
     }
 
-    protected void spielerLogoutEvent(String spielername) {
+    public void spielerLogoutEvent(String spielername) {
         client.mitspielerLogout(spielername);
     }
 
-    protected void spielEnde(boolean wert) {
+    public void spielEnde(boolean wert) {
         client.spielEnde(wert);
     }
 
-    void spielerAmZugEvent(String spielername) {
+    public void spielerAmZugEvent(String spielername) {
         client.mitspielerAmZug(spielername);
     }
 }

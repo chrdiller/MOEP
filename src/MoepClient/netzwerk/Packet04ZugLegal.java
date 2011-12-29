@@ -1,4 +1,4 @@
-package moepclient.netzwerk;
+package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Server dem Client mitteilt, dass der letze Zug ungültig war
@@ -23,7 +23,7 @@ public class Packet04ZugLegal extends Packet{
     }
     
     @Override
-    public void eventAufrufen(Netz netz)
+    public void clientEventAufrufen(Netz netz)
     {
         netz.zugLegalEvent(legal, illegalArt);
     }

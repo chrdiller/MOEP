@@ -1,7 +1,7 @@
 
 package MoepClient.GUI;
 
-import MoepClient.Karte;
+import Moep.Karte;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import javax.swing.BorderFactory;

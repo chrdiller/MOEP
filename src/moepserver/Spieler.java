@@ -1,6 +1,7 @@
 
 package moepserver;
 
+import Moep.Karte;
 import java.util.ArrayList;
 import moepserver.netzwerk.Verbindung;
 

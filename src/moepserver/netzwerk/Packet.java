@@ -1,7 +1,7 @@
 
 package moepserver.netzwerk;
 
-import moepserver.Karte;
+import Moep.Karte;
 
 /**
  * Beschreibt die abstrakte Oberklasse der Packetklassen;
@@ -57,9 +57,7 @@ public abstract class Packet {
      * Ruft packetspezifische Events in spieler auf
      * @param spieler Spieler, bei dem das Event aufgerufen werden soll
      */
-    public abstract void eventAufrufen(Verbindung verbindung);
-    
-    public abstract void eventAusloesen(Verbindung verbindung);
+    public abstract void serverEventAufrufen(Verbindung verbindung);
     
     protected static String seperator = "#";
 }

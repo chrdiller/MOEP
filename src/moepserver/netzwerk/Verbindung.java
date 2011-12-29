@@ -1,9 +1,9 @@
 
 package moepserver.netzwerk;
 
+import Moep.Karte;
 import java.util.logging.Level;
 import moepserver.SpielerRemote;
-import moepserver.Karte;
 import moepserver.MoepLogger;
 
 /**
@@ -79,7 +79,7 @@ public class Verbindung extends Thread
         }
         else
         {
-            packet.eventAufrufen(this);
+            packet.serverEventAufrufen(this);
         }
         return true;
     }
