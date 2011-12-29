@@ -2,9 +2,9 @@ package moepclient.netzwerk;
 
 import MoepClient.Karte;
 import MoepClient.Interface;
+import MoepClient.Spielerverwaltung;
 import moepserver.Server;
 import moepserver.SpielerKI;
-import moepserver.SpielerRemote;
 
 /**
  * Schnittstelle, über die Moep mit dem Netzwerk kommuniziert und umgekehrt
@@ -17,11 +17,13 @@ public class Netz
     private Interface client;
     private Server server;
 
-    public Netz(Interface _client, int kis)
+    public Netz(Interface _client, Spielerverwaltung spieler)
     {
         client = _client;
-        if(kis > 0)
-            serverStarten(kis);
+        if(spieler.gibKISpielerAnzahl() > 0)
+            server = new Server();
+            for(int i = 0; i < spieler.gibKISpielerAnzahl(); i++)
+                server.spielerHinzufuegen(new SpielerKI(spieler.gibKINamen()[i]));
     }
 
     /**
@@ -168,11 +170,5 @@ public class Netz
 
     void spielerAmZugEvent(String spielername) {
         client.mitspielerAmZug(spielername);
-    }
-
-    private void serverStarten(int kis) {
-        server = new Server();
-        for(int i = 0; i < kis; i++)
-            server.spielerHinzufuegen(new SpielerKI("Thorstn_" + (i+1)));
     }
 }

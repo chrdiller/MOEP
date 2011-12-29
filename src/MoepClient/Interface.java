@@ -5,17 +5,21 @@ import MoepClient.GUI.GUI;
 import MoepClient.GUI.FarbeWuenschenDialog;
 import MoepClient.GUI.Hand;
 import MoepClient.GUI.InitPanel;
+import MoepClient.GUI.SpielerDialog;
+import java.awt.event.WindowEvent;
 import moepclient.netzwerk.Netz;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -36,7 +40,7 @@ public class Interface
     private Netz netz;
     
     private Map<String, String> server;
-    
+    private Spielerverwaltung spieler;
     
     public Interface ()
     {
@@ -65,10 +69,37 @@ public class Interface
             
             new MouseAdapter() { //spielerDialog
                 @Override
-                public void mousePressed(MouseEvent me) {
+                public void mousePressed(final MouseEvent me) {
                     System.out.println("spielerDialog");
-                    InitPanel ip = (InitPanel)me.getComponent().getParent();
-                    ip.gibServername();
+                    SpielerDialog spDialog = new SpielerDialog();
+                    spDialog.addWindowListener(new WindowListener(){
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        spieler = ((SpielerDialog)e.getSource()).gibSpielerverwaltung();
+                        g.setEnabled(true);
+                    }
+                    @Override
+                    public void windowOpened(WindowEvent e) { }
+                    @Override
+                    public void windowClosed(WindowEvent e) { }
+                    @Override
+                    public void windowIconified(WindowEvent e) { }
+                    @Override
+                    public void windowDeiconified(WindowEvent e) { }
+                    @Override
+                    public void windowActivated(WindowEvent e) { }
+                    @Override
+                    public void windowDeactivated(WindowEvent e) { }
+                    });
+                    spDialog.gibFertigButton().addMouseListener(            
+                        new MouseAdapter() { //SpielerDialog-Fertig
+                            @Override
+                            public void mousePressed(MouseEvent me) {
+                                ((SpielerDialog)((JButton)me.getSource()).getParent().getParent().getParent().getParent()).dispose();
+                                g.setEnabled(true);
+                            }
+                        });
+                    g.setEnabled(false);
                     /*if(!eingeloggt)
                     {
                         g.LoginOut(!netz.anmelden(information[0], information[1]));
@@ -81,6 +112,10 @@ public class Interface
                 @Override
                 public void mousePressed(MouseEvent me) {
                     System.out.println("erstellen");
+                    if(spieler.istGueltig())
+                    {
+                        netz = new Netz(Interface.this, spieler);
+                    }
                 }
             },
             
@@ -88,6 +123,9 @@ public class Interface
                 @Override
                 public void mousePressed(MouseEvent me) {
                     System.out.println("beitreten");
+                    InitPanel ip = (InitPanel)me.getComponent().getParent();
+                    ip.gibServername();
+                    //...
                 }
             },
             
@@ -110,11 +148,7 @@ public class Interface
         dran = false;
         eingeloggt = false;
       
-        m = new Moep();
-        
-        
-        netz = new Netz(this, 0); //TODO: Zahl von UI holen!!
-        
+        m = new Moep();        
         
         g = new GUI(this, adapter);
     }
