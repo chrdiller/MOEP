@@ -39,6 +39,7 @@ public class InitPanel extends javax.swing.JPanel {
         jLabel1.setText("Einem Spiel beitreten:");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Auswählen..." }));
+        jComboBox1.setMaximumSize(new java.awt.Dimension(89, 20));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -146,5 +147,10 @@ public class InitPanel extends javax.swing.JPanel {
     public String gibServername()
     {
         return (String)jComboBox1.getSelectedItem();
+    }
+    
+    public String gibName()
+    {
+        return jTextField1.getText();
     }
 }

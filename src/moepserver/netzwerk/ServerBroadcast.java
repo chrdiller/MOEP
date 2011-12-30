@@ -14,13 +14,21 @@ import java.net.SocketException;
 
 public class ServerBroadcast extends Thread
 {
+    private String servername;
+    
+    public ServerBroadcast(String _servername)
+    {
+        servername = _servername;
+    }
+    
     public void run()
     {
         DatagramSocket udpSocket = null;
         while(true)
         {
             try {
-                udpSocket = new DatagramSocket(111111);
+                int i = 0;
+                udpSocket = new DatagramSocket(10001);
                 udpSocket.setBroadcast(true);
                 while (true) {
                     byte[] buffer = new byte[1024];
@@ -30,8 +38,7 @@ public class ServerBroadcast extends Thread
                     System.out.print("Nachricht von " + sendeAdresse.getHostAddress() + ":");
                     System.out.println(new String(packet.getData(), 0, packet.getLength()));
                     System.out.println("Sende Antwort.. ");
-                    String antwort = "TestMoepServer";
-                    packet = new DatagramPacket(antwort.getBytes(), antwort.length(), sendeAdresse, 111111);
+                    packet = new DatagramPacket(servername.getBytes(), servername.length(), sendeAdresse, packet.getPort());
                     udpSocket.send(packet);
                     System.out.println("Antwort gesendet!");
                 }

@@ -48,8 +48,8 @@ public class Spielerverwaltung
     
     public boolean istGueltig()
     {
-        for(String s : spieler[1])
-            if(s.equals(""))
+        for(int i = 0; i < 4; i++)
+            if(spieler[i].equals(""))
                 return false;
         if(spieler[0][1].equals(""))
             return false;

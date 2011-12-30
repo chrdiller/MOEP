@@ -208,9 +208,9 @@ public class Verbindung extends Thread
      * @param art Login(art=0) oder Logout(art=1)?
      * @return Erfolgreich gesendet ja/nein
      */
-    public boolean sendeSpielerServerAktion(String name, int art)
+    public boolean sendeSpielerServerAktion(String name, int art, int kartenzahl)
     {
-        return packetSenden(new Packet08SpielerServerAktion(name, art));
+        return packetSenden(new Packet08SpielerServerAktion(name, art, kartenzahl));
     }
     
     /**

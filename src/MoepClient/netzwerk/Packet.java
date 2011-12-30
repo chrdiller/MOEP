@@ -57,9 +57,9 @@ public abstract class Packet {
         {
             return new Packet07Text(dataArray[1]);
         }
-        else if(dataArray[0].equals("08") && dataArray.length == 3)
+        else if(dataArray[0].equals("08") && dataArray.length == 4)
         {
-            return new Packet08SpielerServerAktion(dataArray[1], Integer.parseInt(dataArray[2]));
+            return new Packet08SpielerServerAktion(dataArray[1], Integer.parseInt(dataArray[2]), Integer.parseInt(dataArray[3]));
         }
         else if(dataArray[0].equals("09") && dataArray.length == 2)
         {

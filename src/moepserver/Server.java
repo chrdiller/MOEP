@@ -31,10 +31,11 @@ public class Server {
     private Properties properties;
     
 
-    public Server() {
+    public Server(String servername)
+    {
         log.log(Level.INFO, "*** Starte MoepServer ***");
         loadProperties();
-        netz = new Netz(this, Integer.valueOf(properties.getProperty("Port", "11111")).intValue());
+        netz = new Netz(this, servername, Integer.valueOf(properties.getProperty("Port", "11111")).intValue());
     	verdeckt = this.kartenSet();
 	spieler = new Spieler[4];
         spielerzahl = 0;
@@ -91,7 +92,7 @@ public class Server {
             for(Spieler s : spieler) //Übermittlung der aktuell angemeldeten Spieler an den neuen Remote-Spieler
             {
                 if(s != null)
-                    neu.spielerServerAktion(s.spielername, 0);                  
+                    neu.spielerServerAktion(s.spielername, 0, STARTKARTEN);                  
             }
           
 
@@ -108,7 +109,7 @@ public class Server {
             for(Spieler s : spieler)
             {
                 if(s != null){
-                s.spielerServerAktion(neu.spielername, 0); //Login-Nachricht an alle Remote-Spieler
+                s.spielerServerAktion(neu.spielername, 0, STARTKARTEN); //Login-Nachricht an alle Remote-Spieler
                 s.textSenden(neu.spielername + " ist dem Spiel beigetreten");}
             }
 
@@ -128,15 +129,16 @@ public class Server {
                 for(Spieler s : spieler)
                 {
                     if(s != null)
-                    s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2); //2 = Am Zug
+                    s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, spieler[aktuellerSpielerIndex].gibKartenanzahl()); //2 = Am Zug
                 }
             }
+            kartenzahlUpdate(neu);
         } else 
         {
             neu.loginAblehnen();
             log.log(Level.INFO, "Spieler " + neu.spielername + " wurde abgewiesen");
         }
-
+        
     }
     
     /**
@@ -152,8 +154,9 @@ public class Server {
         for(Spieler s : spieler)
         {
             if(s != null){
-            s.spielerServerAktion(entf.spielername, 1);
-            s.amZug(false);            
+            s.spielerServerAktion(entf.spielername, 1, 0);
+            s.amZug(false);   
+            kartenzahlUpdate(s);
             s.textSenden("Spieler " + entf.spielername + " hat das Spiel verlassen");
             s.textSenden("Das Spiel wurde beendet");
             s.textSenden("Spielneustart, sobald wieder 4 Spieler online sind");
@@ -167,6 +170,7 @@ public class Server {
         for(Spieler s : spieler) {
             if(s != null){
             s.amZug(false);
+            kartenzahlUpdate(s);
             s.textSenden("Spieler " + p.spielername + " hat dieses Spiel gewonnen.");
             s.textSenden("Das Spiel wurde beendet.");
             s.textSenden("Bitte das Spiel verlassen. Nicht nochmal spielen, du alter Zocker!");
@@ -259,6 +263,7 @@ public class Server {
                         s.textSenden(spieler[aktuellerSpielerIndex].spielername + " zieht eine Karte");
 	}
         spieler[aktuellerSpielerIndex].amZug(false);
+        kartenzahlUpdate(spieler[aktuellerSpielerIndex]);
         aktuellerSpielerIndex = (aktuellerSpielerIndex
 			+ richtung
 			+ spieler.length) % spieler.length;
@@ -363,9 +368,9 @@ public class Server {
         spieler[alterSpielerIndex].moep = false;
         
         spieler[alterSpielerIndex].amZug(false);
+        kartenzahlUpdate(spieler[alterSpielerIndex]);
         
         if(spieler[alterSpielerIndex].gibKartenanzahl() == 0) {
-            
             this.spielGewonnen(spieler[alterSpielerIndex]);
         }
         else
@@ -374,7 +379,7 @@ public class Server {
             for(Spieler s : spieler)
             {
                 if(s != null)
-                s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2); //2 = Am Zug
+                s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, spieler[aktuellerSpielerIndex].gibKartenanzahl()); //2 = Am Zug
             }
         }
 
@@ -483,6 +488,11 @@ public class Server {
             
             log.log(Level.INFO, "Properties: " + properties.size() + " Eintraege erfolgreich eingelesen");
         } catch (Exception ex) {log.log(Level.WARNING, "Properties-Datei konnte nicht eingelesen werden");}
+    }
+
+    private void kartenzahlUpdate(Spieler sp) {
+        for(int i = 0; i < 4; i++)
+            if(spieler[i] != null) spieler[i].spielerServerAktion(sp.spielername, 3, sp.gibKartenanzahl());
     }
     
 }

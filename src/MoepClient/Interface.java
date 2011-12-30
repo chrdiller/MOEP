@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 /**
  * Die Interface-Klasse, der Knotenpunkt zwischen Netzwerk, GUI und Moep
  * @author Philipp Herrle & Christian Diller
-
  */
 
 public class Interface
@@ -42,6 +41,9 @@ public class Interface
     
     private Map<String, String> server;
     private Spielerverwaltung spieler;
+    
+    private ServerSuche serversuche;
+    private String servername;
     
     public Interface ()
     {
@@ -96,6 +98,7 @@ public class Interface
                         new MouseAdapter() { //SpielerDialog-Fertig
                             @Override
                             public void mousePressed(MouseEvent me) {
+                                spieler = ((SpielerDialog)((JButton)me.getSource()).getParent().getParent().getParent().getParent()).gibSpielerverwaltung();
                                 ((SpielerDialog)((JButton)me.getSource()).getParent().getParent().getParent().getParent()).dispose();
                                 g.setEnabled(true);
                             }
@@ -113,12 +116,9 @@ public class Interface
                 @Override
                 public void mousePressed(MouseEvent me) {
                     System.out.println("erstellen");
-                    if(spieler.istGueltig())
-                    {
-                        netz = new Netz(Interface.this, spieler);
-                        netz.anmelden("", spieler.gibEigenenNamen());
+                    serverErstellen(serversuche.istEinzigerServer());
+                    servername = spieler.gibEigenenNamen() + "_Server";
                     }
-                }
             },
             
             new MouseAdapter() { //Beitreten
@@ -126,8 +126,8 @@ public class Interface
                 public void mousePressed(MouseEvent me) {
                     System.out.println("beitreten");
                     InitPanel ip = (InitPanel)me.getComponent().getParent();
-                    ip.gibServername();
-                    //...
+                    netz = new Netz(Interface.this);
+                    netz.anmelden(server.get(ip.gibServername()), ip.gibName());
                 }
             },
             
@@ -153,6 +153,9 @@ public class Interface
         m = new Moep();        
         
         g = new GUI(this, adapter);
+        
+        serversuche = new ServerSuche(Interface.this);
+        serversuche.start();
     }
     
     
@@ -296,6 +299,10 @@ public class Interface
         m.mitspielerAmZug(spielername);
         g.setSpielStatus(m.gibSpielerliste());
     }
+    
+    public void spielerKartenzahlUpdate(String spielername, int kartenzahl) {
+        m.mitspielerKartenzahlUpdate(spielername, kartenzahl);
+    }
     //</editor-fold>
     
 
@@ -351,5 +358,20 @@ public class Interface
         server.put(serverName, serverAdresse);
         g.serverGefunden(serverName);
     }
+
+    public void serverErstellen(boolean einzigerServer) {
+        if(einzigerServer){
+            if(spieler.istGueltig())
+            {
+                netz = new Netz(Interface.this, spieler, servername);
+                netz.anmelden("", spieler.gibEigenenNamen());
+            }
+        }
+        else
+        {
+            //Meldung!
+        }
+    }
+
 
 }

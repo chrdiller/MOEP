@@ -9,12 +9,12 @@ import java.util.List;
 /**
  * Die Spielverwaltung auf Clientseite, vor allem Basis für die GUI
  * @author Markus Klar & Christian Diller
-
  */
+
 public class Moep
 {
     private List<Karte> hand;
-    private ArrayList<String> spieler;
+    private String[][] spieler;
     private String spielerAmZug;
     private ArrayList<String> nachrichten;
     private int zuLegenIndex;
@@ -22,14 +22,14 @@ public class Moep
     public Moep()
     {
         hand = Collections.synchronizedList(new ArrayList<Karte>());
-        spieler = new ArrayList<String>();
+        spieler = new String[4][2];
         nachrichten = new ArrayList<String>();
     }
     
     public Moep(ArrayList<Karte> h)
     {
-        hand = Collections.synchronizedList(h);;
-        spieler = new ArrayList<String>();
+        hand = Collections.synchronizedList(h);
+        spieler = new String[4][2];
         nachrichten = new ArrayList<String>();
         Collections.sort(hand);
     }
@@ -67,25 +67,33 @@ public class Moep
     
     public void mitspielerLogin(String name)
     {
-        spieler.add(name);
+        for(int i = 0; i < 4; i++)
+            if(spieler[i][0] == null) {
+                spieler[i][0] = name;
+                return;
+            }
     }
     
     public void mitspielerLogout(String name)
     {
-        spieler.remove(name);
+        for(int i = 0; i < 4; i++)
+            if(spieler[i][0] == name) {
+                spieler[i][0] = null;
+                spieler[i][1] = null;
+            }
     }
     
     public String gibSpielerliste()
     {
-        if(spieler.isEmpty())
+        if(keineSpieler())
             return "";
         String ausgabe = "<html><body><center><h1>Spielerliste</h1><br/><h2>";
-        for(String s : spieler)
+        for(int i = 0; i < 4; i++)
         {
-            if(s.equals(spielerAmZug))
-                ausgabe += ("<i>" + s  + "</i>" + "<br/><br/>");
+            if(spieler[i][0] != null && spieler[i][0].equals(spielerAmZug))
+                ausgabe += ("<i>" + spieler[i][0]  + " (" + spieler[i][1] + " Karten)" + "</i>" + "<br/><br/>");
             else
-                ausgabe += (s + "<br/><br/>");
+                ausgabe += (spieler[i][0]  + " (" + spieler[i][1] + " Karten)" + "<br/><br/>");
         }
         ausgabe = ausgabe + "<h2></center></body></html>";
         return umlautFix(ausgabe);
@@ -122,10 +130,31 @@ public class Moep
 
     public void statusReset() {
         nachrichten.clear();
-        spieler.clear();
+        for(int i = 0; i < 4; i++) {
+            spieler[i][0] = null;
+            spieler[i][1] = null;
+        }
     }
 
     public void mitspielerAmZug(String spielername) {
         spielerAmZug = spielername;
+        for(int i = 0; i < 4; i++)
+            if(spieler[i][0] == spielername) {
+            }
+    }
+
+    private boolean keineSpieler() {
+        for(int i = 0; i < 4; i++)
+            if(spieler[i][0] != null)
+                return false;
+        return true;
+    }
+
+    public void mitspielerKartenzahlUpdate(String spielername, int kartenzahl) {
+        for(int i = 0; i < 4; i++)
+            if(spieler[i][0] == spielername) {
+                spieler[i][1] = kartenzahl+"";
+                return;
+            }
     }
 }

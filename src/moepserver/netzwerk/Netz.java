@@ -6,8 +6,8 @@ import moepserver.SpielerRemote;
 /**
  * Essentiell, um das Netzwerk zu initialisieren und neue Spieler zum Server hinzuzufügen
  * @author Christian Diller
-
  */
+
 public class Netz
 {
     private Server server;
@@ -15,11 +15,11 @@ public class Netz
     private ServerListener listener;
     private ServerBroadcast broadcast;
 
-    public Netz(Server _server, int port)
+    public Netz(Server _server, String servername, int port)
     {
         server = _server;
         listenerStarten(port);
-        broadcastStarten();
+        broadcastStarten(servername);
     }
     
     /**
@@ -47,8 +47,8 @@ public class Netz
         server.spielerHinzufuegen(new SpielerRemote(verbindung, name, verbindung.gibIP()), -1);
     }
 
-    private void broadcastStarten() {
-        broadcast = new ServerBroadcast();
+    private void broadcastStarten(String servername) {
+        broadcast = new ServerBroadcast(servername);
         broadcast.start();
     }
 }

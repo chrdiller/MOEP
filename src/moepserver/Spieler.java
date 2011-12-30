@@ -41,7 +41,7 @@ public abstract class Spieler
     public abstract void textSenden(String t);
     public abstract int farbeFragen();    
     public abstract void loginAkzeptieren();    
-    public abstract void spielerServerAktion(String sn, int wert); 
+    public abstract void spielerServerAktion(String sn, int wert, int kartenzahl); 
     public abstract void spielEnde(boolean gewonnen);
     public abstract String gibIP();
     public abstract void warteAufMoep();

@@ -2,9 +2,9 @@
 package MoepClient.GUI;
 
 import MoepClient.Spielerverwaltung;
-import java.util.ArrayList;
+import java.awt.Point;
+import java.awt.Toolkit;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 
 /**
  *
@@ -13,8 +13,9 @@ import javax.swing.JComboBox;
 public class SpielerDialog extends javax.swing.JFrame {
 
     /** Creates new form SpielerDialog */
-    public SpielerDialog(Spielerverwaltung spieler) {
+    public SpielerDialog(final Spielerverwaltung spieler) {
         initComponents();
+        this.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - this.getWidth()) / 4 ,(Toolkit.getDefaultToolkit().getScreenSize().height - this.getHeight()) / 4));
         spielerverwaltungAnwenden(spieler);
         setVisible(true);
     }
@@ -245,6 +246,6 @@ public class SpielerDialog extends javax.swing.JFrame {
         jTextField3.setText(spieler[3][1]);
         jComboBox1.setSelectedItem(spieler[1][0]);
         jComboBox2.setSelectedItem(spieler[2][0]);
-        jComboBox3.setSelectedItem(spieler[1][0]);
+        jComboBox3.setSelectedItem(spieler[3][0]);
     }
 }

@@ -28,9 +28,9 @@ public class Netz
         lokal = false;   
     }
     
-    public Netz(Interface _client, Spielerverwaltung _spVerwaltung)
+    public Netz(Interface _client, Spielerverwaltung _spVerwaltung, String servername)
     {
-        server = new Server();
+        server = new Server(servername);
         client = _client;
         spVerwaltung = _spVerwaltung;
         lokal = true;
@@ -67,10 +67,10 @@ public class Netz
      * @param karte Das Kartenobjekt, das diesen Spielerzug beschreibt
      * @return Erfolgreich gesendet ja/nein
      */
-    public boolean sendeKarteLegen(Karte karte)
+    public boolean sendeKarteLegen(final Karte karte)
     {
         if(lokal) {
-            spieler.karteLegenEvent(karte);
+            new Thread(){public void run(){spieler.karteLegenEvent(karte);}}.start();
             return true;
         }
         else
@@ -84,7 +84,7 @@ public class Netz
     public boolean sendeKarteZiehen()
     {
         if(lokal) {
-            spieler.karteZiehenEvent();
+            new Thread(){public void run(){spieler.karteZiehenEvent();}}.start();
             return true;
         } 
         else
@@ -98,7 +98,7 @@ public class Netz
     public boolean sendeMoepButtonDruecken()
     {
         if(lokal) {
-            spieler.moepButtonEvent();
+            new Thread(){public void run(){spieler.moepButtonEvent();}}.start();
             return true;
         }
         else
@@ -114,7 +114,9 @@ public class Netz
     public boolean sendeFarbeWuenschenAntwort(int farbe)
     {
         farbeWuenschenInt = farbe;
-        return verbindung.sendeFarbeWuenschenAntwort(farbe);
+        if(!lokal)
+            return verbindung.sendeFarbeWuenschenAntwort(farbe);
+        return true;
     }
     
     /**
@@ -200,5 +202,9 @@ public class Netz
 
     public void spielerAmZugEvent(String spielername) {
         client.mitspielerAmZug(spielername);
+    }
+
+    public void spielerKartenzahlUpdate(String spielername, int kartenzahl) {
+        client.spielerKartenzahlUpdate(spielername, kartenzahl);
     }
 }

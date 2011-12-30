@@ -13,17 +13,19 @@ public class Packet08SpielerServerAktion extends Packet{
     
     private String spielername;
     private int art; //0: Login; 1: Logout
+    private int kartenzahl;
     
-    public Packet08SpielerServerAktion(String _spielername, int _art)
+    public Packet08SpielerServerAktion(String _spielername, int _art, int _kartenzahl)
     {
         spielername = _spielername;
         art = _art;
+        kartenzahl = _kartenzahl;
     }
     
     @Override
     public String gibData()
     {
-        return "08" + seperator + spielername + seperator + art;
+        return "08" + seperator + spielername + seperator + art + seperator + kartenzahl;
     }
     
     @Override

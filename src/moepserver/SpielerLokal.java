@@ -22,6 +22,7 @@ public class SpielerLokal extends Spieler
         loginIP = _loginIP;
         spielername = _spielername;
         hand = new ArrayList<Karte>();
+        clientNetz.spielerKartenzahlUpdate(spielername, gibKartenanzahl());
     }
     
     @Override
@@ -148,7 +149,7 @@ public class SpielerLokal extends Spieler
 
     @Override
     public int farbeFragen() {
-        clientNetz.farbeWuenschenEvent();
+        new Thread(){public void run(){clientNetz.farbeWuenschenEvent();}}.start();
         while(clientNetz.farbeWuenschenInt == 0){try {
                 Thread.currentThread().sleep(200);
             } catch (InterruptedException ex) {}}
@@ -163,7 +164,7 @@ public class SpielerLokal extends Spieler
     }
     
     @Override
-    public void spielerServerAktion(String sn, int wert)
+    public void spielerServerAktion(String sn, int wert, int kartenzahl)
     {
         if(wert == 0)
             clientNetz.spielerLoginEvent(sn);
@@ -171,6 +172,8 @@ public class SpielerLokal extends Spieler
             clientNetz.spielerLogoutEvent(sn);
         else if(wert == 2)
             clientNetz.spielerAmZugEvent(sn);
+        else if(wert == 3)
+            clientNetz.spielerKartenzahlUpdate(spielername, gibKartenanzahl());
     }
     
     @Override

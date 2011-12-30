@@ -145,7 +145,7 @@ public class SpielerKI extends Spieler
             
             if(hand.size() == 1)
                 new Thread(){public void run(){moepButtonEvent();}}.start();
-        }      
+        }
     }
 
     @Override
@@ -186,7 +186,7 @@ public class SpielerKI extends Spieler
     }
     
     @Override
-    public void spielerServerAktion(String sn, int wert)
+    public void spielerServerAktion(String sn, int wert, int kartenzahl)
     {
         //Nichts
     }

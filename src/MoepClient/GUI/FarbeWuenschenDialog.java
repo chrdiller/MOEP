@@ -14,8 +14,8 @@ import javax.swing.JLabel;
 /**
  * Beschreibt den Farbe-Wuenschen-Dialog
  * @author Philipp Herrle
-
  */
+
 public class FarbeWuenschenDialog extends JFrame 
 {
     
@@ -48,6 +48,8 @@ public class FarbeWuenschenDialog extends JFrame
         Point point = new Point((screenSize.width - this.getWidth()) / 2 ,(screenSize.height - this.getHeight()) / 2);
         
         this.setLocation(point);
+        
+        this.setEnabled(true);
 
 
         jLabel1.setBackground(new java.awt.Color(255, 0, 0));
