@@ -1,4 +1,3 @@
-
 package MoepClient;
 
 import Moep.Karte;
@@ -8,7 +7,7 @@ import java.util.List;
 
 /**
  * Die Spielverwaltung auf Clientseite, vor allem Basis für die GUI
- * @author Markus Klar & Christian Diller
+ * @author Christian Diller & Markus Klar 
  */
 
 public class Moep

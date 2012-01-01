@@ -1,4 +1,3 @@
-
 package MoepClient.GUI;
 
 import java.awt.Dimension;
@@ -14,13 +13,14 @@ import javax.swing.JPanel;
 /**
  * Beschreibt die Schnittstelle zwischen gespeichertem und gezeichneten Bild
  * @author Philipp Herrle
-
  */
-public class IconGraphik extends JLabel{
-    
+
+public class IconGraphik extends JLabel
+{
     private ImageIcon icon;
     
-    public IconGraphik (ImageIcon iconH,Dimension pref, MouseAdapter listener){
+    public IconGraphik (ImageIcon iconH,Dimension pref, MouseAdapter listener)
+    {
         super();
         
         if (pref==null)pref = new Dimension(200, 300);
@@ -35,17 +35,18 @@ public class IconGraphik extends JLabel{
         else{
             icon = iconH;
         }
-        
     }
     
-    public void changeIcon(ImageIcon iconH){
+    public void changeIcon(ImageIcon iconH)
+    {
         if(iconH != null) icon = iconH;
         
         this.repaint();
     }
 
     
-    public final ImageIcon getDefaultIcon(){
+    public final ImageIcon getDefaultIcon()
+    {
         ImageIcon icon = new ImageIcon(this.getClass().getResource("../grafik/kartenSet.png"));
         icon.setImage(new JPanel().createImage(new FilteredImageSource(icon.getImage().getSource(), new CropImageFilter(12 * 166, 4 * 250, 166, 250))));
         return icon;
@@ -53,16 +54,17 @@ public class IconGraphik extends JLabel{
     
     
     @Override
-    public void paintComponent (Graphics g){
+    public void paintComponent (Graphics g)
+    {
         super.paintComponent(g);
         
         Graphics2D g2 = (Graphics2D)g;
 
-        
         g2.drawImage(this.getImageIcon().getImage(), 0,0,this.getWidth(),this.getHeight(), null);
     }
 
-    public ImageIcon getImageIcon() {
+    public ImageIcon getImageIcon()
+    {
         return icon;
     }
     

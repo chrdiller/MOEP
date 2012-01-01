@@ -1,4 +1,3 @@
-
 package MoepClient.GUI;
 
 import Moep.Karte;
@@ -17,17 +16,17 @@ import javax.swing.JLabel;
 /**
  * Beschreibt die (grafische) Hand eines Spielers
  * @author Philipp Herrle
-
  */
-public class Hand extends JLabel{
-    
+
+public class Hand extends JLabel
+{
     private final int hGap;
     private final int vBorder;
 
-    
     private Rectangle[] kartenPos;
     
-    public Hand (int hGapH, int vBorderH, MouseAdapter karteLegen){
+    public Hand (int hGapH, int vBorderH, MouseAdapter karteLegen)
+    {
         super();
         
         hGap = hGapH;
@@ -41,8 +40,8 @@ public class Hand extends JLabel{
         this.setPreferredSize(new Dimension(0,240));
     }
     
-    public void kartenAktualisieren (List<Karte> karten){
-        
+    public void kartenAktualisieren (List<Karte> karten)
+    {
         kartenPos = new Rectangle[karten.size()];
         
         ImageIcon[] bilder = new ImageIcon[karten.size()];
@@ -80,8 +79,7 @@ public class Hand extends JLabel{
         
         this.setIcon(new ImageIcon(handNeu));
         
-        this.repaint();
-        
+        this.repaint();  
     }
     
     public int gibIndexKarte (Point MouseKlick){
@@ -95,7 +93,6 @@ public class Hand extends JLabel{
                 break stop;
             }
         }
-        
         return res;
     }
 }

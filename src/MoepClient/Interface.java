@@ -1,4 +1,3 @@
-
 package MoepClient;
 
 import MoepClient.netzwerk.ServerSuche;
@@ -15,21 +14,18 @@ import java.applet.AudioClip;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
-import java.awt.event.WindowListener;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
  * Die Interface-Klasse, der Knotenpunkt zwischen Netzwerk, GUI und Moep
- * @author Philipp Herrle & Christian Diller
+ * @author  Christian Diller & Philipp Herrle
  */
 
 public class Interface
@@ -76,36 +72,28 @@ public class Interface
             new MouseAdapter() { //spielerDialog
                 @Override
                 public void mousePressed(final MouseEvent me) {
-                    System.out.println("spielerDialog");
                     SpielerDialog spDialog = new SpielerDialog(spieler);
                     spDialog.addWindowListener(new WindowAdapter(){
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        spieler = ((SpielerDialog)e.getSource()).gibSpielerverwaltung();
-                        g.setEnabled(true);
+                        @Override
+                        public void windowClosing(WindowEvent e) {
+                            spieler = ((SpielerDialog)e.getSource()).gibSpielerverwaltung();
+                            g.setEnabled(true);
                     }});
                     g.setEnabled(false);
-                    /*if(!eingeloggt)
-                    {
-                        g.LoginOut(!netz.anmelden(information[0], information[1]));
-                        eingeloggt = true; 
-                    }*/
                 }
             },
             
             new MouseAdapter() { //Erstellen
                 @Override
                 public void mousePressed(MouseEvent me) {
-                    System.out.println("erstellen");
-                    serverErstellen(serversuche.istEinzigerServer());
+                    serverErstellen();
                     servername = spieler.gibEigenenNamen() + "_Server";
-                    }
+                }
             },
             
             new MouseAdapter() { //Beitreten
                 @Override
                 public void mousePressed(MouseEvent me) {
-                    System.out.println("beitreten");
                     InitPanel ip = (InitPanel)me.getComponent().getParent();
                     netz = new Netz(Interface.this);
                     netz.anmelden(server.get(ip.gibServername()), ip.gibName());
@@ -135,6 +123,8 @@ public class Interface
         
         g = new GUI(this, adapter);
         
+        Statusmeldung.infoAnzeigen("Willkommen bei MOEP!");
+        
         serversuche = new ServerSuche(Interface.this);
         serversuche.start();
     }
@@ -159,7 +149,7 @@ public class Interface
         }
         m.zuLegen(index);
         if (!netz.sendeKarteLegen(m.gibKarteAt(index))){
-            meldung("Fehler beim Senden :(");
+            Statusmeldung.fehlerAnzeigen("Karte konnte nicht gesendet werden :(");
         }
         else{
             playSound("click");
@@ -210,7 +200,7 @@ public class Interface
     {
         if(eingeloggt)
         {
-            meldung("Vom Server gekickt: " + Grund);
+            Statusmeldung.warnungAnzeigen("Vom Server gekickt: " + Grund);
             logout();               
         }
 
@@ -233,20 +223,7 @@ public class Interface
     //</editor-fold>
     
         
-    //<editor-fold defaultstate="collapsed" desc="Meldung & Logout-Dialog">
-    public void meldung(String meldung)
-    {
-        ImageIcon icon = new ImageIcon(this.getClass().getResource("grafik/dialogSet.png"));
-        icon.setImage(new JPanel().createImage(new FilteredImageSource(icon.getImage().getSource(), new CropImageFilter(3 * 32, 0 * 32, 32, 32))));
-
-        JOptionPane.showMessageDialog(
-                g,
-                meldung,
-                "Fehler",
-                JOptionPane.ERROR_MESSAGE,
-                icon);
-    }
-    
+    //<editor-fold defaultstate="collapsed" desc="Logout-Dialog">
     public boolean yesNoDialog()
     {
         ImageIcon icon = new ImageIcon(this.getClass().getResource("grafik/dialogSet.png"));
@@ -323,7 +300,7 @@ public class Interface
     {
         if(eingeloggt)
         {
-            meldung("Verbindung verloren! :(");
+            Statusmeldung.fehlerAnzeigen("Verbindung verloren :(");
             logout();
         }
     }
@@ -340,8 +317,9 @@ public class Interface
         g.serverGefunden(serverName);
     }
 
-    public void serverErstellen(boolean einzigerServer) {
-        if(einzigerServer){
+    public void serverErstellen() 
+    {
+        if(serversuche.istEinzigerServer()){
             if(spieler.istGueltig())
             {
                 netz = new Netz(Interface.this, spieler, servername);
@@ -350,7 +328,7 @@ public class Interface
         }
         else
         {
-            //Meldung!
+            Statusmeldung.fehlerAnzeigen("Auf diesem PC läuft bereits ein Server");
         }
     }
 

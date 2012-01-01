@@ -3,12 +3,13 @@ package MoepClient.netzwerk;
 import Moep.Karte;
 import MoepClient.Interface;
 import MoepClient.Spielerverwaltung;
+import MoepClient.Statusmeldung;
 import moepserver.Server;
 import moepserver.SpielerKI;
 import moepserver.SpielerLokal;
 
 /**
- * Schnittstelle, über die Moep mit dem Netzwerk kommuniziert und umgekehrt
+ * Schnittstelle, über das Interface mit dem Netzwerk kommuniziert und umgekehrt
  * @author Christian Diller
  */
 
@@ -176,7 +177,7 @@ public class Netz
     
     public void fehlerEvent(String meldung)
     {
-        client.meldung(meldung);
+        Statusmeldung.fehlerAnzeigen(meldung);
     }
     //Ende Event-Methoden
 

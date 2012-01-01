@@ -1,4 +1,3 @@
-
 package MoepClient.GUI;
 
 import java.awt.Color;
@@ -8,13 +7,13 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
 /**
- * Beschreibt die Statusleiste am rechten Rand mit Spielerliste, Meldungen und dem Moep-Button
+ * Beschreibt die Statusleiste am rechten Rand mit Spielerliste, 
+ * Meldungen und dem Moep-Button
  * @author Philipp Herrle
-
  */
+
 public class Status extends javax.swing.JPanel {
 
-    /** Creates new form spielStatus */
     public Status(MouseAdapter moep) {
         initComponents(moep);
     }
@@ -69,18 +68,18 @@ public class Status extends javax.swing.JPanel {
         
     }// </editor-fold>
     
-    // Variables declaration - do not modify
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    // End of variables declaration
     
-    public void setStatus(String status){
+    public void setStatus(String status)
+    {
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER); 
         jLabel2.setText(status);
     }
     
-    public void setSpielStatus (String status){
+    public void setSpielStatus (String status)
+    {
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText(status);
     }

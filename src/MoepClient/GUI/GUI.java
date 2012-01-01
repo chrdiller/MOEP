@@ -1,4 +1,3 @@
-
 package MoepClient.GUI;
 
 import MoepClient.Interface;
@@ -21,9 +20,9 @@ import javax.swing.ScrollPaneLayout;
 
 /**
  * Beschreibt die GUI, ueber die der User mit dem Programm interagiert
- * @author Philipp Herrle
-
+ * @author Philipp Herrle & Christian Diller
  */
+
 public class GUI extends JFrame
 {
     private Interface interfaceI;
@@ -41,33 +40,27 @@ public class GUI extends JFrame
         this.setLocation(new Point(Toolkit.getDefaultToolkit().getScreenSize().width / 8 ,Toolkit.getDefaultToolkit().getScreenSize().height / 8));
         interfaceI = i;
         
-        
-        
+        //<editor-fold defaultstate="collapsed" desc="Layout">
         GridBagLayout gbl = new GridBagLayout();
         this.setLayout(gbl);
-        
-        
-        
-        GridBagConstraints gbc=new GridBagConstraints();
+
+        GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
+        
         gbc.gridx = 0;
         gbc.gridy = 0;
-        
         gbc.gridheight = 1;
         gbc.gridwidth = 2;
-        
         initP = new InitPanel(adapter[2], adapter[3], adapter[4]);
         gbl.setConstraints(initP, gbc);
-        this.add(initP);        
+        this.add(initP);
         
         
         gbc.gridx = 0;
         gbc.gridy = 1;
-        
         gbc.gridheight = 1;
         gbc.gridwidth = 1;
         JPanel container = this.erzeugeFenster(adapter);
-        
         gbl.setConstraints(container, gbc);
         this.add(container);
         
@@ -78,18 +71,14 @@ public class GUI extends JFrame
         gbl.setConstraints(bar, gbc);
         this.add(bar);
         
-        
         gbc.gridx = 1;
         gbc.gridy = 1;
-        
         gbc.gridheight = 2;
         gbc.gridwidth = 1;
-        
         status = new Status(adapter[5]);
-        
         gbl.setConstraints(status, gbc);
         this.add(status);
-        
+        //</editor-fold>
         
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -100,45 +89,34 @@ public class GUI extends JFrame
         
         this.getRootPane().setBorder(BorderFactory.createEmptyBorder(0, 15, 5, 5));
         this.setResizable(false);
-        this.pack();
         
+        this.pack();
         this.setVisible(true);
     }
     
-    private JPanel erzeugeFenster (MouseAdapter[] adapter){
-        
+    private JPanel erzeugeFenster (MouseAdapter[] adapter)
+    {
         tisch = new Tisch(adapter[0]);
-        
         hand = new Hand(15, 20,adapter[1]);
-        
-        //loginP = new LoginPanel (adapter[2], adapter[3]);
-        //initP = new InitPanel(adapter[2], adapter[3], adapter[4]);
-        
+
         JPanel container = new JPanel();
-        
         container.setLayout(new BorderLayout());
         
         JScrollPane scrollpane = new JScrollPane();
-        
         scrollpane.setLayout(new ScrollPaneLayout());
         scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        
         scrollpane.setPreferredSize(new Dimension(800,250));
         scrollpane.setViewportView(hand);
         
-        //container.add(initP, BorderLayout.NORTH);
-        
         container.add(tisch, BorderLayout.CENTER);
-        
         container.add(scrollpane, BorderLayout.SOUTH);
-        
-        //container.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
         
         return container;
     }
     
-    public void ablageAktualisieren (Karte karte){
+    public void ablageAktualisieren (Karte karte)
+    {
         tisch.ablageAktualisieren(karte);
     }
     
@@ -147,29 +125,31 @@ public class GUI extends JFrame
         tisch.ablageReset();
     }
     
-    public void setStatus(String stat){
+    public void setStatus(String stat)
+    {
         status.setStatus(stat);
     }
     
-    public void setSpielStatus(String stat){
+    public void setSpielStatus(String stat)
+    {
         status.setSpielStatus(stat);
     }
     
-    public void LoginOut (boolean login){
-
-        //loginP.changeStatus(login);
-        
+    public void LoginOut (boolean login)
+    {
+        initP.statusAendern(login);
         if (login){
             tisch.ablageAktualisieren(new Karte(0,0));
-            
         }
     }
     
-    public void handAktualisieren(List<Karte> karten){
+    public void handAktualisieren(List<Karte> karten)
+    {
         hand.kartenAktualisieren(karten);
     }
 
-    public void serverGefunden(String serverName) {
+    public void serverGefunden(String serverName)
+    {
         initP.serverGefunden(serverName);
     }
 }

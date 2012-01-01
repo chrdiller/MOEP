@@ -1,10 +1,11 @@
-
 package MoepClient;
 
 /**
- *
+ * Hier werden alle Mitspieler verwaltet, die über den Spieler-Dialog
+ * eingetragen werden
  * @author Christian Diller
  */
+
 public class Spielerverwaltung 
 {
     String[][] spieler;

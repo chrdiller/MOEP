@@ -1,4 +1,3 @@
-
 package MoepClient.GUI;
 
 import Moep.Karte;
@@ -9,10 +8,10 @@ import javax.swing.JPanel;
 import org.jdesktop.layout.GroupLayout;
 
 /**
- * Beschreibt den Tisch, auf dem die Karten liegen
+ * Beschreibt den (grafischen) Tisch, auf dem die Karten liegen
  * @author Philipp Herrle
-
  */
+
 public class Tisch extends JPanel
 {    
     private IconGraphik jLabel1;
@@ -22,8 +21,8 @@ public class Tisch extends JPanel
         initComponents(adapter);
     }
     
-    private void initComponents(MouseAdapter adapter) {
-        
+    private void initComponents(MouseAdapter adapter)
+    {
         jLabel1 = new IconGraphik(null,null,null);
         jLabel2 = new IconGraphik(null,null,adapter);
         
@@ -53,9 +52,9 @@ public class Tisch extends JPanel
                 .addContainerGap())
         );
     }
-    // Variables declaration - do not modify
     
-    public void ablageAktualisieren (Karte karte){
+    public void ablageAktualisieren (Karte karte)
+    {
         jLabel1.changeIcon(karte.gibBild());
         
         this.repaint();

@@ -31,7 +31,7 @@ public class ServerBroadcast extends Thread
                 udpSocket = new DatagramSocket(10001);
                 udpSocket.setBroadcast(true);
                 while (true) {
-                    byte[] buffer = new byte[1024];
+                    byte[] buffer = new byte[4];
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     udpSocket.receive(packet);
                     InetAddress sendeAdresse = packet.getAddress();

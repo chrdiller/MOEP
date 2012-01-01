@@ -1,4 +1,3 @@
-
 package MoepClient.GUI;
 
 import MoepClient.Spielerverwaltung;
@@ -8,9 +7,10 @@ import java.awt.Window;
 import java.awt.event.WindowEvent;
 
 /**
- *
+ * Der Spielerdialog, über den der Benutzer seine Spieler verwalten kann
  * @author Christian Diller
  */
+
 public class SpielerDialog extends javax.swing.JFrame 
 {
 

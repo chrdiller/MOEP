@@ -1,4 +1,3 @@
-
 package MoepClient.GUI;
 
 import MoepClient.Interface;
@@ -21,7 +20,6 @@ public class FarbeWuenschenDialog extends JFrame
     
     private Interface i;
     
-    /** Erstellt die neue Form farbeWuenschenDialog */
     public FarbeWuenschenDialog(Interface iH) {
         i = iH;
         initComponents();
@@ -116,19 +114,17 @@ public class FarbeWuenschenDialog extends JFrame
             public void mousePressed(MouseEvent me){
                 JLabel label = (JLabel)me.getComponent();
                 
-                int farbe = Integer.parseInt(label.getName());
+                final int farbe = Integer.parseInt(label.getName());
                 
-                i.sendeFarbeWuenschenAntwort(farbe);
+                new Thread(){public void run(){i.sendeFarbeWuenschenAntwort(farbe);}};
                 
                 dispose();
             }
         };
     }
         
-    // Variables declaration - do not modify
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    // End of variables declaration
 }
