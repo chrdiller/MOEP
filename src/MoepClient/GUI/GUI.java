@@ -7,7 +7,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ItemListener;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -23,19 +24,21 @@ import javax.swing.ScrollPaneLayout;
  * @author Philipp Herrle
 
  */
-public class GUI extends JFrame{
-    
+public class GUI extends JFrame
+{
     private Interface interfaceI;
     
     private Tisch tisch;
     private Hand hand;
     private Status status;
-    //private LoginPanel loginP;
     private InitPanel initP;
     
-    public GUI (Interface i, MouseAdapter [] adapter){
+    private StatusBar bar = new StatusBar();
+    
+    public GUI (Interface i, MouseAdapter [] adapter) {
         super();
-        
+        this.setTitle("MOEP");
+        this.setLocation(new Point(Toolkit.getDefaultToolkit().getScreenSize().width / 8 ,Toolkit.getDefaultToolkit().getScreenSize().height / 8));
         interfaceI = i;
         
         
@@ -47,28 +50,45 @@ public class GUI extends JFrame{
         
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        
         gbc.gridx = 0;
         gbc.gridy = 0;
         
         gbc.gridheight = 1;
         gbc.gridwidth = 2;
+        
+        initP = new InitPanel(adapter[2], adapter[3], adapter[4]);
+        gbl.setConstraints(initP, gbc);
+        this.add(initP);        
+        
+        
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
         JPanel container = this.erzeugeFenster(adapter);
         
         gbl.setConstraints(container, gbc);
         this.add(container);
         
-        gbc.gridx = 3;
-        gbc.gridy = 0;
-        
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbl.setConstraints(bar, gbc);
+        this.add(bar);
+        
+        
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        
+        gbc.gridheight = 2;
         gbc.gridwidth = 1;
         
         status = new Status(adapter[5]);
         
         gbl.setConstraints(status, gbc);
         this.add(status);
-        
         
         
         this.addWindowListener(new WindowAdapter() {
@@ -78,6 +98,8 @@ public class GUI extends JFrame{
             }
         });
         
+        this.getRootPane().setBorder(BorderFactory.createEmptyBorder(0, 15, 5, 5));
+        this.setResizable(false);
         this.pack();
         
         this.setVisible(true);
@@ -90,7 +112,7 @@ public class GUI extends JFrame{
         hand = new Hand(15, 20,adapter[1]);
         
         //loginP = new LoginPanel (adapter[2], adapter[3]);
-        initP = new InitPanel(adapter[2], adapter[3], adapter[4]);
+        //initP = new InitPanel(adapter[2], adapter[3], adapter[4]);
         
         JPanel container = new JPanel();
         
@@ -105,13 +127,13 @@ public class GUI extends JFrame{
         scrollpane.setPreferredSize(new Dimension(800,250));
         scrollpane.setViewportView(hand);
         
-        //container.add(loginP, BorderLayout.NORTH);
-        container.add(initP, BorderLayout.NORTH);
+        //container.add(initP, BorderLayout.NORTH);
         
         container.add(tisch, BorderLayout.CENTER);
         
         container.add(scrollpane, BorderLayout.SOUTH);
-        container.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 0));
+        
+        //container.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
         
         return container;
     }

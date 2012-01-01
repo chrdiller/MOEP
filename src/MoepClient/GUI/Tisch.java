@@ -13,16 +13,15 @@ import org.jdesktop.layout.GroupLayout;
  * @author Philipp Herrle
 
  */
-public class Tisch extends JPanel{
-    
+public class Tisch extends JPanel
+{    
     private IconGraphik jLabel1;
     private javax.swing.JLabel jLabel2;
     
     public Tisch(MouseAdapter adapter){
-        this.initComponents(adapter);
+        initComponents(adapter);
     }
     
-      // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents(MouseAdapter adapter) {
         
         jLabel1 = new IconGraphik(null,null,null);

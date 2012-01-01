@@ -4,15 +4,16 @@ package MoepClient.GUI;
 import MoepClient.Spielerverwaltung;
 import java.awt.Point;
 import java.awt.Toolkit;
-import javax.swing.JButton;
+import java.awt.Window;
+import java.awt.event.WindowEvent;
 
 /**
  *
  * @author Christian Diller
  */
-public class SpielerDialog extends javax.swing.JFrame {
+public class SpielerDialog extends javax.swing.JFrame 
+{
 
-    /** Creates new form SpielerDialog */
     public SpielerDialog(final Spielerverwaltung spieler) {
         initComponents();
         this.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - this.getWidth()) / 4 ,(Toolkit.getDefaultToolkit().getScreenSize().height - this.getHeight()) / 4));
@@ -198,7 +199,8 @@ public class SpielerDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox3ItemStateChanged
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-
+        this.processWindowEvent(new WindowEvent((Window)this, WindowEvent.WINDOW_CLOSING));
+        dispose();
     }//GEN-LAST:event_jButton1MouseClicked
 
     public Spielerverwaltung gibSpielerverwaltung()
@@ -212,11 +214,6 @@ public class SpielerDialog extends javax.swing.JFrame {
         if(((String)jComboBox2.getSelectedItem()) == "KI") {liste[2][0]="KI"; liste[2][1]=jTextField2.getText();}
         if(((String)jComboBox3.getSelectedItem()) == "KI") {liste[3][0]="KI"; liste[3][1]=jTextField3.getText();}
         return new Spielerverwaltung(liste);
-    }
-    
-    public JButton gibFertigButton()
-    {
-        return jButton1;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -241,11 +238,11 @@ public class SpielerDialog extends javax.swing.JFrame {
             return;        
         String[][] spieler = sp.gibSpielerListe();
         jTextField4.setText(sp.gibEigenenNamen());
+        jComboBox1.setSelectedItem(spieler[1][0]);
+        jComboBox2.setSelectedItem(spieler[2][0]);
+        jComboBox3.setSelectedItem(spieler[3][0]);        
         jTextField1.setText(spieler[1][1]);
         jTextField2.setText(spieler[2][1]);
         jTextField3.setText(spieler[3][1]);
-        jComboBox1.setSelectedItem(spieler[1][0]);
-        jComboBox2.setSelectedItem(spieler[2][0]);
-        jComboBox3.setSelectedItem(spieler[3][0]);
     }
 }

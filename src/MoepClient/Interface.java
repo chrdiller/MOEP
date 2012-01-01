@@ -1,6 +1,7 @@
 
 package MoepClient;
 
+import MoepClient.netzwerk.ServerSuche;
 import Moep.Karte;
 import MoepClient.GUI.GUI;
 import MoepClient.GUI.FarbeWuenschenDialog;
@@ -13,6 +14,7 @@ import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowListener;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
@@ -21,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -75,34 +78,12 @@ public class Interface
                 public void mousePressed(final MouseEvent me) {
                     System.out.println("spielerDialog");
                     SpielerDialog spDialog = new SpielerDialog(spieler);
-                    spDialog.addWindowListener(new WindowListener(){
+                    spDialog.addWindowListener(new WindowAdapter(){
                     @Override
                     public void windowClosing(WindowEvent e) {
                         spieler = ((SpielerDialog)e.getSource()).gibSpielerverwaltung();
                         g.setEnabled(true);
-                    }
-                    @Override
-                    public void windowOpened(WindowEvent e) { }
-                    @Override
-                    public void windowClosed(WindowEvent e) { }
-                    @Override
-                    public void windowIconified(WindowEvent e) { }
-                    @Override
-                    public void windowDeiconified(WindowEvent e) { }
-                    @Override
-                    public void windowActivated(WindowEvent e) { }
-                    @Override
-                    public void windowDeactivated(WindowEvent e) { }
-                    });
-                    spDialog.gibFertigButton().addMouseListener(            
-                        new MouseAdapter() { //SpielerDialog-Fertig
-                            @Override
-                            public void mousePressed(MouseEvent me) {
-                                spieler = ((SpielerDialog)((JButton)me.getSource()).getParent().getParent().getParent().getParent()).gibSpielerverwaltung();
-                                ((SpielerDialog)((JButton)me.getSource()).getParent().getParent().getParent().getParent()).dispose();
-                                g.setEnabled(true);
-                            }
-                        });
+                    }});
                     g.setEnabled(false);
                     /*if(!eingeloggt)
                     {

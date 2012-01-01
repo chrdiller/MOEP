@@ -1,6 +1,7 @@
 
-package MoepClient;
+package MoepClient.netzwerk;
 
+import MoepClient.Interface;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
