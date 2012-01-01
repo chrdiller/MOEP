@@ -20,8 +20,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 /**
  * Die Interface-Klasse, der Knotenpunkt zwischen Netzwerk, GUI und Moep
@@ -86,8 +89,8 @@ public class Interface
             new MouseAdapter() { //Erstellen
                 @Override
                 public void mousePressed(MouseEvent me) {
-                    serverErstellen();
                     servername = spieler.gibEigenenNamen() + "_Server";
+                    serverErstellen();
                 }
             },
             
@@ -111,6 +114,13 @@ public class Interface
                     else
                         playSound("beep");
                 }
+            },
+                
+            new MouseAdapter (){ //Serversuche-ComboBox
+                @Override
+                public void mouseClicked(MouseEvent e) {      
+                    Interface.this.serverSuchen();
+                }
             }
                 
         };
@@ -126,7 +136,7 @@ public class Interface
         Statusmeldung.infoAnzeigen("Willkommen bei MOEP!");
         
         serversuche = new ServerSuche(Interface.this);
-        serversuche.start();
+        serverSuchen();
     }
     
     
@@ -313,8 +323,12 @@ public class Interface
 
     public void serverGefunden(String serverName, String serverAdresse)
     {
-        server.put(serverName, serverAdresse);
-        g.serverGefunden(serverName);
+        if(server.get(serverName) == null) {
+            server.put(serverName, serverAdresse);
+            g.serverGefunden(serverName);
+        }
+        else
+            g.serverGefunden(null);
     }
 
     public void serverErstellen() 
@@ -332,5 +346,10 @@ public class Interface
         }
     }
 
-
+    private void serverSuchen() 
+    {
+        server.clear();
+        serversuche.suchen();
+        Statusmeldung.infoAnzeigen("Serverliste wurde aktualisiert");
+    }
 }

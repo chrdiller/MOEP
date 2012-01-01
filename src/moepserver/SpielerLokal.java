@@ -150,7 +150,7 @@ public class SpielerLokal extends Spieler
     @Override
     public int farbeFragen() {
         new Thread(){public void run(){clientNetz.farbeWuenschenEvent();}}.start();
-        while(clientNetz.farbeWuenschenInt == 0){try {
+        while(clientNetz.farbeWuenschenInt == 4){try {
                 Thread.currentThread().sleep(200);
             } catch (InterruptedException ex) {}}
         int farbe = clientNetz.farbeWuenschenInt;

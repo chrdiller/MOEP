@@ -116,7 +116,7 @@ public class FarbeWuenschenDialog extends JFrame
                 
                 final int farbe = Integer.parseInt(label.getName());
                 
-                new Thread(){public void run(){i.sendeFarbeWuenschenAntwort(farbe);}};
+                new Thread(){public void run(){i.sendeFarbeWuenschenAntwort(farbe);}}.start();
                 
                 dispose();
             }

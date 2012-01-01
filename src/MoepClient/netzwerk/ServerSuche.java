@@ -1,4 +1,3 @@
-
 package MoepClient.netzwerk;
 
 import MoepClient.Interface;
@@ -8,34 +7,36 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 /**
- *
+ * Hier findet die Suche nach Servern im gesamten Netzwerk
+ * per UDP-Broadcast statt
  * @author Christian Diller
  */
 
-public class ServerSuche extends Thread 
+public class ServerSuche
 {
-    Interface i;
+    Interface iF;
             
-    public ServerSuche(Interface _i) 
+    public ServerSuche(Interface _iF) 
     {
-        i = _i;
+        iF = _iF;
     }
 
-    @Override
-    public void run() {
+    public void suchen() 
+    {
         String serverName = "", serverAdresse = "";
         DatagramSocket udpSocket = null;
-        while(true)
+        
+        int zaehler = 0;
+        while (udpSocket == null)
+        {
+            try{udpSocket = new DatagramSocket(11112 + zaehler);}catch(Exception ex){ }
+            zaehler++;
+        }       
+        
+        for(int i = 0; i < 5; i++)
         {
             try 
             {
-                int zaehler = 0;
-                while (udpSocket == null)
-                {
-                    try{udpSocket = new DatagramSocket(11112 + zaehler);}catch(Exception ex){ }
-                    zaehler++;
-                }
-                zaehler = 0;
                 udpSocket.setBroadcast(true);
                 byte[] buffer = new String("MOEP").getBytes();
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("255.255.255.255"), 10001);
@@ -44,6 +45,7 @@ public class ServerSuche extends Thread
 
                 buffer = new byte[1024];
                 packet = new DatagramPacket(buffer, buffer.length);
+                udpSocket.setSoTimeout(100);
                 udpSocket.receive(packet);
 
                 System.out.print("Antwort von " + packet.getAddress().getHostAddress() + ":");
@@ -51,10 +53,10 @@ public class ServerSuche extends Thread
 
                 serverName = new String(packet.getData(), 0, packet.getLength());
                 serverAdresse = packet.getAddress().getHostAddress();
-                i.serverGefunden(serverName, serverAdresse);
+                iF.serverGefunden(serverName, serverAdresse);
             } 
-            catch (NullPointerException npEx) { continue; /*?... */ }
-            catch(IOException ioEx){ continue; } //MELDUNG!
+            catch (NullPointerException npEx) { continue; }
+            catch(IOException ioEx){ continue; }
         }
     }
 

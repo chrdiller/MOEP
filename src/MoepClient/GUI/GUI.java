@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.event.PopupMenuListener;
 
 /**
  * Beschreibt die GUI, ueber die der User mit dem Programm interagiert
@@ -51,7 +52,7 @@ public class GUI extends JFrame
         gbc.gridy = 0;
         gbc.gridheight = 1;
         gbc.gridwidth = 2;
-        initP = new InitPanel(adapter[2], adapter[3], adapter[4]);
+        initP = new InitPanel(adapter[2], adapter[3], adapter[4], adapter[6]);
         gbl.setConstraints(initP, gbc);
         this.add(initP);
         
