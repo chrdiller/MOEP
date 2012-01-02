@@ -3,7 +3,7 @@ package MoepClient.netzwerk;
 import Moep.Karte;
 import MoepClient.Interface;
 import MoepClient.Spielerverwaltung;
-import MoepClient.Statusmeldung;
+import Moep.Statusmeldung;
 import moepserver.Server;
 import moepserver.SpielerKI;
 import moepserver.SpielerLokal;
@@ -47,7 +47,7 @@ public class Netz
     {
         if(lokal) {
             spieler = new SpielerLokal(this, name, "localhost");
-            server.spielerHinzufuegen(spieler, 0);
+            server.spielerHinzufuegen(spieler, 0);     
             for(int i = 0; i < spVerwaltung.gibKISpielerAnzahl(); i++)
                 server.spielerHinzufuegen(new SpielerKI(spVerwaltung.gibKINamen()[i][0]), Integer.parseInt(spVerwaltung.gibKINamen()[i][1]));
             return true;

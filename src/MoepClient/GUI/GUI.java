@@ -35,7 +35,7 @@ public class GUI extends JFrame
     
     private StatusBar bar = new StatusBar();
     
-    public GUI (Interface i, MouseAdapter [] adapter) {
+    public GUI (Interface i, MouseAdapter [] adapter, PopupMenuListener popupListener) {
         super();
         this.setTitle("MOEP");
         this.setLocation(new Point(Toolkit.getDefaultToolkit().getScreenSize().width / 8 ,Toolkit.getDefaultToolkit().getScreenSize().height / 8));
@@ -52,7 +52,7 @@ public class GUI extends JFrame
         gbc.gridy = 0;
         gbc.gridheight = 1;
         gbc.gridwidth = 2;
-        initP = new InitPanel(adapter[2], adapter[3], adapter[4], adapter[6]);
+        initP = new InitPanel(adapter[2], adapter[3], adapter[4], popupListener);
         gbl.setConstraints(initP, gbc);
         this.add(initP);
         

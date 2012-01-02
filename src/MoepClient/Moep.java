@@ -86,15 +86,17 @@ public class Moep
     {
         if(keineSpieler())
             return "";
-        String ausgabe = "<html><body><center><h1>Spielerliste</h1><br/><h2>";
-        for(int i = 0; i < 4; i++)
-        {
-            if(spieler[i][0] != null && spieler[i][0].equals(spielerAmZug))
-                ausgabe += ("<i>" + spieler[i][0]  + " (" + spieler[i][1] + " Karten)" + "</i>" + "<br/><br/>");
-            else
-                ausgabe += (spieler[i][0]  + " (" + spieler[i][1] + " Karten)" + "<br/><br/>");
-        }
-        ausgabe = ausgabe + "<h2></center></body></html>";
+        String ausgabe = "<html><body><center><h2>";
+        try {
+            for(int i = 0; i < 4; i++)
+            {
+                if(spieler[i][0] != null && spieler[i][0].equals(spielerAmZug))
+                    ausgabe += ("<i>" + spieler[i][0] + "</i>" + "<br/>&nbsp;&nbsp;" + kartenZahlGrafisch(i) + "&nbsp;&nbsp;" + spieler[i][1] + "<hr />");
+                else
+                    ausgabe += (spieler[i][0]  + "<br/>&nbsp;&nbsp;" + kartenZahlGrafisch(i) + "&nbsp;&nbsp;" + spieler[i][1] + "<hr />");
+            }
+        } catch(Exception ex) { ex.printStackTrace(System.out); return "";}
+        ausgabe = ausgabe + "</h2></center></body></html>";
         return umlautFix(ausgabe);
     }
     
@@ -127,7 +129,8 @@ public class Moep
         return input;
     }
 
-    public void statusReset() {
+    public void statusReset()
+    {
         nachrichten.clear();
         for(int i = 0; i < 4; i++) {
             spieler[i][0] = null;
@@ -135,25 +138,37 @@ public class Moep
         }
     }
 
-    public void mitspielerAmZug(String spielername) {
+    public void mitspielerAmZug(String spielername)
+    {
         spielerAmZug = spielername;
-        for(int i = 0; i < 4; i++)
-            if(spieler[i][0] == spielername) {
-            }
     }
 
-    private boolean keineSpieler() {
+    private boolean keineSpieler()
+    {
         for(int i = 0; i < 4; i++)
             if(spieler[i][0] != null)
                 return false;
         return true;
     }
 
-    public void mitspielerKartenzahlUpdate(String spielername, int kartenzahl) {
+    public void mitspielerKartenzahlUpdate(String spielername, int kartenzahl)
+    {
+        System.out.println("ZahlUpdate: " + spielername + kartenzahl);
         for(int i = 0; i < 4; i++)
-            if(spieler[i][0] == spielername) {
+            if(spieler[i][0].equals(spielername))
                 spieler[i][1] = kartenzahl+"";
-                return;
-            }
+    }
+
+    private String kartenZahlGrafisch(int spielerIndex)
+    {
+        String ausgabe = "";
+        for (int i = 0; i < Integer.parseInt(spieler[spielerIndex][1]); i++)
+        {
+            if(i % 2 != 0)
+                ausgabe += "<img src=\"" + this.getClass().getResource("./grafik/karteKlein.png").toString() + "\" />";
+            else
+                ausgabe += "<img src=\"" + this.getClass().getResource("./grafik/karteKleinHoch.png").toString() + "\" />";
+        }
+        return ausgabe;
     }
 }

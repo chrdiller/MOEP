@@ -22,7 +22,6 @@ public class SpielerLokal extends Spieler
         loginIP = _loginIP;
         spielername = _spielername;
         hand = new ArrayList<Karte>();
-        clientNetz.spielerKartenzahlUpdate(spielername, gibKartenanzahl());
     }
     
     @Override
@@ -173,7 +172,7 @@ public class SpielerLokal extends Spieler
         else if(wert == 2)
             clientNetz.spielerAmZugEvent(sn);
         else if(wert == 3)
-            clientNetz.spielerKartenzahlUpdate(spielername, gibKartenanzahl());
+            clientNetz.spielerKartenzahlUpdate(sn, kartenzahl);
     }
     
     @Override

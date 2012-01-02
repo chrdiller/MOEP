@@ -114,6 +114,7 @@ public class Server {
             }
 
             this.erzeugeHand(neu);
+            kartenzahlUpdate(neu);
             aktuellerSpielerIndex = (aktuellerSpielerIndex+1)%4;
 
             if(aktuellerSpielerIndex == 0) { // Das Spiel geht los
@@ -132,7 +133,6 @@ public class Server {
                     s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, spieler[aktuellerSpielerIndex].gibKartenanzahl()); //2 = Am Zug
                 }
             }
-            kartenzahlUpdate(neu);
         } else 
         {
             neu.loginAblehnen();
@@ -379,7 +379,7 @@ public class Server {
             for(Spieler s : spieler)
             {
                 if(s != null)
-                s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, spieler[aktuellerSpielerIndex].gibKartenanzahl()); //2 = Am Zug
+                s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, 0); //2 = Am Zug
             }
         }
 
@@ -440,7 +440,6 @@ public class Server {
         verdeckt = this.kartenSet();
 	richtung = 1;
         neueFarbe = 4;
-        //realspieler = new String[4];
 	aktuellerSpielerIndex = spieler.length;
         for(Spieler s : spieler)
         {

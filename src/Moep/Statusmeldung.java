@@ -1,4 +1,4 @@
-package MoepClient;
+package Moep;
 
 import MoepClient.GUI.StatusBar;
 

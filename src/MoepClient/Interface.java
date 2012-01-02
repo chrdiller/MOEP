@@ -1,5 +1,6 @@
 package MoepClient;
 
+import Moep.Statusmeldung;
 import MoepClient.netzwerk.ServerSuche;
 import Moep.Karte;
 import MoepClient.GUI.GUI;
@@ -20,10 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 /**
@@ -114,24 +113,24 @@ public class Interface
                     else
                         playSound("beep");
                 }
-            },
-                
-            new MouseAdapter (){ //Serversuche-ComboBox
-                @Override
-                public void mouseClicked(MouseEvent e) {      
-                    Interface.this.serverSuchen();
-                }
-            }
-                
+            }                
         };
         //</editor-fold>
+        
+        PopupMenuListener popupListener = new PopupMenuListener() {
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) { }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                Interface.this.serverSuchen();
+            }
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) { }
+        };
         
         dran = false;
         eingeloggt = false;
       
         m = new Moep();        
         
-        g = new GUI(this, adapter);
+        g = new GUI(this, adapter, popupListener);
         
         Statusmeldung.infoAnzeigen("Willkommen bei MOEP!");
         
@@ -348,7 +347,6 @@ public class Interface
 
     private void serverSuchen() 
     {
-        server.clear();
         serversuche.suchen();
         Statusmeldung.infoAnzeigen("Serverliste wurde aktualisiert");
     }

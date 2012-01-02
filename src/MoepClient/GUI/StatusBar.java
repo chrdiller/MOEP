@@ -1,6 +1,6 @@
 package MoepClient.GUI;
 
-import MoepClient.Statusmeldung;
+import Moep.Statusmeldung;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 

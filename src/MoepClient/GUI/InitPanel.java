@@ -2,6 +2,7 @@ package MoepClient.GUI;
 
 import java.awt.event.MouseAdapter;
 import javax.swing.JPanel;
+import javax.swing.event.PopupMenuListener;
 
 /**
  * Beschreibt das Panel oberhalb der Spielfläche, über das der Benutzer
@@ -11,12 +12,12 @@ import javax.swing.JPanel;
 
 public class InitPanel extends JPanel 
 {
-    public InitPanel(MouseAdapter spielerDialog, MouseAdapter erstellen, MouseAdapter beitreten, MouseAdapter comboBoxClick) {
+    public InitPanel(MouseAdapter spielerDialog, MouseAdapter erstellen, MouseAdapter beitreten, PopupMenuListener comboBoxListener) {
         initComponents();
         jButton1.addMouseListener(beitreten);
         jButton2.addMouseListener(erstellen);
         jButton3.addMouseListener(spielerDialog);
-        jComboBox1.addMouseListener(comboBoxClick);
+        jComboBox1.addPopupMenuListener(comboBoxListener);
     }
 
     @SuppressWarnings("unchecked")

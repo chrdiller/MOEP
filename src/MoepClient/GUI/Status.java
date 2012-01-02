@@ -1,6 +1,7 @@
 package MoepClient.GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -82,5 +83,6 @@ public class Status extends javax.swing.JPanel {
     {
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText(status);
+        jLabel1.setSize(new Dimension(236, 272));
     }
 }
