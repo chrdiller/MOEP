@@ -2,7 +2,8 @@
 package moepserver;
 
 import Moep.Karte;
-import MoepClient.netzwerk.Netz;
+import Moep.Statusmeldung;
+import MoepClient.netzwerk.Verbindung;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
@@ -14,11 +15,11 @@ import java.util.logging.Level;
 
 public class SpielerLokal extends Spieler
 {
-    private Netz clientNetz;
+    private Verbindung clientVerbindung;
     
-    public SpielerLokal(Netz _clientNetz, String _spielername, String _loginIP)
+    public SpielerLokal(Verbindung _clientVerbindung, String _spielername, String _loginIP)
     {
-        clientNetz = _clientNetz;
+        clientVerbindung = _clientVerbindung;
         loginIP = _loginIP;
         spielername = _spielername;
         hand = new ArrayList<Karte>();
@@ -107,17 +108,17 @@ public class SpielerLokal extends Spieler
 
     @Override
     public void neueHandkarte(Karte karte) {
-        clientNetz.handkarteEmpfangenEvent(karte);
+        clientVerbindung.handkarteEmpfangenEvent(karte);
     }
 
     @Override
     public void neueAblagekarte(Karte k) {
-        clientNetz.ablagestapelkarteEmpfangenEvent(k);
+        clientVerbindung.ablagestapelkarteEmpfangenEvent(k);
     }
 
     @Override
     public void amZug(boolean wert) {
-        clientNetz.amZugEvent(wert);        
+        clientVerbindung.amZugEvent(wert);        
         if(wert)
         {
             server.broadcast(spielername + " ist am Zug");     
@@ -127,33 +128,33 @@ public class SpielerLokal extends Spieler
 
     @Override
     public void ungueltigerZug(int art) {
-        clientNetz.zugLegalEvent(false, art);
+        clientVerbindung.zugLegalEvent(false, art);
     }
     
     @Override
     public void gueltigerZug()
     {
-        clientNetz.zugLegalEvent(true, 0);
+        clientVerbindung.zugLegalEvent(true, 0);
     }
 
     @Override
     public void loginAblehnen() {
-        clientNetz.fehlerEvent("Vom Server nicht akzeptiert!");
+        Statusmeldung.fehlerAnzeigen("Vom Server nicht akzeptiert!");
     }
 
     @Override
     public void textSenden(String t) {
-       clientNetz.textEmpfangenEvent(t);
+       clientVerbindung.textEmpfangenEvent(t);
     }
 
     @Override
     public int farbeFragen() {
-        new Thread(){public void run(){clientNetz.farbeWuenschenEvent();}}.start();
-        while(clientNetz.farbeWuenschenInt == 4){try {
+        new Thread(){public void run(){clientVerbindung.farbeWuenschenEvent();}}.start();
+        while(clientVerbindung.farbeWuenschenInt == 4){try {
                 Thread.currentThread().sleep(200);
             } catch (InterruptedException ex) {}}
-        int farbe = clientNetz.farbeWuenschenInt;
-        clientNetz.farbeWuenschenInt = 0;
+        int farbe = clientVerbindung.farbeWuenschenInt;
+        clientVerbindung.farbeWuenschenInt = 0;
         return farbe;
     }
     
@@ -166,13 +167,13 @@ public class SpielerLokal extends Spieler
     public void spielerServerAktion(String sn, int wert, int kartenzahl)
     {
         if(wert == 0)
-            clientNetz.spielerLoginEvent(sn);
+            clientVerbindung.spielerLoginEvent(sn);
         else if(wert == 1)
-            clientNetz.spielerLogoutEvent(sn);
+            clientVerbindung.spielerLogoutEvent(sn);
         else if(wert == 2)
-            clientNetz.spielerAmZugEvent(sn);
+            clientVerbindung.spielerAmZugEvent(sn);
         else if(wert == 3)
-            clientNetz.spielerKartenzahlUpdate(sn, kartenzahl);
+            clientVerbindung.spielerKartenzahlUpdate(sn, kartenzahl);
     }
     
     @Override
@@ -180,7 +181,7 @@ public class SpielerLokal extends Spieler
     {
         hand = new ArrayList<Karte>();
         this.kartenanzahl = this.gibKartenanzahl();
-        clientNetz.spielEnde(gewonnen);
+        clientVerbindung.spielEnde(gewonnen);
     }
 
     @Override
@@ -201,7 +202,7 @@ public class SpielerLokal extends Spieler
     @Override
     public void kick(String grund)
     {
-        clientNetz.kickEvent(grund);
+        clientVerbindung.kickEvent(grund);
     }
 }
 

@@ -1,25 +1,14 @@
 package MoepClient.netzwerk;
 
-import MoepClient.netzwerk.Packet03AmZug;
-import MoepClient.netzwerk.Packet01Login;
-import MoepClient.netzwerk.Packet02Kick;
-import MoepClient.netzwerk.Packet06FarbeWuenschen;
-import MoepClient.netzwerk.Packet09Spielende;
-import MoepClient.netzwerk.Packet12Ablagestapelkarte;
-import MoepClient.netzwerk.Packet07Text;
-import MoepClient.netzwerk.Packet04ZugLegal;
-import MoepClient.netzwerk.Packet05MoepButton;
-import MoepClient.netzwerk.Packet11Handkarte;
-import MoepClient.netzwerk.Packet08SpielerServerAktion;
 import Moep.Karte;
 /**
  * Beschreibt die abstrakte Oberklasse der Packetklassen;
  * enthält die statische Methode zum Parsen von Strings in Packes
  * @author Christian Diller
-
  */
-public abstract class Packet {
-    
+
+public abstract class Packet
+{
     /**
      * Parst einen String in ein Packet
      * @param data Der String, der geparst werden soll
@@ -28,7 +17,11 @@ public abstract class Packet {
     public static Packet erstellePacket(String data)
     {
        String[] dataArray = data.split(seperator);
-
+       
+        if(dataArray[0].equals("00") && dataArray.length == 3)
+        {
+            return new Packet00Handshake(Integer.parseInt(dataArray[1]), dataArray[2].equals("Y") ? true : false);
+        }
         if(dataArray[0].equals("01") && dataArray.length == 3)
         {
             return new Packet01Login(dataArray[1], dataArray[2].equals("Y") ? true : false);
@@ -45,9 +38,9 @@ public abstract class Packet {
         {
             return new Packet04ZugLegal(dataArray[1].equals("Y") ? true : false, Integer.parseInt(dataArray[2]));
         }
-        else if(dataArray[0].equals("05") && dataArray.length == 2)
+        else if(dataArray[0].equals("05") && dataArray.length == 1)
         {
-            return new Packet05MoepButton(dataArray[1].equals("Y") ? true : false);
+            return new Packet05MoepButton();
         }
         else if(dataArray[0].equals("06") && dataArray.length == 2)
         {
@@ -87,7 +80,7 @@ public abstract class Packet {
      * Ruft packetspezifische Events in netz auf
      * @param netz Das Netzobjekt, in dem die Events aufgerufen werden sollen
      */
-    public abstract void clientEventAufrufen(Netz netz);
+    public abstract void clientEventAufrufen(Verbindung verbindung);
     
     protected static String seperator = "#";
 }

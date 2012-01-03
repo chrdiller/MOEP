@@ -3,13 +3,13 @@ package MoepClient.netzwerk;
 /**
  * Beschreibt das Packet, mit dem der Server dem CLient mitteilt, 
  * dass das Spiel vorbei ist und dieser das Spielfeld aufräumen soll.
- * Ausserdem kann einem Spieler so übermittelt werden, dass er gewonnen hat
+ * Ausserdem kann einem Spieler so übermittelt werden, ob er gewonnen hat
  * Client <- Server
  * @author Christian Diller
-
  */
-public class Packet09Spielende extends Packet{
-    
+
+public class Packet09Spielende extends Packet
+{    
     private boolean gewonnen;
     
     public Packet09Spielende(boolean _gewonnen)
@@ -24,8 +24,8 @@ public class Packet09Spielende extends Packet{
     }
     
     @Override
-    public void clientEventAufrufen(Netz netz)
+    public void clientEventAufrufen(Verbindung verbindung)
     {
-        netz.spielEnde(gewonnen);
+        verbindung.spielEnde(gewonnen);
     }    
 }

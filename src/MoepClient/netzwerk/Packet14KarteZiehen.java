@@ -2,11 +2,12 @@ package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Client dem Server mitteilt, dass eine Karte gezogen werden soll
+ * Client -> Server
  * @author Christian Diller
-
  */
-public class Packet14KarteZiehen extends Packet{
-    
+
+public class Packet14KarteZiehen extends Packet
+{    
     public Packet14KarteZiehen()
     {
         
@@ -19,7 +20,7 @@ public class Packet14KarteZiehen extends Packet{
     }
     
     @Override
-    public void clientEventAufrufen(Netz netz)
+    public void clientEventAufrufen(Verbindung verbindung)
     {
         //Kein ClientEvent
     }

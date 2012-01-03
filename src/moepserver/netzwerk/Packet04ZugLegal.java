@@ -1,13 +1,13 @@
-
 package moepserver.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Server dem Client mitteilt, dass der letze Zug ungültig war
+ * Client <- Server
  * @author Christian Diller
-
  */
-public class Packet04ZugLegal extends Packet{
-    
+
+public class Packet04ZugLegal extends Packet
+{    
     private boolean legal;
     private int illegalArt;
     
@@ -26,6 +26,6 @@ public class Packet04ZugLegal extends Packet{
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        //Kein Serverevent!
+        verbindung.zugLegalEvent(legal, illegalArt);
     }
 }

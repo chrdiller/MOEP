@@ -9,7 +9,7 @@ import MoepClient.GUI.Hand;
 import MoepClient.GUI.InitPanel;
 import MoepClient.GUI.SpielerDialog;
 import java.awt.event.WindowEvent;
-import MoepClient.netzwerk.Netz;
+import MoepClient.netzwerk.Verbindung;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.event.MouseAdapter;
@@ -38,7 +38,7 @@ public class Interface
     
     private GUI g;
     private Moep m;
-    private Netz netz;
+    private Verbindung verbindung;
     
     private Map<String, String> server;
     private Spielerverwaltung spieler;
@@ -97,8 +97,8 @@ public class Interface
                 @Override
                 public void mousePressed(MouseEvent me) {
                     InitPanel ip = (InitPanel)me.getComponent().getParent();
-                    netz = new Netz(Interface.this);
-                    netz.anmelden(server.get(ip.gibServername()), ip.gibName());
+                    verbindung = new Verbindung(server.get(ip.gibServername()), Interface.this);
+                    verbindung.anmelden(ip.gibName());
                 }
             },
             
@@ -107,7 +107,7 @@ public class Interface
                 public void mousePressed(MouseEvent e) {
                     if(dran)
                     {
-                        netz.sendeMoepButtonDruecken();
+                        verbindung.sendeMoepButton();
                         playSound("moep");
                     }
                     else
@@ -146,7 +146,7 @@ public class Interface
         }
         else{
             playSound("click");
-            netz.sendeKarteZiehen();
+            verbindung.sendeKarteZiehen();
             g.handAktualisieren(m.gibHand());
         }
     }
@@ -157,8 +157,8 @@ public class Interface
             return;
         }
         m.zuLegen(index);
-        if (!netz.sendeKarteLegen(m.gibKarteAt(index))){
-            Statusmeldung.fehlerAnzeigen("Karte konnte nicht gesendet werden :(");
+        if (!verbindung.sendeKarteLegen(m.gibKarteAt(index))){
+            Statusmeldung.fehlerAnzeigen("Karte konnte nicht gesendet werden");
         }
         else{
             playSound("click");
@@ -226,7 +226,7 @@ public class Interface
     
     public void sendeFarbeWuenschenAntwort(int farbe)
     {
-        netz.sendeFarbeWuenschenAntwort(farbe);
+        verbindung.sendeFarbeWuenschenAntwort(farbe);
         g.setEnabled(true);
     }
     //</editor-fold>
@@ -290,7 +290,7 @@ public class Interface
         eingeloggt = false;
         g.LoginOut(true);
         dran = false;
-        netz.verbindungSchliessen();
+        verbindung.schliessen();
         spielEnde(false);
         m.statusReset();
         g.setSpielStatus(m.gibSpielerliste());
@@ -335,8 +335,8 @@ public class Interface
         if(serversuche.istEinzigerServer()){
             if(spieler.istGueltig())
             {
-                netz = new Netz(Interface.this, spieler, servername);
-                netz.anmelden("", spieler.gibEigenenNamen());
+                verbindung = new Verbindung(spieler, servername, Interface.this);
+                verbindung.anmelden(spieler.gibEigenenNamen());
             }
         }
         else

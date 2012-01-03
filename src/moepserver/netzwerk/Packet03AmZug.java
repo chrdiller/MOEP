@@ -1,15 +1,14 @@
-
 package moepserver.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Server dem Client mitteilt, ob er am Zug ist
+ * Client <- Server
  * @author Christian Diller
-
  */
-public class Packet03AmZug extends Packet{
-    
+
+public class Packet03AmZug extends Packet
+{    
     private boolean wert;
-    private String text;
     
     public Packet03AmZug(boolean _wert)
     {
@@ -25,7 +24,7 @@ public class Packet03AmZug extends Packet{
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        //Kein Serverevent!
+        verbindung.amZugEvent(wert);
     }
 }
 

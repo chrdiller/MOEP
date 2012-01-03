@@ -1,14 +1,13 @@
-
 package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Server dem Client mitteilt, dass dieser dem Server
  * eine gewünschte Farbe schicken soll; der Client schickt die Farbe an den Server
  * @author Christian Diller
-
  */
-public class Packet06FarbeWuenschen extends Packet{
-    
+
+public class Packet06FarbeWuenschen extends Packet
+{    
     private int farbe;
     
     public Packet06FarbeWuenschen(int _farbe)
@@ -23,8 +22,8 @@ public class Packet06FarbeWuenschen extends Packet{
     }
     
     @Override
-    public void clientEventAufrufen(Netz netz)
+    public void clientEventAufrufen(Verbindung verbindung)
     {
-        netz.farbeWuenschenEvent();
+        verbindung.farbeWuenschenEvent();
     }
 }

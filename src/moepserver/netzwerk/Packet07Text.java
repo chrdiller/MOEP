@@ -1,4 +1,3 @@
-
 package moepserver.netzwerk;
 
 /**
@@ -6,10 +5,10 @@ package moepserver.netzwerk;
  * der dann dem Spieler angezeigt wird
  * Client <- Server
  * @author Christian Diller
-
  */
-public class Packet07Text extends Packet{
-    
+
+public class Packet07Text extends Packet
+{    
     private String text;
     
     public Packet07Text(String _text)
@@ -26,6 +25,6 @@ public class Packet07Text extends Packet{
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        //Kein Serverevent
+        verbindung.textEmpfangenEvent(text);
     }    
 }

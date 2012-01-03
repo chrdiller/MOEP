@@ -1,4 +1,3 @@
-
 package MoepClient.netzwerk;
 
 /**
@@ -7,12 +6,12 @@ package MoepClient.netzwerk;
  * Zudem wird der Spieler uebermittelt, der aktuell am Zug ist sowie die Spielkartenzahl jedes Spielers
  * Client <- Server
  * @author Christian Diller
-
  */
-public class Packet08SpielerServerAktion extends Packet{
-    
+
+public class Packet08SpielerServerAktion extends Packet
+{    
     private String spielername;
-    private int art; //0: Login; 1: Logout
+    private int art; //0: Login; 1: Logout; 2: AmZug; 3: KartenzahlUpdate
     private int kartenzahl;
     
     public Packet08SpielerServerAktion(String _spielername, int _art, int _kartenzahl)
@@ -29,21 +28,21 @@ public class Packet08SpielerServerAktion extends Packet{
     }
     
     @Override
-    public void clientEventAufrufen(Netz netz)
+    public void clientEventAufrufen(Verbindung verbindung)
     {
         if(art == 0)
         {
-            netz.spielerLoginEvent(spielername);
+            verbindung.spielerLoginEvent(spielername);
         }
         else if(art == 1)
         {
-            netz.spielerLogoutEvent(spielername);
+            verbindung.spielerLogoutEvent(spielername);
         }
         else if(art == 2)
         {
-            netz.spielerAmZugEvent(spielername);
+            verbindung.spielerAmZugEvent(spielername);
         }
         else if(art == 3)
-            netz.spielerKartenzahlUpdate(spielername, kartenzahl);
+            verbindung.spielerKartenzahlUpdate(spielername, kartenzahl);
     }    
 }

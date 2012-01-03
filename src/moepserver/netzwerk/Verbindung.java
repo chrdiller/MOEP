@@ -277,4 +277,8 @@ public class Verbindung extends Thread
     public boolean farbeWuenschenAntwortErhalten() {
         return farbeWuenschenInt >= 0;
     }
+
+    void protokollversionAnfrage(int protokollversion) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }

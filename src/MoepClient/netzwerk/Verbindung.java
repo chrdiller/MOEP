@@ -1,91 +1,100 @@
 package MoepClient.netzwerk;
 
-import MoepClient.netzwerk.Packet;
-import MoepClient.netzwerk.Packet13KarteLegen;
-import MoepClient.netzwerk.Packet01Login;
-import MoepClient.netzwerk.Packet14KarteZiehen;
-import MoepClient.netzwerk.Packet06FarbeWuenschen;
-import MoepClient.netzwerk.Packet05MoepButton;
 import java.net.Socket;
 import Moep.Karte;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import Moep.Statusmeldung;
+import MoepClient.Interface;
+import MoepClient.Spielerverwaltung;
+import moepserver.Server;
+import moepserver.SpielerKI;
+import moepserver.SpielerLokal;
 
 /**
- * Die Verbindung, über die der gesamte Netzwerkverkehr läuft
+ * Die Verbindung zwischen Server und Client per Netzwerk oder lokal
  * @author Christian Diller
-
  */
-public class Verbindung extends Thread
+
+public class Verbindung
 {
+    private static final int PROTOKOLLVERSION = 2;
+    private int protokollversionBestaetigt; //-1: Nicht empfangen; 0: Keine Übereinstimmung; 1: Übereinstimmung
+    
     private String adresse;     //Die Adresse des Servers
-    private String name;       //Der zu verwendende Spielername
 
     private boolean angemeldet; //Bereits beim Server angemeldet?
     private boolean letzterLoginFehlgeschlagen;
     
-
-    private Netz netz;
+    private VerbindungReader reader;
+    private VerbindungWriter writer;
     
-    private VerbindungReaderThread reader;
-    private VerbindungWriterThread writer;
+    private boolean lokal;
+    public int farbeWuenschenInt;
     
-    private static final Logger logger = Logger.getLogger("MoepClientNetz");
+    private Interface client;
+    private SpielerLokal spieler;
+    private Server server;
+    private Spielerverwaltung spVerwaltung;
     
-    public Verbindung(Netz _netz, String _adresse)
+    public Verbindung(String _adresse, Interface _client)
     {
-        netz = _netz;
+        protokollversionBestaetigt = -1;
+        client = _client;
+        lokal = false;
+        
         adresse = _adresse;
         angemeldet = false;
         letzterLoginFehlgeschlagen = false;
-        int port = 11111;
-        
-        try {
-            port = Integer.valueOf(adresse.substring(adresse.indexOf(":") + 1)).intValue();
-            adresse = adresse.split(":")[0];
-        }
-        catch(Exception ex){}
-        
+                
         try 
         {
-            Socket clientSocket = new Socket(adresse, port);
-            reader = new VerbindungReaderThread(clientSocket);
-            writer = new VerbindungWriterThread(clientSocket);
+            Socket clientSocket = new Socket(adresse, 11111);
+            reader = new VerbindungReader(clientSocket);
+            writer = new VerbindungWriter(clientSocket);
+            reader.verbindung = this;
+            reader.start();
         } 
         catch (Exception ex) 
         {
-            netz.fehlerEvent("Fehler beim Verbinden zum Server");
+            Statusmeldung.fehlerAnzeigen("Verbinden zum Server fehlgeschlagen");
         }
     }
-
-    @Override
-    public void run()
+    
+    public Verbindung(Spielerverwaltung _spVerwaltung, String servername, Interface _client)
     {
-        reader.verbindung = this;
-        reader.start();
-        writer.start();
-        while(true)
+        client = _client;
+        server = new Server(servername);
+        spVerwaltung = _spVerwaltung;
+        lokal = true;
+        
+        adresse = "";
+        angemeldet = false;
+        letzterLoginFehlgeschlagen = false;
+                
+        try 
         {
-            synchronized(this)
-            {
-                try
-                {
-                    this.wait();
-                }
-                catch(InterruptedException ex)
-                {
-                    logger.log(Level.WARNING, "Verbindung wurde beim Warten unterbrochen");
-                }
-            }
-            
-            while(!reader.istLeer())
-            {
-                String data = reader.pop();
-                if(!packetBearbeiten(data))
-                {
-                    logger.log(Level.WARNING, "Fehler im Protokoll (Falscher Server?) Data: {0}", data);
-                }
-            }
+            Socket clientSocket = new Socket(adresse, 11111);
+            reader = new VerbindungReader(clientSocket);
+            writer = new VerbindungWriter(clientSocket);
+            reader.verbindung = this;
+            reader.start();
+        } 
+        catch (Exception ex) 
+        {
+            Statusmeldung.fehlerAnzeigen("Verbinden zum Server fehlgeschlagen");
+        }
+    }
+    
+    public boolean anmelden(String name)
+    {
+        if(lokal) {
+            spieler = new SpielerLokal(this, name, "localhost");
+            server.spielerHinzufuegen(spieler, 0);     
+            for(int i = 0; i < spVerwaltung.gibKISpielerAnzahl(); i++)
+                server.spielerHinzufuegen(new SpielerKI(spVerwaltung.gibKINamen()[i][0]), Integer.parseInt(spVerwaltung.gibKINamen()[i][1]));
+            return true;
+        }
+        else {
+            return sendeLogin(name);
         }
     }
 
@@ -95,14 +104,29 @@ public class Verbindung extends Thread
         
         if(packet == null)
             return false;
-        packet.clientEventAufrufen(netz);
+        packet.clientEventAufrufen(this);
         return true;
     }
 
-    public boolean sendeLogin(String _name)
+    //<editor-fold defaultstate="collapsed" desc="Sende-Methoden">
+    public boolean sendeHandshake()
     {
+        packetSenden(new Packet00Handshake(PROTOKOLLVERSION, false));
+        int i = 0;
+        while(protokollversionBestaetigt == -1) {
+            try{Thread.currentThread().sleep(500);}catch(Exception ex){}
+            i++;
+            if(i > 20)
+                return false;
+        }
+        return true;
+    }
+    
+    public boolean sendeLogin(String name)
+    {
+        if(!sendeHandshake())
+            return false;
         letzterLoginFehlgeschlagen = false;
-        name = _name;
         if(!packetSenden(new Packet01Login(name, false)))
             return false;
         int i = 0;
@@ -113,51 +137,67 @@ public class Verbindung extends Thread
                 letzterLoginFehlgeschlagen = false;
                 return false;
             }
-            try{this.sleep(1000);}catch(Exception ex){}
+            try{Thread.currentThread().sleep(500);}catch(Exception ex){}
             i++;
-            if(i > 10)
+            if(i > 20)
                 return false;
         }
         return true;
     }
     
-    protected boolean sendeKarteLegen(Karte karte) {
-        return packetSenden(new Packet13KarteLegen(karte));
-    }
-
-    protected boolean sendeKarteZiehen() {
-        return packetSenden(new Packet14KarteZiehen());
+    public boolean sendeKarteLegen(final Karte karte)
+    {
+        if(lokal) {
+            spieler.karteLegenEvent(karte);
+            return true;
+        }
+        else
+            return packetSenden(new Packet13KarteLegen(karte));
     }
     
-    protected boolean sendeMoepButton()
+    public boolean sendeKarteZiehen()
     {
-        return packetSenden(new Packet05MoepButton(false));
+        if(lokal) {
+            spieler.karteZiehenEvent();
+            return true;
+        }
+        else
+            return packetSenden(new Packet14KarteZiehen());
     }
     
-    protected boolean sendeFarbeWuenschenAntwort(int farbe)
+    public boolean sendeMoepButton()
     {
-        return packetSenden(new Packet06FarbeWuenschen(farbe));
+        if(lokal) {
+            spieler.moepButtonEvent();
+            return true;
+        }
+        else
+            return packetSenden(new Packet05MoepButton());
+    }
+    
+    public boolean sendeFarbeWuenschenAntwort(int farbe)
+    {
+        farbeWuenschenInt = farbe;
+        if(!lokal)
+            return packetSenden(new Packet06FarbeWuenschen(farbe));
+        return true;
     }
     
     private boolean packetSenden(Packet packet)
     {
         try
         {
-            writer.push(packet.gibData());
-            synchronized(writer)
-            {
-                writer.notify();
-            }
+            writer.senden(packet.gibData());
             return true;
         }
         catch(Exception ex){return false;}
     }
+    //</editor-fold>
     
-    protected void verbindungSchliessen()
+    public void schliessen()
     {
         angemeldetSetzen(false);
         reader.interrupt();
-        writer.interrupt();
     }
     
     protected void angemeldetSetzen(boolean wert)
@@ -165,14 +205,92 @@ public class Verbindung extends Thread
         if(wert == false && angemeldet == false)
         {
             letzterLoginFehlgeschlagen = true;
-            netz.fehlerEvent("Anmeldung vom Server abgewiesen :(");
+            Statusmeldung.fehlerAnzeigen("Anmeldung vom Server abgewiesen");
         }
         angemeldet = wert;
     }
 
     protected void verbindungVerlorenEvent() {
-        netz.verbindungVerlorenEvent();
+        Statusmeldung.fehlerAnzeigen("Verbindung zum Server verloren");
     }
 
+    protected synchronized void neuesPacket(String data) {
+        if(!packetBearbeiten(data))
+        {
+            Statusmeldung.fehlerAnzeigen("Ungültiges Protokoll (Falscher Server?) Data:" + data);
+        }
+    }
 
+    //<editor-fold defaultstate="collapsed" desc="Event-Methoden">
+    public void kickEvent(String grund)
+    {
+        client.kick(grund);
+        schliessen();
+    }
+    
+    public void zugLegalEvent(boolean legal, int illegalArt)
+    {
+        client.zugLegal(legal, illegalArt);
+    }
+    
+    public void amZugEvent(boolean wert)
+    {
+        client.dranSetzen(wert);
+    }
+    
+    public void farbeWuenschenEvent()
+    {
+        client.farbeWuenschenAnfrage();
+    }
+    
+    public void textEmpfangenEvent(String text)
+    {
+        client.status(text);
+    }
+    
+    public void spielerLoginEvent(String spielername)
+    {
+        client.mitspielerLogin(spielername);
+    }
+    
+    public void spielerLogoutEvent(String spielername)
+    {
+        client.mitspielerLogout(spielername);
+    }
+    
+    public void spielerAmZugEvent(String spielername)
+    {
+        client.mitspielerAmZug(spielername);
+    }
+    
+    public void spielerKartenzahlUpdate(String spielername, int kartenzahl)
+    {
+        client.spielerKartenzahlUpdate(spielername, kartenzahl);
+    }
+    
+    public void spielEnde(boolean gewonnen)
+    {
+        client.spielEnde(gewonnen);
+    }
+    
+    public void handkarteEmpfangenEvent(Karte karte)
+    {
+        client.karteEmpfangen(karte);
+    }
+    
+    public void ablagestapelkarteEmpfangenEvent(Karte karte)
+    {
+        client.ablageAkt(karte);
+    }
+    
+    public void protokollversionErgebnis(boolean gleicheVersion) {
+        if(!gleicheVersion) {
+            Statusmeldung.fehlerAnzeigen("Unterschiedliche Protokollversionen");
+            protokollversionBestaetigt = 0;
+        }
+        else
+            protokollversionBestaetigt = 1;
+    }
+    //</editor-fold>
+    
 }

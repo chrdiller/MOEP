@@ -2,28 +2,26 @@ package MoepClient.netzwerk;
 
 /**
  * Beschreibt das Packet, mit dem der Client dem Server mitteilt, dass der MoepButton gedrückt wurde
- * Außerdem wird vom Server zurückgeschickt, ob der Button rechtzeitig gedrückt wurde
+ * Client -> Server
  * @author Christian Diller
-
  */
-public class Packet05MoepButton extends Packet{
-    
-    private boolean rechtzeitig;
-    
-    public Packet05MoepButton(boolean _rechtzeitig)
+
+public class Packet05MoepButton extends Packet
+{    
+    public Packet05MoepButton()
     {
-        rechtzeitig = _rechtzeitig;
+
     }
     
     @Override
     public String gibData()
     {
-        return "05" + seperator + (rechtzeitig ? "Y":"N");
+        return "05" + seperator;
     }
     
     @Override
-    public void clientEventAufrufen(Netz netz)
+    public void clientEventAufrufen(Verbindung verbindung)
     {
-        netz.moepButtonAntwortEvent(rechtzeitig);
+        //Kein Client-Event!
     }
 }

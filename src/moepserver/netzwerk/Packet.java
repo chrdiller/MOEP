@@ -23,13 +23,17 @@ public abstract class Packet {
         
         String[] dataArray = data.split(seperator);
         
+        if(dataArray[0].equals("00") && dataArray.length == 3)
+        {
+            return new Packet00Handshake(Integer.parseInt(dataArray[1]), dataArray[2].equals("Y") ? true : false);
+        }
         if(dataArray[0].equals("01") && dataArray.length == 3)
         {
             return new Packet01Login(dataArray[1], dataArray[2].equals("Y") ? true : false);
         }
         else if(dataArray[0].equals("05") && dataArray.length == 2)
         {
-            return new Packet05MoepButton(dataArray[1].equals("Y") ? true : false);
+            return new Packet05MoepButton();
         }
         else if(dataArray[0].equals("06") && dataArray.length == 2)
         {

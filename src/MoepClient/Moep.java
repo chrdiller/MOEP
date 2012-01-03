@@ -155,7 +155,7 @@ public class Moep
     {
         System.out.println("ZahlUpdate: " + spielername + kartenzahl);
         for(int i = 0; i < 4; i++)
-            if(spieler[i][0].equals(spielername))
+            if(spieler[i][0] == spielername)
                 spieler[i][1] = kartenzahl+"";
     }
 

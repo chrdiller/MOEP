@@ -1,13 +1,12 @@
-
 package moepserver.netzwerk;
 
 import Moep.Karte;
-
 /**
  * Beschreibt das Packet, mit dem der Server dem Client eine Handkarte übermittelt
+ * Client <- Server
  * @author Christian Diller
-
  */
+
 public class Packet11Handkarte extends Packet{
     
     private Karte karte;
@@ -31,6 +30,6 @@ public class Packet11Handkarte extends Packet{
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        //Kein Serverevent!
+        verbindung.handkarteEmpfangenEvent(karte);
     }
 }

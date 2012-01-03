@@ -136,7 +136,6 @@ public class Netz
     public void kickEvent(String grund)
     {
         client.kick(grund);
-        
         try{verbindung.verbindungSchliessen();}catch(Exception ex){}
     }
 
