@@ -27,7 +27,7 @@ import javax.swing.event.PopupMenuListener;
 
 /**
  * Die Interface-Klasse, der Knotenpunkt zwischen Netzwerk, GUI und Moep
- * @author  Christian Diller & Philipp Herrle
+ * @author Christian Diller & Philipp Herrle
  */
 
 public class Interface

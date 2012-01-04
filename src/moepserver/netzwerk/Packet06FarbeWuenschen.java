@@ -22,8 +22,14 @@ public class Packet06FarbeWuenschen extends Packet
     }
     
     @Override
-    public void serverEventAufrufen(Verbindung verbindung)
+    public void serverEventAufrufen(final Verbindung verbindung)
     {
-        verbindung.farbeWuenschenEvent();
+            new Thread(){
+            @Override
+            public void run()
+            {
+                verbindung.farbeWuenschenEvent(farbe);         
+            }
+        }.start();
     }
 }

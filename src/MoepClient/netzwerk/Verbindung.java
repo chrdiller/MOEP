@@ -214,7 +214,9 @@ public class Verbindung
         Statusmeldung.fehlerAnzeigen("Verbindung zum Server verloren");
     }
 
-    protected synchronized void neuesPacket(String data) {
+    protected synchronized void neuesPacket(String data)
+    {
+        System.out.println("Packet empfangen: " + data);
         if(!packetBearbeiten(data))
         {
             Statusmeldung.fehlerAnzeigen("Ungültiges Protokoll (Falscher Server?) Data:" + data);

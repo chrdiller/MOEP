@@ -2,6 +2,7 @@
 package moepserver.netzwerk;
 
 import Moep.Karte;
+import Moep.Statusmeldung;
 import java.util.logging.Level;
 import moepserver.SpielerRemote;
 import moepserver.MoepLogger;
@@ -12,13 +13,14 @@ import moepserver.MoepLogger;
  * @author Christian Diller
 
  */
-public class Verbindung extends Thread
+public class Verbindung 
 {    
+    public static final int PROTOKOLLVERSION = 2;
     protected boolean istAktiv;
     protected String loginName;
     
-    protected VerbindungReaderThread reader;
-    private VerbindungWriterThread writer;
+    protected VerbindungReader reader;
+    private VerbindungWriter writer;
     
     public SpielerRemote spieler;
     
@@ -26,41 +28,21 @@ public class Verbindung extends Thread
     
     private static final MoepLogger log = new MoepLogger();
 
-    public Verbindung(VerbindungReaderThread _reader, VerbindungWriterThread _writer) {
-        
-        setName("VerbindungThread");
+    public Verbindung(VerbindungReader _reader, VerbindungWriter _writer)
+    {
         reader = _reader;
         writer = _writer;
-    }
-
-    @Override
-    public void run()
-    {
         reader.verbindung = this;
         reader.start();
-        writer.start();
-        while(true)
+    }
+
+    protected synchronized void neuesPacket(String data)
+    {
+        System.out.println("Packet empfangen(Server): " + data);
+        if(!packetBearbeiten(data))
         {
-            synchronized(this)
-            {
-                try
-                {
-                    this.wait();
-                }
-                catch(InterruptedException ex)
-                {
-                    log.log(Level.WARNING, "Verbindung wurde beim Warten unterbrochen");
-                }
-            }
-            
-            while(!reader.istLeer())
-            {
-                String data = reader.pop();
-                if(!packetBearbeiten(data))
-                {
-                    log.log(Level.WARNING, "Fehler im Protokoll (Falscher Client?) Data: " + data);
-                }
-            }
+            System.out.println("FEHLER!!(Server)");
+            Statusmeldung.fehlerAnzeigen("Ungültiges Protokoll (Falscher Client?) Data:" + data);
         }
     }
 
@@ -71,10 +53,7 @@ public class Verbindung extends Thread
             return false;
         if(packet instanceof Packet01Login)
         {
-            loginName = ((Packet01Login)packet).gibName();
-            this.setName("VerbindungThread: " + loginName);     
-            reader.setName("ReaderThread: " + loginName);
-            writer.setName("WriterThread: " + loginName);
+            loginName = ((Packet01Login)packet).gibData().split("#")[1];
             istAktiv = true;
         }
         else
@@ -88,11 +67,7 @@ public class Verbindung extends Thread
     {
         try
         {
-            writer.push(packet.gibData());
-            synchronized(writer)
-            {
-                writer.notify();
-            }
+            writer.senden(packet.gibData());
             return true;
         }
         catch(Exception ex){return false;}
@@ -109,7 +84,6 @@ public class Verbindung extends Thread
         try
         {
             reader.interrupt();
-            writer.interrupt();
             istAktiv = false;
             return true;
         }
@@ -161,9 +135,9 @@ public class Verbindung extends Thread
      * @param rechtzeitig Rechtzeitig gedrückt ja/nein
      * @return Erfolgreich gesendet ja/nein
      */
-    public boolean sendeMoepButtonAntwort(boolean rechtzeitig)
+    public boolean sendeMoepButtonAntwort()
     {
-        return packetSenden(new Packet05MoepButton(rechtzeitig));
+        return packetSenden(new Packet05MoepButton());
     }
     
     /**
@@ -274,11 +248,13 @@ public class Verbindung extends Thread
         return ausgabe;
     }
 
-    public boolean farbeWuenschenAntwortErhalten() {
+    public boolean farbeWuenschenAntwortErhalten()
+    {
         return farbeWuenschenInt >= 0;
     }
 
-    void protokollversionAnfrage(int protokollversion) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    public void protokollversionAnfrage(int protokollversion)
+    {
+        packetSenden(new Packet00Handshake(PROTOKOLLVERSION, PROTOKOLLVERSION == protokollversion));
     }
 }

@@ -26,6 +26,6 @@ public class Packet04ZugLegal extends Packet
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        verbindung.zugLegalEvent(legal, illegalArt);
+        //Kein Serverevent!
     }
 }

@@ -30,6 +30,6 @@ public class Packet11Handkarte extends Packet{
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        verbindung.handkarteEmpfangenEvent(karte);
+        //Kein Serverevent!
     }
 }

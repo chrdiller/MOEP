@@ -25,6 +25,6 @@ public class Packet07Text extends Packet
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        verbindung.textEmpfangenEvent(text);
+        //Kein Serverevent
     }    
 }

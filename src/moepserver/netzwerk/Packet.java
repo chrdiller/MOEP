@@ -7,8 +7,8 @@ import Moep.Karte;
  * Beschreibt die abstrakte Oberklasse der Packetklassen;
  * enthält die statische Methode zum Parsen von Strings in Packets
  * @author Christian Diller
-
  */
+
 public abstract class Packet {
     
     /**

@@ -1,24 +1,21 @@
 package moepserver;
 
 import Moep.Karte;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.util.logging.Level;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.Random;
-import moepserver.netzwerk.Netz;
+import moepserver.netzwerk.ServerBroadcast;
+import moepserver.netzwerk.ServerListener;
 
 /**
  * Die zentrale Serverklasse
  * @author Frank Kottler & Christian Diller
  */
 
-public class Server {
+public class Server
+{
     private static final MoepLogger log = new MoepLogger();
-    public static int STARTKARTEN;
-
-    private Netz netz;
+    public static final int STARTKARTEN = 7;
 
     private Karte offen;
     private ArrayList<Karte> verdeckt;
@@ -28,25 +25,23 @@ public class Server {
     private int aktuellerSpielerIndex;
     public int neueFarbe;
     private int alterSpielerIndex;
-    private Properties properties;
+    private String servername;
     
 
-    public Server(String servername)
+    public Server(String _servername)
     {
         log.log(Level.INFO, "*** Starte MoepServer ***");
-        loadProperties();
-        netz = new Netz(this, servername, Integer.valueOf(properties.getProperty("Port", "11111")).intValue());
+        servername = _servername;
+        threadsStarten();
     	verdeckt = this.kartenSet();
 	spieler = new Spieler[4];
         spielerzahl = 0;
 	richtung = 1;
         neueFarbe = 4;
-        //realspieler = new String[4];
 	aktuellerSpielerIndex = 0;
 	deckeErsteKarteAuf();
         alterSpielerIndex = 0;
-        STARTKARTEN = Integer.valueOf(properties.getProperty("Startkarten", "7")).intValue();
-    }
+    }   
 
     /**
      * Erzeugt eine Arraylist, die alle am Spiel beteiligten Karten enthält
@@ -467,32 +462,17 @@ public class Server {
         }
         return ausgabe;
     }
-    
-    
-     /**
-     * Hier werden die Properties aus der server.properties eingelesen
-     * Achtung: Sobald ein Fehler auftritt, wird die gesamte Datei ignoriert!
-     */
-    private void loadProperties()
-    {
-        properties = new Properties(); 
-        BufferedInputStream fileStream;
-        String pfad = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-        pfad = pfad.substring(0, pfad.lastIndexOf("/"));
-        pfad = pfad + "/server.properties";
-        try {
-            fileStream = new BufferedInputStream(new FileInputStream(pfad));
-            properties.load(fileStream);
-            fileStream.close();
-            
-            log.log(Level.INFO, "Properties: " + properties.size() + " Eintraege erfolgreich eingelesen");
-        } catch (Exception ex) {log.log(Level.WARNING, "Properties-Datei konnte nicht eingelesen werden");}
-    }
 
     private void kartenzahlUpdate(Spieler sp) {
         for(int i = 0; i < 4; i++)
             if(spieler[i] != null) spieler[i].spielerServerAktion(sp.spielername, 3, sp.gibKartenanzahl());
     }
     
+    private void threadsStarten()     
+    {
+        ServerListener listener = new ServerListener(this, 11111);
+        listener.start();
+        ServerBroadcast broadcast = new ServerBroadcast(servername);
+        broadcast.start();
+    }
 }
- 

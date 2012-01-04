@@ -1,5 +1,4 @@
-
-package MoepClient.netzwerk;
+package moepserver.netzwerk;
 
 import Moep.Statusmeldung;
 import java.io.BufferedReader;
@@ -51,5 +50,10 @@ public class VerbindungReader extends Thread
         {
             verbindung.verbindungVerlorenEvent();
         }
+    }
+    
+    public String gibIP()
+    {
+        return clientSocket.getRemoteSocketAddress().toString();        
     }
 }

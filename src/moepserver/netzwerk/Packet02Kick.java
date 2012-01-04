@@ -24,6 +24,6 @@ public class Packet02Kick extends Packet
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        verbindung.kickEvent(grund);
+        //Kein Serverevent!
     }
 }

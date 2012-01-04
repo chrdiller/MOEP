@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import moepserver.MoepLogger;
+import moepserver.Server;
+import moepserver.SpielerRemote;
 
 /**
  * Wartet auf neue Verbindungen
@@ -15,17 +17,17 @@ import moepserver.MoepLogger;
 public class ServerListener extends Thread
 {
     private ServerSocket serverSocket;
-    Netz netz; //Netz muss referenziert werden, um Logins behandeln zu können
+    private Server server; //Netz muss referenziert werden, um Logins behandeln zu können
     private int listenPort;
     
     private static final MoepLogger log = new MoepLogger();
 
-    public ServerListener(Netz _netz, int _port)
+    public ServerListener(Server _server, int _port)
     {
         listenPort = _port;
         if(listenPort < 0)
             listenPort = 11111;
-        netz = _netz;
+        server = _server;
         this.setName("ServerListenerThread");
     }
 
@@ -55,14 +57,20 @@ public class ServerListener extends Thread
                 log.log(Level.WARNING, "Akzeptieren einer neuen Verbindung fehlgeschlagen");
             }
 
-            Verbindung verbindung = new Verbindung(new VerbindungReaderThread(clientSocket), new VerbindungWriterThread(clientSocket)); 
-            verbindung.start();
-            LoginWaechter logW = new LoginWaechter(verbindung, netz);
-            logW.start();
+            final Verbindung verbindung = new Verbindung(new VerbindungReader(clientSocket), new VerbindungWriter(clientSocket)); 
+            new Thread(){public void run(){warteAufLogin(verbindung);}}.start();
 
             clientSocket = null;
-            verbindung = null;
-            logW = null;
         }
+    }
+    
+    private void warteAufLogin(final Verbindung verbindung)
+    {
+        while(!verbindung.istAktiv)
+        {
+            //Warten...
+            try{sleep(500);}catch(Exception ex){}
+        }
+        server.spielerHinzufuegen(new SpielerRemote(verbindung, verbindung.loginName, verbindung.gibIP()), -1);
     }
 }

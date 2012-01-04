@@ -30,19 +30,6 @@ public class Packet08SpielerServerAktion extends Packet
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        if(art == 0)
-        {
-            verbindung.spielerLoginEvent(spielername);
-        }
-        else if(art == 1)
-        {
-            verbindung.spielerLogoutEvent(spielername);
-        }
-        else if(art == 2)
-        {
-            verbindung.spielerAmZugEvent(spielername);
-        }
-        else if(art == 3)
-            verbindung.spielerKartenzahlUpdate(spielername, kartenzahl);
+        //Kein Serverevent!
     }    
 }

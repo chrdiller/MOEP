@@ -24,7 +24,7 @@ public class Packet03AmZug extends Packet
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        verbindung.amZugEvent(wert);
+        //Kein Serverevent!
     }
 }
 

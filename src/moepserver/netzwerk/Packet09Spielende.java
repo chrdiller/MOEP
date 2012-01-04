@@ -26,6 +26,6 @@ public class Packet09Spielende extends Packet
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        verbindung.spielEnde(gewonnen);
+        //Kein Serverevent!
     }    
 }

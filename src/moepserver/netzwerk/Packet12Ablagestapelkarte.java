@@ -25,6 +25,6 @@ public class Packet12Ablagestapelkarte extends Packet
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        verbindung.ablagestapelkarteEmpfangenEvent(karte);
+        //Kein Serverevent!
     }
 }
