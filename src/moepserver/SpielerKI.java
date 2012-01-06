@@ -122,7 +122,6 @@ public class SpielerKI extends Spieler
     {   
         if(wert)
         {
-            server.broadcast(spielername + " ist am Zug");     
             log.log(Level.INFO, "Spieler " + spielername + " ist am Zug");
             
             //KI-Code
@@ -142,9 +141,6 @@ public class SpielerKI extends Spieler
                 }catch (InterruptedException ex) {}   
                 new Thread(){public void run(){karteLegenEvent(legbar.get(new Random().nextInt(legbar.size())));}}.start();
             }
-            
-            if(hand.size() == 1)
-                new Thread(){public void run(){moepButtonEvent();}}.start();
         }
     }
 
@@ -205,7 +201,10 @@ public class SpielerKI extends Spieler
     }
 
     @Override
-    public void warteAufMoep() {      
+    public void warteAufMoep()
+    {      
+        if(hand.size() == 1)
+            moepButtonEvent();
         try
         {
             Thread.currentThread().sleep(2000); 

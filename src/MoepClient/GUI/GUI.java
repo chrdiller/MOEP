@@ -136,14 +136,6 @@ public class GUI extends JFrame
         status.setSpielStatus(stat);
     }
     
-    public void LoginOut (boolean login)
-    {
-        initP.statusAendern(login);
-        if (login){
-            tisch.ablageAktualisieren(new Karte(0,0));
-        }
-    }
-    
     public void handAktualisieren(List<Karte> karten)
     {
         hand.kartenAktualisieren(karten);

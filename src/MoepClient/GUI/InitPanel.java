@@ -43,7 +43,8 @@ public class InitPanel extends JPanel
 
         jLabel3.setText("2/4 Spieler");
 
-        jButton2.setText("Starten");
+        jButton2.setText("Erstellen");
+        jButton2.setActionCommand("");
 
         jButton3.setText("Spieler...");
 
@@ -63,7 +64,7 @@ public class InitPanel extends JPanel
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -128,13 +129,48 @@ public class InitPanel extends JPanel
         return (String)jComboBox1.getSelectedItem();
     }
     
+    public String gibErstellenServername()
+    {
+        return (String)jTextField2.getText();
+    }
+    
     public String gibName()
     {
         return jTextField1.getText();
     }
 
-    void statusAendern(boolean login)
+    public void statusBeitreten(boolean aktiv, String text)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        jComboBox1.setEnabled(aktiv);
+        jTextField1.setEnabled(aktiv);
+        if(text == "-")
+            jButton1.setEnabled(aktiv);
+        else {
+            jButton1.setText(text);
+            jButton1.setEnabled(true);
+        }
+    }
+    
+    public void statusErstellen(boolean aktiv, String text)
+    {
+        jButton3.setEnabled(aktiv);
+        jTextField2.setEnabled(aktiv);
+        if(text == "-")
+            jButton2.setEnabled(aktiv);
+        else {
+            jButton2.setText(text);        
+            jButton2.setEnabled(true);
+        }
+
+    }
+    
+    public String gibErstellenText()
+    {
+        return jButton2.getText();
+    }
+    
+    public String gibBeitretenText()
+    {
+        return jButton1.getText();
     }
 }

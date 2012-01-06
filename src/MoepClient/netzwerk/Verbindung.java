@@ -38,6 +38,8 @@ public class Verbindung
     public Verbindung(String _adresse, Interface _client)
     {
         protokollversionBestaetigt = -1;
+        farbeWuenschenInt = 4;
+        
         client = _client;
         lokal = false;
         
@@ -214,13 +216,17 @@ public class Verbindung
         Statusmeldung.fehlerAnzeigen("Verbindung zum Server verloren");
     }
 
-    protected synchronized void neuesPacket(String data)
+    protected void neuesPacket(String data)
     {
-        System.out.println("Packet empfangen: " + data);
         if(!packetBearbeiten(data))
         {
             Statusmeldung.fehlerAnzeigen("Ungültiges Protokoll (Falscher Server?) Data:" + data);
         }
+    }
+    
+    public void serverBeenden()
+    {
+        server.beenden();
     }
 
     //<editor-fold defaultstate="collapsed" desc="Event-Methoden">

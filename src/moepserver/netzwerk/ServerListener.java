@@ -52,10 +52,12 @@ public class ServerListener extends Thread
             {
                 clientSocket = serverSocket.accept();
             } 
+       
             catch (Exception ex) 
             {
                 log.log(Level.WARNING, "Akzeptieren einer neuen Verbindung fehlgeschlagen");
             }
+
 
             final Verbindung verbindung = new Verbindung(new VerbindungReader(clientSocket), new VerbindungWriter(clientSocket)); 
             new Thread(){public void run(){warteAufLogin(verbindung);}}.start();

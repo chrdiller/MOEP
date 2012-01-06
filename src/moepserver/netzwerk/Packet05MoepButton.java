@@ -20,14 +20,8 @@ public class Packet05MoepButton extends Packet
     }
     
     @Override
-    public void serverEventAufrufen(final Verbindung verbindung)
+    public void serverEventAufrufen(Verbindung verbindung)
     {
-        new Thread(){
-            @Override
-            public void run()
-            {
-                verbindung.moepButtonEvent();   
-            }
-        }.start();
+        verbindung.moepButtonEvent();   
     }
 }

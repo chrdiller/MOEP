@@ -26,7 +26,8 @@ public class Server
     public int neueFarbe;
     private int alterSpielerIndex;
     private String servername;
-    
+    ServerListener listener;    
+    ServerBroadcast broadcast;
 
     public Server(String _servername)
     {
@@ -470,9 +471,17 @@ public class Server
     
     private void threadsStarten()     
     {
-        ServerListener listener = new ServerListener(this, 11111);
+        listener = new ServerListener(this, 11111);
         listener.start();
-        ServerBroadcast broadcast = new ServerBroadcast(servername);
+        broadcast = new ServerBroadcast(servername);
         broadcast.start();
+    }
+
+    public void beenden()
+    {
+        for(Spieler s : spieler)
+            s.kick("Server wurde beendet");
+        listener.interrupt();
+        broadcast.interrupt();
     }
 }

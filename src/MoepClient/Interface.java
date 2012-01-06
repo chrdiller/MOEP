@@ -44,7 +44,6 @@ public class Interface
     private Spielerverwaltung spieler;
     
     private ServerSuche serversuche;
-    private String servername;
     
     public Interface ()
     {
@@ -88,8 +87,23 @@ public class Interface
             new MouseAdapter() { //Erstellen
                 @Override
                 public void mousePressed(MouseEvent me) {
-                    servername = spieler.gibEigenenNamen() + "_Server";
-                    serverErstellen();
+                    InitPanel ip = (InitPanel)me.getComponent().getParent();
+                    if(ip.gibErstellenText() == "Erstellen") {
+                        if(ip.gibErstellenServername() != "Servername" || ip.gibErstellenServername() != "") {
+                            serverErstellen(ip.gibErstellenServername());
+                            ip.statusErstellen(false, "Beenden");
+                            ip.statusBeitreten(false, "Beitreten");
+                        }
+                        else
+                            Statusmeldung.fehlerAnzeigen("Bitte erst einen Servernamen eingeben");
+                    }
+                    else
+                    {
+                        verbindung.serverBeenden();
+                        spielEnde(false);
+                        ip.statusErstellen(true, "Erstellen");
+                        ip.statusBeitreten(true, "Beitreten");
+                    }
                 }
             },
             
@@ -97,8 +111,24 @@ public class Interface
                 @Override
                 public void mousePressed(MouseEvent me) {
                     InitPanel ip = (InitPanel)me.getComponent().getParent();
-                    verbindung = new Verbindung(server.get(ip.gibServername()), Interface.this);
-                    verbindung.anmelden(ip.gibName());
+                    if(ip.gibBeitretenText() == "Beitreten") {
+                        if(ip.gibName() != "" || ip.gibName() != "Spielername") {
+                            verbindung = new Verbindung(server.get(ip.gibServername()), Interface.this);
+                            verbindung.anmelden(ip.gibName());               
+                            ip.statusErstellen(false, "-");
+                            ip.statusBeitreten(false, "Verlassen");
+                        }
+                        else
+                            Statusmeldung.fehlerAnzeigen("Bitte erst einen Spielernamen eingeben");  
+                    }
+                    else
+                    {
+                        verbindung.schliessen();
+                        spielEnde(false);
+                        ip.statusErstellen(true, "Erstellen");
+                        ip.statusBeitreten(true, "Beitreten");
+                    }
+
                 }
             },
             
@@ -288,7 +318,6 @@ public class Interface
     private void logout()
     {
         eingeloggt = false;
-        g.LoginOut(true);
         dran = false;
         verbindung.schliessen();
         spielEnde(false);
@@ -330,7 +359,7 @@ public class Interface
             g.serverGefunden(null);
     }
 
-    public void serverErstellen() 
+    public void serverErstellen(String servername) 
     {
         if(serversuche.istEinzigerServer()){
             if(spieler.istGueltig())

@@ -119,11 +119,8 @@ public class SpielerLokal extends Spieler
     @Override
     public void amZug(boolean wert) {
         clientVerbindung.amZugEvent(wert);        
-        if(wert)
-        {
-            server.broadcast(spielername + " ist am Zug");     
+        if(wert) 
             log.log(Level.INFO, "Spieler " + spielername + " ist am Zug");
-        }
     }
 
     @Override
@@ -154,7 +151,7 @@ public class SpielerLokal extends Spieler
                 Thread.currentThread().sleep(200);
             } catch (InterruptedException ex) {}}
         int farbe = clientVerbindung.farbeWuenschenInt;
-        clientVerbindung.farbeWuenschenInt = 0;
+        clientVerbindung.farbeWuenschenInt = 4;
         return farbe;
     }
     

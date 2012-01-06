@@ -23,15 +23,9 @@ public class Packet13KarteLegen extends Packet
     }
     
     @Override
-    public void serverEventAufrufen(final Verbindung verbindung)
+    public void serverEventAufrufen(Verbindung verbindung)
     {
-        new Thread(){
-            @Override
-            public void run()
-            {
-                verbindung.karteLegenEvent(karte);  
-            }
-        }.start();
+        verbindung.karteLegenEvent(karte);  
     }
 }
 

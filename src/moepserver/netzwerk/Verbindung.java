@@ -36,12 +36,10 @@ public class Verbindung
         reader.start();
     }
 
-    protected synchronized void neuesPacket(String data)
+    protected void neuesPacket(String data)
     {
-        System.out.println("Packet empfangen(Server): " + data);
         if(!packetBearbeiten(data))
         {
-            System.out.println("FEHLER!!(Server)");
             Statusmeldung.fehlerAnzeigen("Ungültiges Protokoll (Falscher Client?) Data:" + data);
         }
     }

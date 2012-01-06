@@ -118,11 +118,8 @@ public class SpielerRemote extends Spieler
     @Override
     public void amZug(boolean wert) {
         verbindung.sendeAmZug(wert);        
-        if(wert)
-        {
-            server.broadcast(spielername + " ist am Zug");     
+        if(wert)  
             log.log(Level.INFO, "Spieler " + spielername + " ist am Zug");
-        }
     }
 
     @Override

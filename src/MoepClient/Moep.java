@@ -91,7 +91,7 @@ public class Moep
             for(int i = 0; i < 4; i++)
             {
                 if(spieler[i][0] != null && spieler[i][0].equals(spielerAmZug))
-                    ausgabe += ("<i>" + spieler[i][0] + "</i>" + "<br/>&nbsp;&nbsp;" + kartenZahlGrafisch(i) + "&nbsp;&nbsp;" + spieler[i][1] + "<hr />");
+                    ausgabe += ("* " + spieler[i][0] + " *" + "<br/>&nbsp;&nbsp;" + kartenZahlGrafisch(i) + "&nbsp;&nbsp;" + spieler[i][1] + "<hr />");
                 else
                     ausgabe += (spieler[i][0]  + "<br/>&nbsp;&nbsp;" + kartenZahlGrafisch(i) + "&nbsp;&nbsp;" + spieler[i][1] + "<hr />");
             }
