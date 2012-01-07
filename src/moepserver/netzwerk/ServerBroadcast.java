@@ -15,6 +15,7 @@ import java.net.SocketException;
 public class ServerBroadcast extends Thread
 {
     private String servername;
+    private DatagramSocket udpSocket = null;    
     
     public ServerBroadcast(String _servername)
     {
@@ -23,7 +24,6 @@ public class ServerBroadcast extends Thread
     
     public void run()
     {
-        DatagramSocket udpSocket = null;
         while(true)
         {
             try {
@@ -50,5 +50,13 @@ public class ServerBroadcast extends Thread
                 udpSocket.close();
             }
         }
+    }
+
+    public void beenden()
+    {
+        try {
+            udpSocket.close();
+            this.interrupt();
+        } catch (Exception ex) { }
     }
 }

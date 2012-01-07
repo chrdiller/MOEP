@@ -170,7 +170,7 @@ public class Verbindung
     public boolean sendeMoepButton()
     {
         if(lokal) {
-            spieler.moepButtonEvent();
+            new Thread(){public void run(){spieler.moepButtonEvent();}}.start();
             return true;
         }
         else
@@ -213,7 +213,7 @@ public class Verbindung
     }
 
     protected void verbindungVerlorenEvent() {
-        Statusmeldung.fehlerAnzeigen("Verbindung zum Server verloren");
+        client.verbindungVerloren();
     }
 
     protected void neuesPacket(String data)
@@ -256,9 +256,10 @@ public class Verbindung
         client.status(text);
     }
     
-    public void spielerLoginEvent(String spielername)
+    public void spielerLoginEvent(String spielername, int kartenzahl)
     {
         client.mitspielerLogin(spielername);
+        client.spielerKartenzahlUpdate(spielername, kartenzahl);
     }
     
     public void spielerLogoutEvent(String spielername)
@@ -273,6 +274,7 @@ public class Verbindung
     
     public void spielerKartenzahlUpdate(String spielername, int kartenzahl)
     {
+        System.out.println("V_KU: " + spielername + kartenzahl);
         client.spielerKartenzahlUpdate(spielername, kartenzahl);
     }
     

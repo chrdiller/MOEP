@@ -172,7 +172,7 @@ public class SpielerKI extends Spieler
     public int farbeFragen()
     {
         Random r = new Random();
-        return r.nextInt(4) + 1;
+        return r.nextInt(4);
     }
     
     @Override

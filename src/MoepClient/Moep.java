@@ -95,7 +95,7 @@ public class Moep
                 else
                     ausgabe += (spieler[i][0]  + "<br/>&nbsp;&nbsp;" + kartenZahlGrafisch(i) + "&nbsp;&nbsp;" + spieler[i][1] + "<hr />");
             }
-        } catch(Exception ex) { ex.printStackTrace(System.out); return "";}
+        } catch(Exception ex) { return "";}
         ausgabe = ausgabe + "</h2></center></body></html>";
         return umlautFix(ausgabe);
     }
@@ -153,10 +153,12 @@ public class Moep
 
     public void mitspielerKartenzahlUpdate(String spielername, int kartenzahl)
     {
-        System.out.println("ZahlUpdate: " + spielername + kartenzahl);
-        for(int i = 0; i < 4; i++)
-            if(spieler[i][0] == spielername)
-                spieler[i][1] = kartenzahl+"";
+        for(int i = 0; i < 4; i++) {
+            try {
+                if(spieler[i][0].equals(spielername))
+                    spieler[i][1] = kartenzahl+"";
+            }catch(Exception ex){}
+        }
     }
 
     private String kartenZahlGrafisch(int spielerIndex)

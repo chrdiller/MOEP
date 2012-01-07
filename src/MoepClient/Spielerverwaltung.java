@@ -50,10 +50,8 @@ public class Spielerverwaltung
     public boolean istGueltig()
     {
         for(int i = 0; i < 4; i++)
-            if(spieler[i].equals(""))
+            if(spieler[i][1] == "")
                 return false;
-        if(spieler[0][1].equals(""))
-            return false;
         return true;
     }
 }

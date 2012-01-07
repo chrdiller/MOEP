@@ -79,22 +79,22 @@ public class Server
      * Fügt einen Spieler zum Spiel hinzu; wird von LoginWaechter ausgerufen
      * @param neu Der neue Spieler mit passender Verbindung
      */
-    public void spielerHinzufuegen(Spieler neu, int position) {
+    public void spielerHinzufuegen(Spieler neu, int position)
+    {
         log.log(Level.INFO, "Spieler " + neu.spielername + " (" + neu.gibIP() + ") hat sich verbunden");
-        if(spielerzahl < 4) {
-            neu.loginAkzeptieren();
+        if(spielerzahl < 4 && !spielernameVorhanden(neu.spielername)) {
             spielerzahl++;
+            neu.loginAkzeptieren();  
             log.log(Level.INFO, "Spieler " + neu.spielername + " wurde akzeptiert (Spieler " + (aktuellerSpielerIndex + 1) + " von 4)");
             for(Spieler s : spieler) //Übermittlung der aktuell angemeldeten Spieler an den neuen Remote-Spieler
             {
                 if(s != null)
-                    neu.spielerServerAktion(s.spielername, 0, STARTKARTEN);                  
+                    neu.spielerServerAktion(s.spielername, 0, STARTKARTEN); 
             }
           
-
             if(position >= 0 && spieler[position] == null)
                 spieler[position] = neu;
-            else{
+            else {
                 for(int i = 0; i < 4; i++)
                     if(spieler[i] == null)
                         spieler[i] = neu; 
@@ -129,12 +129,11 @@ public class Server
                     s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, spieler[aktuellerSpielerIndex].gibKartenanzahl()); //2 = Am Zug
                 }
             }
-        } else 
-        {
+        }
+        else {
             neu.loginAblehnen();
             log.log(Level.INFO, "Spieler " + neu.spielername + " wurde abgewiesen");
-        }
-        
+        } 
     }
     
     /**
@@ -264,6 +263,11 @@ public class Server
 			+ richtung
 			+ spieler.length) % spieler.length;
         new Thread(){public void run(){spieler[aktuellerSpielerIndex].amZug(true);}}.start();
+        for(Spieler s : spieler)
+            {
+                if(s != null)
+                s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, 0); //2 = Am Zug
+            }
     }
 
 
@@ -481,7 +485,17 @@ public class Server
     {
         for(Spieler s : spieler)
             s.kick("Server wurde beendet");
-        listener.interrupt();
-        broadcast.interrupt();
+        listener.beenden();
+        broadcast.beenden();
+    }
+    
+    private boolean spielernameVorhanden(String name)
+    {  
+        for (int i = 0; i < 4; i++)
+            try {
+                if(spieler[i].spielername == name)
+                    return true;
+            } catch(Exception ex) { } 
+        return false;
     }
 }

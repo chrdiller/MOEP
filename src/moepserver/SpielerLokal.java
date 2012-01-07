@@ -147,7 +147,8 @@ public class SpielerLokal extends Spieler
     @Override
     public int farbeFragen() {
         new Thread(){public void run(){clientVerbindung.farbeWuenschenEvent();}}.start();
-        while(clientVerbindung.farbeWuenschenInt == 4){try {
+        while(clientVerbindung.farbeWuenschenInt == 4){
+            try {
                 Thread.currentThread().sleep(200);
             } catch (InterruptedException ex) {}}
         int farbe = clientVerbindung.farbeWuenschenInt;
@@ -164,7 +165,7 @@ public class SpielerLokal extends Spieler
     public void spielerServerAktion(String sn, int wert, int kartenzahl)
     {
         if(wert == 0)
-            clientVerbindung.spielerLoginEvent(sn);
+            clientVerbindung.spielerLoginEvent(sn, kartenzahl);
         else if(wert == 1)
             clientVerbindung.spielerLogoutEvent(sn);
         else if(wert == 2)

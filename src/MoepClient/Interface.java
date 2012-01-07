@@ -89,20 +89,20 @@ public class Interface
                 public void mousePressed(MouseEvent me) {
                     InitPanel ip = (InitPanel)me.getComponent().getParent();
                     if(ip.gibErstellenText() == "Erstellen") {
-                        if(ip.gibErstellenServername() != "Servername" || ip.gibErstellenServername() != "") {
-                            serverErstellen(ip.gibErstellenServername());
+                        if(spieler.istGueltig() && (ip.gibErstellenServername() != "Servername" || ip.gibErstellenServername() != "")) {
                             ip.statusErstellen(false, "Beenden");
-                            ip.statusBeitreten(false, "Beitreten");
+                            ip.statusBeitreten(false, "Beitreten");                            
+                            serverErstellen(ip.gibErstellenServername());
                         }
                         else
-                            Statusmeldung.fehlerAnzeigen("Bitte erst einen Servernamen eingeben");
+                            Statusmeldung.fehlerAnzeigen("Bitte erst einen Servernamen eingeben und die Spieler konfigurieren");
                     }
                     else
                     {
+                        ip.statusErstellen(true, "Erstellen");
+                        ip.statusBeitreten(true, "Beitreten");                        
                         verbindung.serverBeenden();
                         spielEnde(false);
-                        ip.statusErstellen(true, "Erstellen");
-                        ip.statusBeitreten(true, "Beitreten");
                     }
                 }
             },
@@ -113,20 +113,20 @@ public class Interface
                     InitPanel ip = (InitPanel)me.getComponent().getParent();
                     if(ip.gibBeitretenText() == "Beitreten") {
                         if(ip.gibName() != "" || ip.gibName() != "Spielername") {
+                            ip.statusErstellen(false, "-");
+                            ip.statusBeitreten(false, "Verlassen");                            
                             verbindung = new Verbindung(server.get(ip.gibServername()), Interface.this);
                             verbindung.anmelden(ip.gibName());               
-                            ip.statusErstellen(false, "-");
-                            ip.statusBeitreten(false, "Verlassen");
                         }
                         else
                             Statusmeldung.fehlerAnzeigen("Bitte erst einen Spielernamen eingeben");  
                     }
                     else
                     {
+                        ip.statusErstellen(true, "Erstellen");
+                        ip.statusBeitreten(true, "Beitreten");                        
                         verbindung.schliessen();
                         spielEnde(false);
-                        ip.statusErstellen(true, "Erstellen");
-                        ip.statusBeitreten(true, "Beitreten");
                     }
 
                 }
@@ -163,6 +163,8 @@ public class Interface
         g = new GUI(this, adapter, popupListener);
         
         Statusmeldung.infoAnzeigen("Willkommen bei MOEP!");
+        
+        spieler = new Spielerverwaltung(new String[][]{{"",""},{"",""},{"",""},{"",""}});
         
         serversuche = new ServerSuche(Interface.this);
         serverSuchen();
@@ -298,7 +300,9 @@ public class Interface
     }
     
     public void spielerKartenzahlUpdate(String spielername, int kartenzahl) {
+        System.out.println("C_KU: " + spielername + kartenzahl);
         m.mitspielerKartenzahlUpdate(spielername, kartenzahl);
+        g.setSpielStatus(m.gibSpielerliste());
     }
     //</editor-fold>
     
@@ -338,7 +342,7 @@ public class Interface
     {
         if(eingeloggt)
         {
-            Statusmeldung.fehlerAnzeigen("Verbindung verloren :(");
+            Statusmeldung.fehlerAnzeigen("Verbindung verloren");
             logout();
         }
     }

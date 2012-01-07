@@ -31,7 +31,7 @@ public abstract class Packet {
         {
             return new Packet01Login(dataArray[1], dataArray[2].equals("Y") ? true : false);
         }
-        else if(dataArray[0].equals("05") && dataArray.length == 2)
+        else if(dataArray[0].equals("05") && dataArray.length == 1)
         {
             return new Packet05MoepButton();
         }

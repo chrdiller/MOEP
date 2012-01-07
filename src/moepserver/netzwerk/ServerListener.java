@@ -75,4 +75,11 @@ public class ServerListener extends Thread
         }
         server.spielerHinzufuegen(new SpielerRemote(verbindung, verbindung.loginName, verbindung.gibIP()), -1);
     }
+
+    public void beenden() {
+        try {
+            serverSocket.close();
+            this.interrupt();
+        } catch (Exception ex) { }
+    }
 }

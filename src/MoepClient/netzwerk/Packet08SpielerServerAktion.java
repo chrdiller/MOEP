@@ -32,7 +32,7 @@ public class Packet08SpielerServerAktion extends Packet
     {
         if(art == 0)
         {
-            verbindung.spielerLoginEvent(spielername);
+            verbindung.spielerLoginEvent(spielername, kartenzahl);
         }
         else if(art == 1)
         {
@@ -43,6 +43,8 @@ public class Packet08SpielerServerAktion extends Packet
             verbindung.spielerAmZugEvent(spielername);
         }
         else if(art == 3)
+        {
             verbindung.spielerKartenzahlUpdate(spielername, kartenzahl);
+        }
     }    
 }

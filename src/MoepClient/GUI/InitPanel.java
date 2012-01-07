@@ -131,7 +131,7 @@ public class InitPanel extends JPanel
     
     public String gibErstellenServername()
     {
-        return (String)jTextField2.getText();
+        return jTextField2.getText();
     }
     
     public String gibName()
