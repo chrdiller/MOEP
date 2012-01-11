@@ -274,7 +274,6 @@ public class Verbindung
     
     public void spielerKartenzahlUpdate(String spielername, int kartenzahl)
     {
-        System.out.println("V_KU: " + spielername + kartenzahl);
         client.spielerKartenzahlUpdate(spielername, kartenzahl);
     }
     

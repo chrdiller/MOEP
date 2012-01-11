@@ -3,6 +3,7 @@ package MoepClient.GUI;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
@@ -59,7 +60,10 @@ public class IconGraphik extends JLabel
         super.paintComponent(g);
         
         Graphics2D g2 = (Graphics2D)g;
-
+        
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.drawImage(this.getImageIcon().getImage(), 0,0,this.getWidth(),this.getHeight(), null);
     }
 

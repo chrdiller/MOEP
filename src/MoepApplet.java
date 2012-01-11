@@ -1,13 +1,12 @@
 
-
-
 import MoepClient.Interface;
 import javax.swing.JApplet;
 
 /**
- * Upcoming.
+ * Bietet die Möglichkeit, MOEP als Applet zu implementieren
  * @author Christian Diller
  */
+
 public class MoepApplet extends JApplet {
 
     @Override

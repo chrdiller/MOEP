@@ -49,6 +49,7 @@ public class Interface
     public Interface ()
     {
         server = new HashMap<String, String>();
+        
         //<editor-fold defaultstate="collapsed" desc="Mouse-Adapter">
         MouseAdapter[] adapter = new MouseAdapter[] {
             
@@ -155,7 +156,6 @@ public class Interface
             }                
         };
         //</editor-fold>
-        
         PopupMenuListener popupListener = new PopupMenuListener() {
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) { }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
@@ -309,7 +309,6 @@ public class Interface
     }
     
     public void spielerKartenzahlUpdate(String spielername, int kartenzahl) {
-        System.out.println("C_KU: " + spielername + kartenzahl);
         m.mitspielerKartenzahlUpdate(spielername, kartenzahl);
         g.setSpielStatus(m.gibSpielerliste());
     }
@@ -345,7 +344,25 @@ public class Interface
         System.exit(0);
     }
     //</editor-fold>
+    
 
+    //<editor-fold defaultstate="collapsed" desc="Server-Suche">
+    public void serverGefunden(String serverName, String serverAdresse)
+    {
+        if(server.get(serverName) == null) {
+            server.put(serverName, serverAdresse);
+            g.serverGefunden(serverName);
+        }
+        else
+            g.serverGefunden(null);
+    }
+    
+    private void serverSuchen()
+    {
+        serversuche.suchen();
+        Statusmeldung.infoAnzeigen("Serverliste wurde aktualisiert");
+    }
+    //</editor-fold>
     
     public void verbindungVerloren() 
     {
@@ -362,16 +379,8 @@ public class Interface
         clip.play();
     }
 
-    public void serverGefunden(String serverName, String serverAdresse)
-    {
-        if(server.get(serverName) == null) {
-            server.put(serverName, serverAdresse);
-            g.serverGefunden(serverName);
-        }
-        else
-            g.serverGefunden(null);
-    }
 
+    
     public void serverErstellen(String servername) 
     {
         if(serversuche.istEinzigerServer()){
@@ -387,9 +396,4 @@ public class Interface
         }
     }
 
-    private void serverSuchen() 
-    {
-        serversuche.suchen();
-        Statusmeldung.infoAnzeigen("Serverliste wurde aktualisiert");
-    }
 }

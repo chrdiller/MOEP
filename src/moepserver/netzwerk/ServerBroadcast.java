@@ -35,12 +35,8 @@ public class ServerBroadcast extends Thread
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     udpSocket.receive(packet);
                     InetAddress sendeAdresse = packet.getAddress();
-                    System.out.print("Nachricht von " + sendeAdresse.getHostAddress() + ":");
-                    System.out.println(new String(packet.getData(), 0, packet.getLength()));
-                    System.out.println("Sende Antwort.. ");
                     packet = new DatagramPacket(servername.getBytes(), servername.length(), sendeAdresse, packet.getPort());
                     udpSocket.send(packet);
-                    System.out.println("Antwort gesendet!");
                 }
             } catch (SocketException e) {
                 e.printStackTrace();

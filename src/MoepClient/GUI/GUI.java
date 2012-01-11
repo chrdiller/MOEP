@@ -13,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -38,6 +39,7 @@ public class GUI extends JFrame
     public GUI (Interface i, MouseAdapter [] adapter, PopupMenuListener popupListener) {
         super();
         this.setTitle("MOEP");
+        this.setIconImage(new ImageIcon(this.getClass().getResource("../grafik/mIconKlein.png")).getImage());
         this.setLocation(new Point(Toolkit.getDefaultToolkit().getScreenSize().width / 8 ,Toolkit.getDefaultToolkit().getScreenSize().height / 8));
         interfaceI = i;
         

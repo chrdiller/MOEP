@@ -40,16 +40,12 @@ public class ServerSuche
                 udpSocket.setBroadcast(true);
                 byte[] buffer = new String("MOEP").getBytes();
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("255.255.255.255"), 10001);
-                System.out.println("Sende Broadcast");
                 udpSocket.send(packet);
 
                 buffer = new byte[1024];
                 packet = new DatagramPacket(buffer, buffer.length);
                 udpSocket.setSoTimeout(100);
                 udpSocket.receive(packet);
-
-                System.out.print("Antwort von " + packet.getAddress().getHostAddress() + ":");
-                System.out.println(new String(packet.getData(), 0, packet.getLength()));
 
                 serverName = new String(packet.getData(), 0, packet.getLength());
                 serverAdresse = packet.getAddress().getHostAddress();
