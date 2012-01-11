@@ -1,6 +1,7 @@
 package MoepClient.GUI;
 
 import java.awt.event.MouseAdapter;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.PopupMenuListener;
 
@@ -138,39 +139,14 @@ public class InitPanel extends JPanel
     {
         return jTextField1.getText();
     }
-
-    public void statusBeitreten(boolean aktiv, String text)
+    
+    public JButton gibErstellenButton()
     {
-        jComboBox1.setEnabled(aktiv);
-        jTextField1.setEnabled(aktiv);
-        if(text == "-")
-            jButton1.setEnabled(aktiv);
-        else {
-            jButton1.setText(text);
-            jButton1.setEnabled(true);
-        }
+        return jButton2;
     }
     
-    public void statusErstellen(boolean aktiv, String text)
+    public JButton gibBeitretenButton()
     {
-        jButton3.setEnabled(aktiv);
-        jTextField2.setEnabled(aktiv);
-        if(text == "-")
-            jButton2.setEnabled(aktiv);
-        else {
-            jButton2.setText(text);        
-            jButton2.setEnabled(true);
-        }
-
-    }
-    
-    public String gibErstellenText()
-    {
-        return jButton2.getText();
-    }
-    
-    public String gibBeitretenText()
-    {
-        return jButton1.getText();
+        return jButton1;
     }
 }

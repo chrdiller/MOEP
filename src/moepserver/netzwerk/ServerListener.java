@@ -1,11 +1,10 @@
 
 package moepserver.netzwerk;
 
+import Moep.Statusmeldung;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import moepserver.MoepLogger;
 import moepserver.Server;
 import moepserver.SpielerRemote;
 
@@ -19,8 +18,6 @@ public class ServerListener extends Thread
     private ServerSocket serverSocket;
     private Server server; //Netz muss referenziert werden, um Logins behandeln zu können
     private int listenPort;
-    
-    private static final MoepLogger log = new MoepLogger();
 
     public ServerListener(Server _server, int _port)
     {
@@ -42,7 +39,7 @@ public class ServerListener extends Thread
         } 
         catch (Exception ex) 
         {
-            log.log(Level.SEVERE, "Fehler beim Starten des Servers auf Port " + listenPort);
+            Statusmeldung.fehlerAnzeigen("Fehler beim Starten des Servers auf Port " + listenPort);
             return;
         }
 
@@ -55,7 +52,7 @@ public class ServerListener extends Thread
        
             catch (Exception ex) 
             {
-                log.log(Level.WARNING, "Akzeptieren einer neuen Verbindung fehlgeschlagen");
+                Statusmeldung.fehlerAnzeigen("Akzeptieren einer neuen Verbindung fehlgeschlagen");
             }
 
 

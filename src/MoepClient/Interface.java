@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.PopupMenuListener;
@@ -88,21 +89,25 @@ public class Interface
                 @Override
                 public void mousePressed(MouseEvent me) {
                     InitPanel ip = (InitPanel)me.getComponent().getParent();
-                    if(ip.gibErstellenText() == "Erstellen") {
-                        if(spieler.istGueltig() && (ip.gibErstellenServername() != "Servername" || ip.gibErstellenServername() != "")) {
-                            ip.statusErstellen(false, "Beenden");
-                            ip.statusBeitreten(false, "Beitreten");                            
+                    JButton erstellenBtn = ip.gibErstellenButton();
+                    JButton beitretenBtn = ip.gibBeitretenButton();
+                    if(!erstellenBtn.isEnabled())
+                        return;
+                    if("Erstellen".equals(erstellenBtn.getText())) {
+                        if(spieler.istGueltig() && (!"Servername".equals(ip.gibErstellenServername()) || !"".equals(ip.gibErstellenServername()))) {
                             serverErstellen(ip.gibErstellenServername());
+                            beitretenBtn.setEnabled(false);  
+                            erstellenBtn.setText("Beenden");
                         }
                         else
                             Statusmeldung.fehlerAnzeigen("Bitte erst einen Servernamen eingeben und die Spieler konfigurieren");
                     }
                     else
                     {
-                        ip.statusErstellen(true, "Erstellen");
-                        ip.statusBeitreten(true, "Beitreten");                        
                         verbindung.serverBeenden();
                         spielEnde(false);
+                        beitretenBtn.setEnabled(true);  
+                        erstellenBtn.setText("Erstellen");                            
                     }
                 }
             },
@@ -111,22 +116,26 @@ public class Interface
                 @Override
                 public void mousePressed(MouseEvent me) {
                     InitPanel ip = (InitPanel)me.getComponent().getParent();
-                    if(ip.gibBeitretenText() == "Beitreten") {
-                        if(ip.gibName() != "" || ip.gibName() != "Spielername") {
-                            ip.statusErstellen(false, "-");
-                            ip.statusBeitreten(false, "Verlassen");                            
+                    JButton erstellenBtn = ip.gibErstellenButton();
+                    JButton beitretenBtn = ip.gibBeitretenButton();
+                    if(!beitretenBtn.isEnabled())
+                        return;
+                    if("Beitreten".equals(beitretenBtn.getText())) {
+                        if(!"".equals(ip.gibName()) || !"Spielername".equals(ip.gibName())) {
                             verbindung = new Verbindung(server.get(ip.gibServername()), Interface.this);
-                            verbindung.anmelden(ip.gibName());               
+                            verbindung.anmelden(ip.gibName());   
+                            erstellenBtn.setEnabled(false);
+                            beitretenBtn.setText("Verlassen");                                 
                         }
                         else
                             Statusmeldung.fehlerAnzeigen("Bitte erst einen Spielernamen eingeben");  
                     }
                     else
-                    {
-                        ip.statusErstellen(true, "Erstellen");
-                        ip.statusBeitreten(true, "Beitreten");                        
+                    {                  
                         verbindung.schliessen();
                         spielEnde(false);
+                        erstellenBtn.setEnabled(true);
+                        beitretenBtn.setText("Beitreten");     
                     }
 
                 }

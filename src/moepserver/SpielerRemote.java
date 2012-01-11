@@ -2,6 +2,7 @@
 package moepserver;
 
 import Moep.Karte;
+import Moep.Statusmeldung;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import moepserver.netzwerk.Packet;
@@ -81,12 +82,12 @@ public class SpielerRemote extends Spieler
 
     @Override
     public void fehlerEvent(String beschreibung) {
-        log.log(Level.SEVERE, "Fehler: " + beschreibung);
+        Statusmeldung.fehlerAnzeigen(beschreibung);
     }
 
     @Override
     public void verbindungVerlorenEvent() {
-        log.log(Level.INFO, "Verbindung zu Spieler " + spielername + " verloren");
+        Statusmeldung.warnungAnzeigen("Verbindung zu Spieler " + spielername + " verloren");
         server.spielerEntfernen(this);
     }
 
@@ -118,8 +119,6 @@ public class SpielerRemote extends Spieler
     @Override
     public void amZug(boolean wert) {
         verbindung.sendeAmZug(wert);        
-        if(wert)  
-            log.log(Level.INFO, "Spieler " + spielername + " ist am Zug");
     }
 
     @Override

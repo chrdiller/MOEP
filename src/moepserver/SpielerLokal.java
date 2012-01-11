@@ -82,12 +82,12 @@ public class SpielerLokal extends Spieler
 
     @Override
     public void fehlerEvent(String beschreibung) {
-        log.log(Level.SEVERE, "Fehler: " + beschreibung);
+        Statusmeldung.fehlerAnzeigen(beschreibung);
     }
 
     @Override
     public void verbindungVerlorenEvent() {
-        log.log(Level.INFO, "Verbindung zu Spieler " + spielername + " verloren");
+        Statusmeldung.warnungAnzeigen("Verbindung zu Spieler " + spielername + " verloren");
         server.spielerEntfernen(this);
     }
 
@@ -119,8 +119,6 @@ public class SpielerLokal extends Spieler
     @Override
     public void amZug(boolean wert) {
         clientVerbindung.amZugEvent(wert);        
-        if(wert) 
-            log.log(Level.INFO, "Spieler " + spielername + " ist am Zug");
     }
 
     @Override

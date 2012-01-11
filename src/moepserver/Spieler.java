@@ -12,7 +12,6 @@ import moepserver.netzwerk.Verbindung;
 
 public abstract class Spieler 
 {
-    protected static final MoepLogger log = new MoepLogger();
     public String spielername;
     public int kartenanzahl;
     protected ArrayList<Karte> hand;

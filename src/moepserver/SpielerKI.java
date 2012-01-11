@@ -2,6 +2,7 @@
 package moepserver;
 
 import Moep.Karte;
+import Moep.Statusmeldung;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
@@ -78,7 +79,7 @@ public class SpielerKI extends Spieler
     @Override
     public void fehlerEvent(String beschreibung) 
     {
-        log.log(Level.SEVERE, "Fehler: " + beschreibung);
+        Statusmeldung.fehlerAnzeigen(beschreibung);
     }
 
     @Override
@@ -122,8 +123,6 @@ public class SpielerKI extends Spieler
     {   
         if(wert)
         {
-            log.log(Level.INFO, "Spieler " + spielername + " ist am Zug");
-            
             //KI-Code
             final ArrayList<Karte> legbar = new ArrayList<Karte>();
             for(Karte legen : hand)

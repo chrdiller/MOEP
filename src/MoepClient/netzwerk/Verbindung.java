@@ -198,7 +198,7 @@ public class Verbindung
     
     public void schliessen()
     {
-        angemeldetSetzen(false);
+        angemeldet = false;
         reader.interrupt();
     }
     

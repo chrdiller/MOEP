@@ -5,7 +5,6 @@ import Moep.Karte;
 import Moep.Statusmeldung;
 import java.util.logging.Level;
 import moepserver.SpielerRemote;
-import moepserver.MoepLogger;
 
 /**
  * Beschreibt eine Verbindung zu einem Client
@@ -25,8 +24,6 @@ public class Verbindung
     public SpielerRemote spieler;
     
     private int farbeWuenschenInt = -1;
-    
-    private static final MoepLogger log = new MoepLogger();
 
     public Verbindung(VerbindungReader _reader, VerbindungWriter _writer)
     {

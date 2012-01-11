@@ -1,6 +1,7 @@
 package moepserver;
 
 import Moep.Karte;
+import Moep.Statusmeldung;
 import java.util.logging.Level;
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,7 +15,6 @@ import moepserver.netzwerk.ServerListener;
 
 public class Server
 {
-    private static final MoepLogger log = new MoepLogger();
     public static final int STARTKARTEN = 7;
 
     private Karte offen;
@@ -31,7 +31,7 @@ public class Server
 
     public Server(String _servername)
     {
-        log.log(Level.INFO, "*** Starte MoepServer ***");
+        Statusmeldung.infoAnzeigen("*** Starte MoepServer ***");
         servername = _servername;
         threadsStarten();
     	verdeckt = this.kartenSet();
@@ -81,11 +81,11 @@ public class Server
      */
     public void spielerHinzufuegen(Spieler neu, int position)
     {
-        log.log(Level.INFO, "Spieler " + neu.spielername + " (" + neu.gibIP() + ") hat sich verbunden");
+        Statusmeldung.infoAnzeigen("Spieler " + neu.spielername + " (" + neu.gibIP() + ") hat sich verbunden");
         if(spielerzahl < 4 && !spielernameVorhanden(neu.spielername)) {
             spielerzahl++;
             neu.loginAkzeptieren();  
-            log.log(Level.INFO, "Spieler " + neu.spielername + " wurde akzeptiert (Spieler " + (aktuellerSpielerIndex + 1) + " von 4)");
+            Statusmeldung.infoAnzeigen("Spieler " + neu.spielername + " wurde akzeptiert (Spieler " + (aktuellerSpielerIndex + 1) + " von 4)");
             for(Spieler s : spieler) //Übermittlung der aktuell angemeldeten Spieler an den neuen Remote-Spieler
             {
                 if(s != null)
@@ -114,7 +114,7 @@ public class Server
             aktuellerSpielerIndex = (aktuellerSpielerIndex+1)%4;
 
             if(aktuellerSpielerIndex == 0) { // Das Spiel geht los
-                log.log(Level.INFO, "Ein neues Spiel wurde gestartet");
+                Statusmeldung.infoAnzeigen("Ein neues Spiel wurde gestartet");
                 broadcast("Ein neues Spiel wurde gestartet");
                 for(int i = 0; i<4; i++)  {
                     spieler[i].neueAblagekarte(offen);
@@ -132,7 +132,7 @@ public class Server
         }
         else {
             neu.loginAblehnen();
-            log.log(Level.INFO, "Spieler " + neu.spielername + " wurde abgewiesen");
+            Statusmeldung.infoAnzeigen("Spieler " + neu.spielername + " wurde abgewiesen");
         } 
     }
     
@@ -145,7 +145,7 @@ public class Server
         for(int i = 0; i < 4; i++)
             if(spieler[i].equals(entf))
                 spieler[i] = null;
-        log.log(Level.INFO, "Spieler " + entf.spielername + " wurde vom Server entfernt");
+        Statusmeldung.infoAnzeigen("Spieler " + entf.spielername + " wurde vom Server entfernt");
         for(Spieler s : spieler)
         {
             if(s != null){
@@ -161,7 +161,7 @@ public class Server
     }
 
     public void spielGewonnen(Spieler p) {
-        log.log(Level.INFO, "Dieses Spiel wurde von " + p.spielername + " gewonnen");
+        Statusmeldung.infoAnzeigen("Dieses Spiel wurde von " + p.spielername + " gewonnen");
         for(Spieler s : spieler) {
             if(s != null){
             s.amZug(false);
@@ -186,7 +186,7 @@ public class Server
 		if (offen.gibNummer() < 10) break;
 		verdeckt.add(offen);
 	}
-	log.log(Level.INFO, "Erste Karte wurde aufgedeckt");
+	Statusmeldung.infoAnzeigen("Erste Karte wurde aufgedeckt");
     }
 
     /**
@@ -249,7 +249,6 @@ public class Server
      */
     protected void karteZiehenEvent() 
     {
-        log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " zieht eine Karte");
         Karte neu = this.gibZufaelligeKarte();
         spieler[aktuellerSpielerIndex].karteHinzufuegen(neu);
         spieler[aktuellerSpielerIndex].neueHandkarte(neu);
@@ -277,16 +276,15 @@ public class Server
      */
     protected void spielerzugEvent(Karte karte) 
     {
-        log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " spielt " + karte.gibDaten());
         if (!this.kannGelegtWerdenAuf(karte, offen)) { //Kann die Karte gelegt werden?
                 spieler[aktuellerSpielerIndex].ungueltigerZug(0);
-                log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " spielt einen ungültigen Zug");
+                Statusmeldung.infoAnzeigen("Spieler " + spieler[aktuellerSpielerIndex].spielername + " spielt einen ungültigen Zug");
                 return;
         }
 
         if(!spieler[aktuellerSpielerIndex].istInHand(karte)) { //Hat der Spieler die Karte in seiner Hand?
             spieler[aktuellerSpielerIndex].ungueltigerZug(1);
-            log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " spielt eine Karte, die er nicht besitzt");
+            Statusmeldung.infoAnzeigen("Spieler " + spieler[aktuellerSpielerIndex].spielername + " spielt eine Karte, die er nicht besitzt");
             return;
         }
         spieler[aktuellerSpielerIndex].gueltigerZug();
@@ -298,8 +296,7 @@ public class Server
         boolean istWuenschen        = symbol == 13;
         boolean istVierPlus         = symbol == 14;
 
-        if (istRichtungsWechsel) { richtung *= -1;  //Richtungswechsel durchführen
-            log.log(Level.INFO, "Richtung wurde geändert");}
+        if (istRichtungsWechsel) { richtung *= -1;}  //Richtungswechsel durchführen
 
         spieler[aktuellerSpielerIndex].karteEntfernen(karte); // Dem aktuellen Spieler OK geben
 
@@ -354,16 +351,13 @@ public class Server
 
             if(!spieler[alterSpielerIndex].moep) {
                 Karte neu = this.gibZufaelligeKarte();
-                log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " hat nicht rechtzeitig Moep gerufen");
                 broadcast(spieler[alterSpielerIndex].spielername + " hat nicht MOEP gerufen");
 
                 spieler[alterSpielerIndex].neueHandkarte(neu); 
                 spieler[alterSpielerIndex].karteHinzufuegen(neu);
             }
-            else if(spieler[alterSpielerIndex].moep) {
-                log.log(Level.INFO, "Spieler " + spieler[aktuellerSpielerIndex].spielername + " ruft Moep");
+            else if(spieler[alterSpielerIndex].moep)
                 broadcast(spieler[alterSpielerIndex].spielername + " ruft MOEP");
-            }
         }
         spieler[alterSpielerIndex].moep = false;
         
@@ -449,7 +443,7 @@ public class Server
         }
 	deckeErsteKarteAuf();
         alterSpielerIndex = 0;
-        log.log(Level.INFO, "Das Spiel wurde beendet");
+        Statusmeldung.infoAnzeigen("Das Spiel wurde beendet");
     }
 
     private String intZuFarbe(int farbeInt) {
@@ -484,7 +478,8 @@ public class Server
     public void beenden()
     {
         for(Spieler s : spieler)
-            s.kick("Server wurde beendet");
+            if(s != null)
+                s.kick("Server wurde beendet");
         listener.beenden();
         broadcast.beenden();
     }
