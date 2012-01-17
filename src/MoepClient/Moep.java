@@ -23,6 +23,10 @@ public class Moep
         hand = Collections.synchronizedList(new ArrayList<Karte>());
         spieler = new String[4][2];
         nachrichten = new ArrayList<String>();
+        for (int i = 0; i < 4; i++) {
+            spieler[i][0] = "(Warte auf Spieler...)";
+            spieler[i][1] = "0";
+        }
     }
     
     public Moep(ArrayList<Karte> h)
@@ -64,21 +68,18 @@ public class Moep
         return hand.get(indexKarte);
     }
     
-    public void mitspielerLogin(String name)
+    public void mitspielerLogin(String name, int position)
     {
-        for(int i = 0; i < 4; i++)
-            if(spieler[i][0] == null) {
-                spieler[i][0] = name;
-                return;
-            }
+        spieler[position][0] = name;
+
     }
     
     public void mitspielerLogout(String name)
     {
         for(int i = 0; i < 4; i++)
             if(spieler[i][0] == name) {
-                spieler[i][0] = null;
-                spieler[i][1] = null;
+                spieler[i][0] = "(Warte auf Spieler...)";
+                spieler[i][1] = "0";
             }
     }
     
@@ -90,7 +91,7 @@ public class Moep
         try {
             for(int i = 0; i < 4; i++)
             {
-                if(spieler[i][0] != null && spieler[i][0].equals(spielerAmZug))
+                if(spieler[i][0].equals(spielerAmZug))
                     ausgabe += ("* " + spieler[i][0] + " *" + "<br/>&nbsp;&nbsp;" + kartenZahlGrafisch(i) + "&nbsp;&nbsp;" + spieler[i][1] + "<hr />");
                 else
                     ausgabe += (spieler[i][0]  + "<br/>&nbsp;&nbsp;" + kartenZahlGrafisch(i) + "&nbsp;&nbsp;" + spieler[i][1] + "<hr />");
@@ -133,8 +134,8 @@ public class Moep
     {
         nachrichten.clear();
         for(int i = 0; i < 4; i++) {
-            spieler[i][0] = null;
-            spieler[i][1] = null;
+            spieler[i][0] = "(Warte auf Spieler...)";
+            spieler[i][1] = "0";
         }
     }
 

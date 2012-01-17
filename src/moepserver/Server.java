@@ -86,27 +86,33 @@ public class Server
             spielerzahl++;
             neu.loginAkzeptieren();  
             Statusmeldung.infoAnzeigen("Spieler " + neu.spielername + " wurde akzeptiert (Spieler " + (aktuellerSpielerIndex + 1) + " von 4)");
-            for(Spieler s : spieler) //Übermittlung der aktuell angemeldeten Spieler an den neuen Remote-Spieler
-            {
-                if(s != null)
-                    neu.spielerServerAktion(s.spielername, 0, STARTKARTEN); 
-            }
           
+            int endPosition = position;
             if(position >= 0 && spieler[position] == null)
                 spieler[position] = neu;
             else {
                 for(int i = 0; i < 4; i++)
-                    if(spieler[i] == null)
-                        spieler[i] = neu; 
+                    if(spieler[i] == null) {
+                        spieler[i] = neu;
+                        endPosition = i;
+                        break;
+                    }
             }
             
             neu.server = this;
-
-            for(Spieler s : spieler)
+            
+            for(int i = 0; i < 4; i++) //Übermittlung der aktuell angemeldeten Spieler an den neuen Remote-Spieler
             {
-                if(s != null){
-                s.spielerServerAktion(neu.spielername, 0, STARTKARTEN); //Login-Nachricht an alle Remote-Spieler
-                s.textSenden(neu.spielername + " ist dem Spiel beigetreten");}
+                if(spieler[i] != null)
+                    neu.spielerServerAktion(spieler[i].spielername, 0, STARTKARTEN, i); 
+            }
+
+            for(int i = 0; i < 4; i++)
+            {
+                if(spieler[i] != null) {
+                    spieler[i].spielerServerAktion(neu.spielername, 0, STARTKARTEN, endPosition); //Login-Nachricht an alle Remote-Spieler
+                    spieler[i].textSenden(neu.spielername + " ist dem Spiel beigetreten");
+                }
             }
 
             this.erzeugeHand(neu);
@@ -123,10 +129,10 @@ public class Server
                     }
                 }
                 new Thread(){public void run(){spieler[aktuellerSpielerIndex].amZug(true);}}.start();
-                for(Spieler s : spieler)
+                for(int i = 0; i < 4; i++)
                 {
-                    if(s != null)
-                    s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, spieler[aktuellerSpielerIndex].gibKartenanzahl()); //2 = Am Zug
+                    if(spieler[i] != null)
+                        spieler[i].spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, spieler[aktuellerSpielerIndex].gibKartenanzahl(), i); //2 = Am Zug
                 }
             }
         }
@@ -146,16 +152,15 @@ public class Server
             if(spieler[i].equals(entf))
                 spieler[i] = null;
         Statusmeldung.infoAnzeigen("Spieler " + entf.spielername + " wurde vom Server entfernt");
-        for(Spieler s : spieler)
-        {
-            if(s != null){
-            s.spielerServerAktion(entf.spielername, 1, 0);
-            s.amZug(false);   
-            kartenzahlUpdate(s);
-            s.textSenden("Spieler " + entf.spielername + " hat das Spiel verlassen");
-            s.textSenden("Das Spiel wurde beendet");
-            s.textSenden("Spielneustart, sobald wieder 4 Spieler online sind");
-            s.spielEnde(false);}
+        for(int i = 0; i < 4; i++) {
+            if(spieler[i] != null) {
+            spieler[i].spielerServerAktion(entf.spielername, 1, 0, i);
+            spieler[i].amZug(false);   
+            kartenzahlUpdate(spieler[i]);
+            spieler[i].textSenden("Spieler " + entf.spielername + " hat das Spiel verlassen");
+            spieler[i].textSenden("Das Spiel wurde beendet");
+            spieler[i].textSenden("Spielneustart, sobald wieder 4 Spieler online sind");
+            spieler[i].spielEnde(false);}
         }
         spielBeenden();
     }
@@ -262,11 +267,11 @@ public class Server
 			+ richtung
 			+ spieler.length) % spieler.length;
         new Thread(){public void run(){spieler[aktuellerSpielerIndex].amZug(true);}}.start();
-        for(Spieler s : spieler)
-            {
-                if(s != null)
-                s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, 0); //2 = Am Zug
-            }
+        for(int i = 0; i < 4; i++)
+        {
+            if(spieler[i] != null)
+                spieler[i].spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, 0, i); //2 = Am Zug
+        }
     }
 
 
@@ -370,10 +375,10 @@ public class Server
         else
         {
             new Thread(){public void run(){spieler[aktuellerSpielerIndex].amZug(true);}}.start();
-            for(Spieler s : spieler)
+            for(int i = 0; i < 4; i++)
             {
-                if(s != null)
-                s.spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, 0); //2 = Am Zug
+                if(spieler[i] != null)
+                    spieler[i].spielerServerAktion(spieler[aktuellerSpielerIndex].spielername, 2, 0, i); //2 = Am Zug
             }
         }
 
@@ -462,9 +467,10 @@ public class Server
         return ausgabe;
     }
 
-    private void kartenzahlUpdate(Spieler sp) {
+    private void kartenzahlUpdate(Spieler sp)
+    {
         for(int i = 0; i < 4; i++)
-            if(spieler[i] != null) spieler[i].spielerServerAktion(sp.spielername, 3, sp.gibKartenanzahl());
+            if(spieler[i] != null) spieler[i].spielerServerAktion(sp.spielername, 3, sp.gibKartenanzahl(), i);
     }
     
     private void threadsStarten()     
@@ -488,7 +494,7 @@ public class Server
     {  
         for (int i = 0; i < 4; i++)
             try {
-                if(spieler[i].spielername == name)
+                if(spieler[i].spielername == null ? name == null : spieler[i].spielername.equals(name))
                     return true;
             } catch(Exception ex) { } 
         return false;

@@ -291,9 +291,9 @@ public class Interface
 
     
     //<editor-fold defaultstate="collapsed" desc="Mitspieler-Aktionen">
-    public void mitspielerLogin(String name)
+    public void mitspielerLogin(String name, int position)
     {
-        m.mitspielerLogin(name);
+        m.mitspielerLogin(name, position);
         g.setSpielStatus(m.gibSpielerliste());
     }
     

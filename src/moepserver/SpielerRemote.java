@@ -157,9 +157,9 @@ public class SpielerRemote extends Spieler
     }
     
     @Override
-    public void spielerServerAktion(String sn, int wert, int kartenzahl)
+    public void spielerServerAktion(String sn, int wert, int kartenzahl, int position)
     {
-        verbindung.sendeSpielerServerAktion(sn, wert, kartenzahl);
+        verbindung.sendeSpielerServerAktion(sn, wert, kartenzahl, position);
     }
     
     @Override

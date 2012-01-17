@@ -48,7 +48,7 @@ public class IconGraphik extends JLabel
     
     public final ImageIcon getDefaultIcon()
     {
-        ImageIcon icon = new ImageIcon(this.getClass().getResource("../grafik/kartenSet.png"));
+        ImageIcon icon = new ImageIcon(this.getClass().getResource("grafik/kartenSet.png"));
         icon.setImage(new JPanel().createImage(new FilteredImageSource(icon.getImage().getSource(), new CropImageFilter(12 * 166, 4 * 250, 166, 250))));
         return icon;
     }

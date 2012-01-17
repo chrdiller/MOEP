@@ -63,8 +63,11 @@ public class Verbindung
     
     public Verbindung(Spielerverwaltung _spVerwaltung, String servername, Interface _client)
     {
+        farbeWuenschenInt = 4;
+        
         client = _client;
         server = new Server(servername);
+        
         spVerwaltung = _spVerwaltung;
         lokal = true;
         
@@ -150,7 +153,7 @@ public class Verbindung
     public boolean sendeKarteLegen(final Karte karte)
     {
         if(lokal) {
-            spieler.karteLegenEvent(karte);
+            new Thread(){public void run(){spieler.karteLegenEvent(karte);}}.start();
             return true;
         }
         else
@@ -160,7 +163,7 @@ public class Verbindung
     public boolean sendeKarteZiehen()
     {
         if(lokal) {
-            spieler.karteZiehenEvent();
+            new Thread(){public void run(){spieler.karteZiehenEvent();}}.start();
             return true;
         }
         else
@@ -256,9 +259,9 @@ public class Verbindung
         client.status(text);
     }
     
-    public void spielerLoginEvent(String spielername, int kartenzahl)
+    public void spielerLoginEvent(String spielername, int kartenzahl, int position)
     {
-        client.mitspielerLogin(spielername);
+        client.mitspielerLogin(spielername, position);
         client.spielerKartenzahlUpdate(spielername, kartenzahl);
     }
     

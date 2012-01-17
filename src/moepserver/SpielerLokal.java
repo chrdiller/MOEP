@@ -5,7 +5,6 @@ import Moep.Karte;
 import Moep.Statusmeldung;
 import MoepClient.netzwerk.Verbindung;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 /**
  * Beschreibt einen Lokal-Spieler, also einen Spieler,
@@ -160,10 +159,10 @@ public class SpielerLokal extends Spieler
     }
     
     @Override
-    public void spielerServerAktion(String sn, int wert, int kartenzahl)
+    public void spielerServerAktion(String sn, int wert, int kartenzahl, int position)
     {
         if(wert == 0)
-            clientVerbindung.spielerLoginEvent(sn, kartenzahl);
+            clientVerbindung.spielerLoginEvent(sn, kartenzahl, position);
         else if(wert == 1)
             clientVerbindung.spielerLogoutEvent(sn);
         else if(wert == 2)

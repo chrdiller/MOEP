@@ -24,6 +24,15 @@ public class Spielerverwaltung
         return anzahl;
     }
     
+    public int gibLokalSpielerAnzahl()
+    {
+        int anzahl = 0;
+        for(int i = 0; i < spieler.length; i++)
+            if(spieler[i][0] == "Lokal")
+                anzahl++;
+        return anzahl;
+    }
+    
     public String[][] gibKINamen()
     {
         String[][] ausgabe = new String[gibKISpielerAnzahl()][2];

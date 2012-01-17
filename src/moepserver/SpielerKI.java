@@ -5,7 +5,6 @@ import Moep.Karte;
 import Moep.Statusmeldung;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
 
 /**
  * Beschreibt einen KI-Spieler, also einen Spieler,
@@ -181,7 +180,7 @@ public class SpielerKI extends Spieler
     }
     
     @Override
-    public void spielerServerAktion(String sn, int wert, int kartenzahl)
+    public void spielerServerAktion(String sn, int wert, int kartenzahl, int position)
     {
         //Nichts
     }

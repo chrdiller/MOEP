@@ -3,7 +3,6 @@ package moepserver.netzwerk;
 
 import Moep.Karte;
 import Moep.Statusmeldung;
-import java.util.logging.Level;
 import moepserver.SpielerRemote;
 
 /**
@@ -177,9 +176,9 @@ public class Verbindung
      * @param art Login(art=0) oder Logout(art=1)?
      * @return Erfolgreich gesendet ja/nein
      */
-    public boolean sendeSpielerServerAktion(String name, int art, int kartenzahl)
+    public boolean sendeSpielerServerAktion(String name, int art, int kartenzahl, int position)
     {
-        return packetSenden(new Packet08SpielerServerAktion(name, art, kartenzahl));
+        return packetSenden(new Packet08SpielerServerAktion(name, art, kartenzahl, position));
     }
     
     /**

@@ -26,7 +26,7 @@ public class Status extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         
-        jLabel3 = new IconGraphik(new ImageIcon(this.getClass().getResource("../grafik/moep-button.png")),null,moep);
+        jLabel3 = new IconGraphik(new ImageIcon(this.getClass().getResource("grafik/moep-button.png")),null,moep);
 
         setBounds(new java.awt.Rectangle(0, 0, 260, 500));
         setPreferredSize(new java.awt.Dimension(260, 500));

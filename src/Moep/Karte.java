@@ -1,5 +1,7 @@
 package Moep;
 
+
+
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 import javax.swing.ImageIcon;
@@ -45,7 +47,7 @@ public class Karte implements Comparable<Karte>
     
     public ImageIcon gibBild()
     {
-        ImageIcon bild = new ImageIcon(this.getClass().getResource("../MoepClient/grafik/kartenSet.png"));
+        ImageIcon bild = new ImageIcon(MoepClient.GUI.GUI.class.getResource("grafik/kartenSet.png"));
         bild.setImage(new JPanel().createImage(new FilteredImageSource(bild.getImage().getSource(), new CropImageFilter((nummer - (farbe == 4 ? 13 : 0))* 166, farbe * 250, 166, 250))));
         return bild;
     }
