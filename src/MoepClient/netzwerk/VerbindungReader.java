@@ -1,10 +1,12 @@
-
 package MoepClient.netzwerk;
 
 import Moep.Statusmeldung;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Wird pro Verbindung erzeugt
@@ -17,6 +19,9 @@ public class VerbindungReader extends Thread
     private Socket clientSocket;
     private BufferedReader input;
     protected Verbindung verbindung;
+    private ExecutorService executor = Executors.newCachedThreadPool();
+    
+    private boolean beendet;
     
     public VerbindungReader(Socket _clientSocket) {
         
@@ -40,7 +45,7 @@ public class VerbindungReader extends Thread
                 final String inputLine = input.readLine();
                 if(inputLine == null)
                     break;
-                new Thread(){public void run(){verbindung.neuesPacket(inputLine);}}.start();
+                executor.execute(new Runnable(){public void run(){verbindung.neuesPacket(inputLine);}});
             }
             verbindung.verbindungVerlorenEvent(); //Hier kommt die Ausführung nur hin, wenn der Server die Verbindung geschlossen hat
 
@@ -49,7 +54,17 @@ public class VerbindungReader extends Thread
         }
         catch(Exception ex)
         {
-            verbindung.verbindungVerlorenEvent();
+            if(!beendet)
+                verbindung.verbindungVerlorenEvent();
         }
+    }
+
+    public void beenden()
+    {
+        beendet = true;
+        try {
+            input.close();
+            clientSocket.close();
+        } catch (IOException ex) { }
     }
 }

@@ -1,23 +1,23 @@
-
 package moepserver.netzwerk;
 
 import Moep.Statusmeldung;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
 import moepserver.Server;
 import moepserver.SpielerRemote;
 
 /**
  * Wartet auf neue Verbindungen
  * @author Christian Diller
-
  */
+
 public class ServerListener extends Thread
 {
     private ServerSocket serverSocket;
     private Server server; //Netz muss referenziert werden, um Logins behandeln zu können
     private int listenPort;
+    private boolean beendet = false;
 
     public ServerListener(Server _server, int _port)
     {
@@ -48,18 +48,15 @@ public class ServerListener extends Thread
             try 
             {
                 clientSocket = serverSocket.accept();
+                final Verbindung verbindung = new Verbindung(new VerbindungReader(clientSocket), new VerbindungWriter(clientSocket)); 
+                new Thread(){public void run(){warteAufLogin(verbindung);}}.start();                
             } 
-       
             catch (Exception ex) 
             {
-                Statusmeldung.fehlerAnzeigen("Akzeptieren einer neuen Verbindung fehlgeschlagen");
+                if(!beendet)
+                    Statusmeldung.fehlerAnzeigen("Akzeptieren einer neuen Verbindung fehlgeschlagen");
+                break;                  
             }
-
-
-            final Verbindung verbindung = new Verbindung(new VerbindungReader(clientSocket), new VerbindungWriter(clientSocket)); 
-            new Thread(){public void run(){warteAufLogin(verbindung);}}.start();
-
-            clientSocket = null;
         }
     }
     
@@ -73,10 +70,11 @@ public class ServerListener extends Thread
         server.spielerHinzufuegen(new SpielerRemote(verbindung, verbindung.loginName, verbindung.gibIP()), -1);
     }
 
-    public void beenden() {
+    public void beenden()
+    {
+        beendet = true;        
         try {
             serverSocket.close();
-            this.interrupt();
-        } catch (Exception ex) { }
+        } catch (IOException ex) { }
     }
 }

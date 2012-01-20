@@ -148,4 +148,9 @@ public class GUI extends JFrame
     {
         initP.serverGefunden(serverName);
     }
+    
+    public void spielerZahlAendern(int wert)
+    {
+        initP.spielerZahlAendern(wert);
+    }
 }

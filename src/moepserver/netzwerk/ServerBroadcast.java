@@ -1,6 +1,7 @@
 
 package moepserver.netzwerk;
 
+import Moep.Statusmeldung;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -15,7 +16,8 @@ import java.net.SocketException;
 public class ServerBroadcast extends Thread
 {
     private String servername;
-    private DatagramSocket udpSocket = null;    
+    private DatagramSocket udpSocket = null;
+    private boolean beendet = false;
     
     public ServerBroadcast(String _servername)
     {
@@ -38,21 +40,19 @@ public class ServerBroadcast extends Thread
                     packet = new DatagramPacket(servername.getBytes(), servername.length(), sendeAdresse, packet.getPort());
                     udpSocket.send(packet);
                 }
-            } catch (SocketException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                if(!beendet)
+                    Statusmeldung.fehlerAnzeigen("ServerBroadcast wurde unterbrochen");
             } finally {
                 udpSocket.close();
             }
+            break;
         }
     }
 
     public void beenden()
     {
-        try {
-            udpSocket.close();
-            this.interrupt();
-        } catch (Exception ex) { }
+        beendet = true;
+        udpSocket.close();
     }
 }

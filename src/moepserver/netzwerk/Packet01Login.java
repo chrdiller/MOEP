@@ -27,6 +27,6 @@ public class Packet01Login extends Packet
     @Override
     public void serverEventAufrufen(Verbindung verbindung)
     {
-        //Kein direkter Eventaufruf im Server
+        verbindung.anmelden(name);
     }
 }

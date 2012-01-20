@@ -49,9 +49,11 @@ public class Verbindung
                 
         try 
         {
+            Statusmeldung.infoAnzeigen("Verbindung aufbauen...");
             Socket clientSocket = new Socket(adresse, 11111);
             reader = new VerbindungReader(clientSocket);
             writer = new VerbindungWriter(clientSocket);
+            Statusmeldung.infoAnzeigen("Verbindung hergestellt");
             reader.verbindung = this;
             reader.start();
         } 
@@ -74,19 +76,6 @@ public class Verbindung
         adresse = "";
         angemeldet = false;
         letzterLoginFehlgeschlagen = false;
-                
-        try 
-        {
-            Socket clientSocket = new Socket(adresse, 11111);
-            reader = new VerbindungReader(clientSocket);
-            writer = new VerbindungWriter(clientSocket);
-            reader.verbindung = this;
-            reader.start();
-        } 
-        catch (Exception ex) 
-        {
-            Statusmeldung.fehlerAnzeigen("Verbinden zum Server fehlgeschlagen");
-        }
     }
     
     public boolean anmelden(String name)
@@ -99,6 +88,7 @@ public class Verbindung
             return true;
         }
         else {
+            Statusmeldung.infoAnzeigen("Anmelden...");
             return sendeLogin(name);
         }
     }
@@ -129,9 +119,11 @@ public class Verbindung
     
     public boolean sendeLogin(String name)
     {
+        Statusmeldung.infoAnzeigen("Handshake durchführen...");
         if(!sendeHandshake())
             return false;
         letzterLoginFehlgeschlagen = false;
+        Statusmeldung.infoAnzeigen("Login durchführen...");
         if(!packetSenden(new Packet01Login(name, false)))
             return false;
         int i = 0;
@@ -202,7 +194,10 @@ public class Verbindung
     public void schliessen()
     {
         angemeldet = false;
-        reader.interrupt();
+        if(!lokal) {
+            writer.beenden();
+            reader.beenden();
+        }
     }
     
     protected void angemeldetSetzen(boolean wert)
@@ -213,6 +208,7 @@ public class Verbindung
             Statusmeldung.fehlerAnzeigen("Anmeldung vom Server abgewiesen");
         }
         angemeldet = wert;
+        client.eingeloggt = wert;
     }
 
     protected void verbindungVerlorenEvent() {
@@ -236,7 +232,6 @@ public class Verbindung
     public void kickEvent(String grund)
     {
         client.kick(grund);
-        schliessen();
     }
     
     public void zugLegalEvent(boolean legal, int illegalArt)

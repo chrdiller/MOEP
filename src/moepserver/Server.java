@@ -2,7 +2,6 @@ package moepserver;
 
 import Moep.Karte;
 import Moep.Statusmeldung;
-import java.util.logging.Level;
 import java.util.ArrayList;
 import java.util.Random;
 import moepserver.netzwerk.ServerBroadcast;
@@ -101,7 +100,7 @@ public class Server
             
             neu.server = this;
             
-            for(int i = 0; i < 4; i++) //Übermittlung der aktuell angemeldeten Spieler an den neuen Remote-Spieler
+            for(int i = 0; i < 4; i++) //Übermittlung der aktuell angemeldeten Spieler an den neuen Spieler
             {
                 if(spieler[i] != null)
                     neu.spielerServerAktion(spieler[i].spielername, 0, STARTKARTEN, i); 
@@ -110,7 +109,8 @@ public class Server
             for(int i = 0; i < 4; i++)
             {
                 if(spieler[i] != null) {
-                    spieler[i].spielerServerAktion(neu.spielername, 0, STARTKARTEN, endPosition); //Login-Nachricht an alle Remote-Spieler
+                    if(!spieler[i].equals(neu))
+                        spieler[i].spielerServerAktion(neu.spielername, 0, STARTKARTEN, endPosition); //Login-Nachricht an alle  anderen Spieler
                     spieler[i].textSenden(neu.spielername + " ist dem Spiel beigetreten");
                 }
             }
@@ -149,18 +149,22 @@ public class Server
     public void spielerEntfernen(Spieler entf)
     {
         for(int i = 0; i < 4; i++)
-            if(spieler[i].equals(entf))
+            if(spieler[i].spielername.equals(entf.spielername))
+            {
                 spieler[i] = null;
+                spielerzahl--;
+            }
         Statusmeldung.infoAnzeigen("Spieler " + entf.spielername + " wurde vom Server entfernt");
         for(int i = 0; i < 4; i++) {
             if(spieler[i] != null) {
-            spieler[i].spielerServerAktion(entf.spielername, 1, 0, i);
-            spieler[i].amZug(false);   
-            kartenzahlUpdate(spieler[i]);
-            spieler[i].textSenden("Spieler " + entf.spielername + " hat das Spiel verlassen");
-            spieler[i].textSenden("Das Spiel wurde beendet");
-            spieler[i].textSenden("Spielneustart, sobald wieder 4 Spieler online sind");
-            spieler[i].spielEnde(false);}
+                spieler[i].spielerServerAktion(entf.spielername, 1, 0, i);
+                spieler[i].amZug(false);   
+                kartenzahlUpdate(spieler[i]);
+                spieler[i].textSenden("Spieler " + entf.spielername + " hat das Spiel verlassen");
+                spieler[i].textSenden("Das Spiel wurde beendet");
+                spieler[i].textSenden("Spielneustart, sobald wieder 4 Spieler online sind");
+                spieler[i].spielEnde(false);
+            }
         }
         spielBeenden();
     }
@@ -439,7 +443,7 @@ public class Server
         verdeckt = this.kartenSet();
 	richtung = 1;
         neueFarbe = 4;
-	aktuellerSpielerIndex = spieler.length;
+	aktuellerSpielerIndex = spielerzahl;
         for(Spieler s : spieler)
         {
             if(s != null){
@@ -483,11 +487,11 @@ public class Server
 
     public void beenden()
     {
+        listener.beenden();
+        broadcast.beenden();        
         for(Spieler s : spieler)
             if(s != null)
                 s.kick("Server wurde beendet");
-        listener.beenden();
-        broadcast.beenden();
     }
     
     private boolean spielernameVorhanden(String name)

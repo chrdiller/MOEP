@@ -6,7 +6,7 @@ import java.security.AllPermission;
 import javax.swing.JApplet;
 
 /**
- * Bietet die Möglichkeit, MOEP als Applet zu implementieren
+ * Bietet die Möglichkeit, MOEP aus einem Applet heraus zu starten
  * @author Christian Diller
  */
 
@@ -22,7 +22,7 @@ public class MoepApplet extends JApplet {
         try{ AccessController.checkPermission(perm); }
         catch (AccessControlException ex) {return; }
         
-        //Startet MOEP
+        //Startet MOEP in einem normalen Fenster
         Interface i = new Interface();   
     }
         

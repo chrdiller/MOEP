@@ -14,6 +14,7 @@ public class VerbindungWriter
 {
     private Socket clientSocket;
     private PrintWriter output;
+    private boolean beendet = false;
     
     public VerbindungWriter(Socket _clientSocket)
     {
@@ -30,6 +31,17 @@ public class VerbindungWriter
     
     public void senden(String data)
     {
-        output.println(data);
+        try {
+            output.println(data);
+        } catch(Exception ex) {
+            if(!beendet)
+                Statusmeldung.fehlerAnzeigen("Senden eines Packets fehlgeschlagen");
+        }
+    }
+
+    public void beenden()
+    {
+        beendet = true;
+        output.close();
     }
 }

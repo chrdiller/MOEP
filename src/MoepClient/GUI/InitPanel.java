@@ -13,6 +13,8 @@ import javax.swing.event.PopupMenuListener;
 
 public class InitPanel extends JPanel 
 {
+    private int spielerzahl = 0;
+    
     public InitPanel(MouseAdapter spielerDialog, MouseAdapter erstellen, MouseAdapter beitreten, PopupMenuListener comboBoxListener) {
         initComponents();
         jButton1.addMouseListener(beitreten);
@@ -42,7 +44,7 @@ public class InitPanel extends JPanel
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jLabel3.setText("2/4 Spieler");
+        jLabel3.setText("0/4 Spieler");
 
         jButton2.setText("Erstellen");
         jButton2.setActionCommand("");
@@ -148,5 +150,14 @@ public class InitPanel extends JPanel
     public JButton gibBeitretenButton()
     {
         return jButton1;
+    }
+    
+    public void spielerZahlAendern(int wert)
+    {
+        if(wert == 0)
+            spielerzahl = 0;
+        else
+            spielerzahl += wert;
+        jLabel3.setText(spielerzahl + "/4 Spieler");
     }
 }

@@ -34,17 +34,17 @@ import javax.swing.event.PopupMenuListener;
 public class Interface
 {
 
-    private boolean dran;
-    private boolean eingeloggt;
+    private boolean dran; //Sperrt die Spieleraktionen, wenn false
+    public boolean eingeloggt; //Unterdrückt verbindungVerlorenEvents, wenn false
     
-    private GUI g;
-    private Moep m;
-    private Verbindung verbindung;
+    private GUI g; //Die GUI, einmal erzeugt
+    private Moep m; //Informationsverwaltung, bei jeder Spielsession neu erzeugt
+    private Verbindung verbindung; //Die Verbindung zum Server, bei jeder Spielsession neu erzeugt
     
-    private Map<String, String> server;
-    private Spielerverwaltung spieler;
+    private Map<String, String> server; //Speichert per Broadcast gefundene Server
+    private Spielerverwaltung spieler; //Verwaltet die Spieler
     
-    private ServerSuche serversuche;
+    private ServerSuche serversuche; //Für den UDP-Bradcast zuständig
     
     public Interface ()
     {
@@ -89,6 +89,7 @@ public class Interface
             new MouseAdapter() { //Erstellen
                 @Override
                 public void mousePressed(MouseEvent me) {
+                    m = new Moep(); 
                     InitPanel ip = (InitPanel)me.getComponent().getParent();
                     JButton erstellenBtn = ip.gibErstellenButton();
                     JButton beitretenBtn = ip.gibBeitretenButton();
@@ -99,6 +100,7 @@ public class Interface
                             serverErstellen(ip.gibErstellenServername());
                             beitretenBtn.setEnabled(false);  
                             erstellenBtn.setText("Beenden");
+                            eingeloggt = true;
                         }
                         else
                             Statusmeldung.fehlerAnzeigen("Bitte erst einen Servernamen eingeben und die Spieler konfigurieren");
@@ -106,7 +108,6 @@ public class Interface
                     else
                     {
                         verbindung.serverBeenden();
-                        spielEnde(false);
                         beitretenBtn.setEnabled(true);  
                         erstellenBtn.setText("Erstellen");                            
                     }
@@ -116,6 +117,7 @@ public class Interface
             new MouseAdapter() { //Beitreten
                 @Override
                 public void mousePressed(MouseEvent me) {
+                    m = new Moep(); 
                     InitPanel ip = (InitPanel)me.getComponent().getParent();
                     JButton erstellenBtn = ip.gibErstellenButton();
                     JButton beitretenBtn = ip.gibBeitretenButton();
@@ -134,7 +136,7 @@ public class Interface
                     else
                     {                  
                         verbindung.schliessen();
-                        spielEnde(false);
+                        logout();
                         erstellenBtn.setEnabled(true);
                         beitretenBtn.setText("Beitreten");     
                     }
@@ -166,8 +168,6 @@ public class Interface
         
         dran = false;
         eingeloggt = false;
-      
-        m = new Moep();        
         
         g = new GUI(this, adapter, popupListener);
         
@@ -295,12 +295,14 @@ public class Interface
     {
         m.mitspielerLogin(name, position);
         g.setSpielStatus(m.gibSpielerliste());
+        g.spielerZahlAendern(1);
     }
     
     public void mitspielerLogout(String name)
     {
         m.mitspielerLogout(name);
         g.setSpielStatus(m.gibSpielerliste());
+        g.spielerZahlAendern(-1);
     }
     
     public void mitspielerAmZug(String spielername) {
@@ -320,7 +322,12 @@ public class Interface
     {
         m.setzeHand(new ArrayList<Karte>());
         g.handAktualisieren(m.gibHand());
+        
         g.ablageReset();
+        
+        g.setSpielStatus(m.gibSpielerliste());
+        g.setStatus(m.gibStatus());
+        
         if(gewonnen)
             playSound("applause");
         else
@@ -332,10 +339,10 @@ public class Interface
         eingeloggt = false;
         dran = false;
         verbindung.schliessen();
+        
+        g.spielerZahlAendern(0);
+        m.statusLeeren();
         spielEnde(false);
-        m.statusReset();
-        g.setSpielStatus(m.gibSpielerliste());
-        g.setStatus(m.gibStatus());
     }
     
     public void beenden()

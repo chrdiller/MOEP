@@ -96,7 +96,7 @@ public class Moep
                 else
                     ausgabe += (spieler[i][0]  + "<br/>&nbsp;&nbsp;" + kartenZahlGrafisch(i) + "&nbsp;&nbsp;" + spieler[i][1] + "<hr />");
             }
-        } catch(Exception ex) { return "";}
+        } catch(Exception ex) { ex.printStackTrace(System.out); return "";}
         ausgabe = ausgabe + "</h2></center></body></html>";
         return umlautFix(ausgabe);
     }
@@ -129,13 +129,13 @@ public class Moep
         input.replaceAll("ß", "&szlig;");
         return input;
     }
-
-    public void statusReset()
+    
+    public void statusLeeren()
     {
         nachrichten.clear();
         for(int i = 0; i < 4; i++) {
-            spieler[i][0] = "(Warte auf Spieler...)";
-            spieler[i][1] = "0";
+            spieler[i][0] = "";
+            spieler[i][1] = "";
         }
     }
 
@@ -168,9 +168,9 @@ public class Moep
         for (int i = 0; i < Integer.parseInt(spieler[spielerIndex][1]); i++)
         {
             if(i % 2 != 0)
-                ausgabe += "<img src=\"" + this.getClass().getResource("./grafik/karteKlein.png").toString() + "\" />";
+                ausgabe += "<img src=\"" + this.getClass().getResource("GUI/grafik/karteKlein.png").toString() + "\" />";
             else
-                ausgabe += "<img src=\"" + this.getClass().getResource("./grafik/karteKleinHoch.png").toString() + "\" />";
+                ausgabe += "<img src=\"" + this.getClass().getResource("GUI/grafik/karteKleinHoch.png").toString() + "\" />";
         }
         return ausgabe;
     }

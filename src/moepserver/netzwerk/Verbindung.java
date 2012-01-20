@@ -1,4 +1,3 @@
-
 package moepserver.netzwerk;
 
 import Moep.Karte;
@@ -9,8 +8,8 @@ import moepserver.SpielerRemote;
  * Beschreibt eine Verbindung zu einem Client
  * Jede Verbindung besitzt einen Reader und einen Writer, die die Lese- bzw. Schreibvorgänge in seperaten Threads ausführen
  * @author Christian Diller
-
  */
+
 public class Verbindung 
 {    
     public static final int PROTOKOLLVERSION = 2;
@@ -32,6 +31,12 @@ public class Verbindung
         reader.start();
     }
 
+    protected void anmelden(String name)
+    {
+        loginName = name;
+        istAktiv = true;
+    }
+
     protected void neuesPacket(String data)
     {
         if(!packetBearbeiten(data))
@@ -45,15 +50,7 @@ public class Verbindung
         Packet packet = Packet.erstellePacket(str);
         if(packet == null)
             return false;
-        if(packet instanceof Packet01Login)
-        {
-            loginName = ((Packet01Login)packet).gibData().split("#")[1];
-            istAktiv = true;
-        }
-        else
-        {
-            packet.serverEventAufrufen(this);
-        }
+        packet.serverEventAufrufen(this);
         return true;
     }
 
