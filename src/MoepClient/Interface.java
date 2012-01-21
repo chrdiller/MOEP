@@ -99,7 +99,7 @@ public class Interface
                         return;
                     }
                     if ("Erstellen".equals(erstellenBtn.getText())) {
-                        if (spieler.istGueltig() && (!"Servername".equals(ip.gibErstellenServername()) || !"".equals(ip.gibErstellenServername()))) {
+                        if (spieler.istGueltig() && (!"Servername".equals(ip.gibErstellenServername()) && !"".equals(ip.gibErstellenServername()))) {
                             serverErstellen(ip.gibErstellenServername());
                             beitretenBtn.setEnabled(false);
                             erstellenBtn.setText("Beenden");
@@ -128,17 +128,20 @@ public class Interface
                         return;
                     }
                     if ("Beitreten".equals(beitretenBtn.getText())) {
-                        if (!"".equals(ip.gibName()) || !"Spielername".equals(ip.gibName())) {
+                        if (!"".equals(ip.gibName()) && !"Spielername".equals(ip.gibName())) {
                             verbindung = new Verbindung(server.get(ip.gibServername()), Interface.this);
-                            verbindung.anmelden(ip.gibName());
-                            erstellenBtn.setEnabled(false);
-                            beitretenBtn.setText("Verlassen");
+                            if(verbindung.anmelden(ip.gibName())) {
+                                Statusmeldung.infoAnzeigen("Willkommen auf dem MoepServer " + ip.gibServername());
+                                erstellenBtn.setEnabled(false);
+                                beitretenBtn.setText("Verlassen");
+                            }
                         } else {
                             Statusmeldung.fehlerAnzeigen("Bitte erst einen Spielernamen eingeben");
                         }
                     } else {
                         verbindung.schliessen();
                         logout();
+                        Statusmeldung.infoAnzeigen("Logout erfolgreich");
                         erstellenBtn.setEnabled(true);
                         beitretenBtn.setText("Beitreten");
                     }
