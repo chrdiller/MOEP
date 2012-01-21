@@ -9,18 +9,15 @@ import moepserver.SpielerRemote;
  * Jede Verbindung besitzt einen Reader und einen Writer, die die Lese- bzw. Schreibvorgänge in seperaten Threads ausführen
  * @author Christian Diller
  */
+public class Verbindung
+{
 
-public class Verbindung 
-{    
     public static final int PROTOKOLLVERSION = 2;
     protected boolean istAktiv;
     protected String loginName;
-    
     protected VerbindungReader reader;
     private VerbindungWriter writer;
-    
     public SpielerRemote spieler;
-    
     private int farbeWuenschenInt = -1;
 
     public Verbindung(VerbindungReader _reader, VerbindungWriter _writer)
@@ -39,8 +36,7 @@ public class Verbindung
 
     protected void neuesPacket(String data)
     {
-        if(!packetBearbeiten(data))
-        {
+        if (!packetBearbeiten(data)) {
             Statusmeldung.fehlerAnzeigen("Ungültiges Protokoll (Falscher Client?) Data:" + data);
         }
     }
@@ -48,20 +44,21 @@ public class Verbindung
     protected boolean packetBearbeiten(String str)
     {
         Packet packet = Packet.erstellePacket(str);
-        if(packet == null)
+        if (packet == null) {
             return false;
+        }
         packet.serverEventAufrufen(this);
         return true;
     }
 
     private boolean packetSenden(Packet packet)
     {
-        try
-        {
+        try {
             writer.senden(packet.gibData());
             return true;
+        } catch (Exception ex) {
+            return false;
         }
-        catch(Exception ex){return false;}
     }
 
     /**
@@ -72,13 +69,13 @@ public class Verbindung
     public boolean verbindungSchliessen(String grund)
     {
         packetSenden(new Packet02Kick(grund));
-        try
-        {
+        try {
             reader.interrupt();
             istAktiv = false;
             return true;
+        } catch (Exception ex) {
+            return false;
         }
-        catch(Exception ex){return false;}
     }
 
     /**
@@ -87,7 +84,8 @@ public class Verbindung
      * @param text Wenn nicht am Zug: Anzuzeigender Text, z.B. "Spieler xy ist gerade am Zug" oder "Warten, bis vier Spieler online sind..."
      * @return Erfolgreich gesendet ja/nein
      */
-    public boolean sendeAmZug(boolean wert) {
+    public boolean sendeAmZug(boolean wert)
+    {
         return packetSenden(new Packet03AmZug(wert));
     }
 
@@ -95,11 +93,13 @@ public class Verbindung
      * Teilt dem Client mit, dass sein letzter Zug ungültig war
      * @return Erfolgreich gesendet ja/nein
      */
-    public boolean sendeUngueltigerZug(int art) {
+    public boolean sendeUngueltigerZug(int art)
+    {
         return packetSenden(new Packet04ZugLegal(false, art));
     }
-    
-    public boolean sendeGueltigerZug() {
+
+    public boolean sendeGueltigerZug()
+    {
         return packetSenden(new Packet04ZugLegal(true, -1));
     }
 
@@ -108,7 +108,8 @@ public class Verbindung
      * @param karte Die zu sendende Karte
      * @return Erfolgreich gesendet ja/nein
      */
-    public boolean sendeHandkarte(Karte karte) {
+    public boolean sendeHandkarte(Karte karte)
+    {
         return packetSenden(new Packet11Handkarte(karte));
     }
 
@@ -117,10 +118,11 @@ public class Verbindung
      * @param karte Die zu sendende Karte
      * @return Erfolgreich gesendet ja/nein
      */
-    public boolean sendeAblagestapelkarte(Karte karte) {
+    public boolean sendeAblagestapelkarte(Karte karte)
+    {
         return packetSenden(new Packet12Ablagestapelkarte(karte));
     }
-    
+
     /**
      * Sendet dem Client, ob der MoepButton rechtzeitig gedrückt wurde
      * @param rechtzeitig Rechtzeitig gedrückt ja/nein
@@ -130,7 +132,7 @@ public class Verbindung
     {
         return packetSenden(new Packet05MoepButton());
     }
-    
+
     /**
      * Sendet eine Antwort auf eine Loginanfrage; wird von MoepServer ausgelöst
      * @param wert Login akzeptiert ja/nein
@@ -149,15 +151,17 @@ public class Verbindung
     public int farbeWuenschen()
     {
         sendeFarbeWuenschen();
-        while(farbeWuenschenInt<0){try {
+        while (farbeWuenschenInt < 0) {
+            try {
                 Thread.currentThread().sleep(200);
-            } catch (InterruptedException ex) {}
-}
+            } catch (InterruptedException ex) {
+            }
+        }
         int ausgabe = farbeWuenschenInt;
         farbeWuenschenInt = -1;
         return ausgabe;
     }
-    
+
     /**
      * Sendet beliebigen Text an den Client, der mit dieser Verbindung verknüpgt ist
      * @param text Der zu sendende Text
@@ -167,7 +171,7 @@ public class Verbindung
     {
         return packetSenden(new Packet07Text(text));
     }
-    
+
     /**
      * Sendet eine Nachticht an den Client, wenn sich ein Spieler ein- bzw ausloggt
      * @param art Login(art=0) oder Logout(art=1)?
@@ -177,7 +181,7 @@ public class Verbindung
     {
         return packetSenden(new Packet08SpielerServerAktion(name, art, kartenzahl, position));
     }
-    
+
     /**
      * Sendet eine Anfrage an den Client, sich eine Farbe zu wünschen
      * @return Erfolgreich gesendet ja/nein
@@ -186,15 +190,16 @@ public class Verbindung
     {
         return packetSenden(new Packet06FarbeWuenschen(-1));
     }
-    
+
     /**
      * Sendet den Befehl an den Client, das Spielfeld aufzuräumen
      * @return Erfolgreich gesendet ja/nein
      */
-    public boolean sendeSpielende(boolean wert) {
+    public boolean sendeSpielende(boolean wert)
+    {
         return packetSenden(new Packet09Spielende(wert));
     }
-    
+
     /**
      * Kickt einen Client (Verwendet z.B. vom IP-Schutz)
      * @param grund Der im Client anzuzeigende Grund
@@ -204,35 +209,40 @@ public class Verbindung
     {
         return packetSenden(new Packet02Kick(grund));
     }
-    
+
     //Event - Methoden
-    protected void moepButtonEvent() {
+    protected void moepButtonEvent()
+    {
         spieler.moepButtonEvent();
     }
 
-    protected void farbeWuenschenEvent(int farbe) {
+    protected void farbeWuenschenEvent(int farbe)
+    {
         farbeWuenschenInt = farbe;
     }
 
-    protected void karteLegenEvent(Karte karte) {
+    protected void karteLegenEvent(Karte karte)
+    {
         spieler.karteLegenEvent(karte);
     }
 
-    protected void karteZiehenEvent() {
+    protected void karteZiehenEvent()
+    {
         spieler.karteZiehenEvent();
     }
 
-    protected void verbindungVerlorenEvent() {
+    protected void verbindungVerlorenEvent()
+    {
         spieler.verbindungVerlorenEvent();
     }
     //Ende Eventmethoden
-    
+
     public String gibIP()
     {
         return reader.gibIP();
     }
-    
-    public int gibFarbeWuenschenInt() 
+
+    public int gibFarbeWuenschenInt()
     {
         int ausgabe = farbeWuenschenInt;
         farbeWuenschenInt = -1;

@@ -1,8 +1,7 @@
 /*
  * Copyright (C) 2005-2006 Sun Microsystems, Inc. All rights reserved. Use is
  * subject to license terms.
- */ 
-
+ */
 package org.jdesktop.layout;
 
 import javax.swing.border.EmptyBorder;
@@ -21,7 +20,9 @@ import java.util.*;
  * @author  Werner Randelshofer
  * @version $Revision: 1.4 $
  */
-class AquaLayoutStyle extends LayoutStyle {
+class AquaLayoutStyle extends LayoutStyle
+{
+
     private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0);
     /** Mini size style. */
     private final static int MINI = 0;
@@ -29,8 +30,6 @@ class AquaLayoutStyle extends LayoutStyle {
     private final static int SMALL = 1;
     /** Regular size style. */
     private final static int REGULAR = 2;
-    
-
     /**
      * The containerGapDefinitions array defines the preferred insets (child gaps)
      * of a parent container towards one of its child components.
@@ -54,28 +53,24 @@ class AquaLayoutStyle extends LayoutStyle {
         // Format:
         // { list of parent UI's,
         //   mini insets, small insets, regular insets }
-        
-        { "TabbedPaneUI",
-          new Insets(6,10,10,10), new Insets(6,10,10,12),
-          new Insets(12,20,20,20)
+
+        {"TabbedPaneUI",
+            new Insets(6, 10, 10, 10), new Insets(6, 10, 10, 12),
+            new Insets(12, 20, 20, 20)
         },
-        
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGLayout/chapter_19_section_3.html#//apple_ref/doc/uid/TP30000360/DontLinkElementID_27
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGLayout/chapter_19_section_3.html#//apple_ref/doc/uid/TP30000360/DontLinkElementID_26
         // note for small and mini size: leave 8 to 10 pixels on top
         // note for regular size: leave only 12 pixel at top if tabbed pane UI
-        { "RootPaneUI",
-          new Insets(8,10,10,10), new Insets(8,10,10,12),
-          new Insets(14,20,20,20)
+        {"RootPaneUI",
+            new Insets(8, 10, 10, 10), new Insets(8, 10, 10, 12),
+            new Insets(14, 20, 20, 20)
         },
-        
         // These child gaps are used for all other components
-        { "default",
-          new Insets(8,10,10,10), new Insets(8,10,10,12),
-          new Insets(14,20,20,20)
-        },
-    };
-    
+        {"default",
+            new Insets(8, 10, 10, 10), new Insets(8, 10, 10, 12),
+            new Insets(14, 20, 20, 20)
+        },};
     /**
      * The relatedGapDefinitions table defines the preferred gaps
      * of one party of two related components.
@@ -99,194 +94,171 @@ class AquaLayoutStyle extends LayoutStyle {
         // Format:
         // { list of UI's,
         //   mini insets, small insets, regular insets }
-        
+
         // Push Button:
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_2.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF104
-        { "ButtonUI", "ButtonUI.push", "ButtonUI.text",
-          "ToggleButtonUI.push", "ToggleButtonUI.text",
-          new Insets(8,8,8,8), new Insets(10,10,10,10), new Insets(12,12,12,12)
+        {"ButtonUI", "ButtonUI.push", "ButtonUI.text",
+            "ToggleButtonUI.push", "ToggleButtonUI.text",
+            new Insets(8, 8, 8, 8), new Insets(10, 10, 10, 10), new Insets(12, 12, 12, 12)
         },
-        
         // Metal Button
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_2.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF187
-        { "ButtonUI.metal", "ToggleButtonUI.metal",
-          new Insets(8,8,8,8), new Insets(8,8,8,8), new Insets(12,12,12,12)
+        {"ButtonUI.metal", "ToggleButtonUI.metal",
+            new Insets(8, 8, 8, 8), new Insets(8, 8, 8, 8), new Insets(12, 12, 12, 12)
         },
-        
         // Bevel Button (Rounded and Square)
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_2.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF112
-        { "ButtonUI.bevel", "ButtonUI.toggle", "ButtonUI.square",
-          "ToggleButtonUI", "ToggleButtonUI.bevel", "ToggleButtonUI.square",
-          "ToggleButtonUI.toggle",
-          new Insets(0,0,0,0), new Insets(0,0,0,0), new Insets(0,0,0,0)
+        {"ButtonUI.bevel", "ButtonUI.toggle", "ButtonUI.square",
+            "ToggleButtonUI", "ToggleButtonUI.bevel", "ToggleButtonUI.square",
+            "ToggleButtonUI.toggle",
+            new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
         },
-        
         // Bevel Button (Rounded and Square)
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_2.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF112
-        { "ButtonUI.bevel.largeIcon", "ToggleButtonUI.bevel.largeIcon",
-          new Insets(8,8,8,8), new Insets(8,8,8,8), new Insets(8,8,8,8)
+        {"ButtonUI.bevel.largeIcon", "ToggleButtonUI.bevel.largeIcon",
+            new Insets(8, 8, 8, 8), new Insets(8, 8, 8, 8), new Insets(8, 8, 8, 8)
         },
-        
         // Icon Button
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_2.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF189
-        { "ButtonUI.icon",
-          new Insets(0,0,0,0), new Insets(0,0,0,0), new Insets(0,0,0,0)
+        {"ButtonUI.icon",
+            new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
         },
-        { "ButtonUI.icon.largeIcon",
-          new Insets(8,8,8,8), new Insets(8,8,8,8), new Insets(8,8,8,8)
+        {"ButtonUI.icon.largeIcon",
+            new Insets(8, 8, 8, 8), new Insets(8, 8, 8, 8), new Insets(8, 8, 8, 8)
         },
-        
         // Round Button
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_2.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF191
-        { "ButtonUI.round", "ToggleButtonUI.round",
-          new Insets(12,12,12,12), new Insets(12,12,12,12),
-          new Insets(12,12,12,12)
+        {"ButtonUI.round", "ToggleButtonUI.round",
+            new Insets(12, 12, 12, 12), new Insets(12, 12, 12, 12),
+            new Insets(12, 12, 12, 12)
         },
-        
         // Help Button
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_2.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF193
-        { "ButtonUI.help",
-          new Insets(12,12,12,12), new Insets(12,12,12,12),
-          new Insets(12,12,12,12)
+        {"ButtonUI.help",
+            new Insets(12, 12, 12, 12), new Insets(12, 12, 12, 12),
+            new Insets(12, 12, 12, 12)
         },
-        
         // Segmented Control
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_3.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF196
-        { "ButtonUI.toggleCenter", "ToggleButtonUI.toggleCenter",
-          new Insets(8,0,8,0), new Insets(10,0,10,0), new Insets(12,0,12,0)
+        {"ButtonUI.toggleCenter", "ToggleButtonUI.toggleCenter",
+            new Insets(8, 0, 8, 0), new Insets(10, 0, 10, 0), new Insets(12, 0, 12, 0)
         },
-        { "ButtonUI.toggleEast", "ToggleButtonUI.toggleEast",
-          new Insets(8,0,8,8), new Insets(10,0,10,10), new Insets(12,0,12,12)
+        {"ButtonUI.toggleEast", "ToggleButtonUI.toggleEast",
+            new Insets(8, 0, 8, 8), new Insets(10, 0, 10, 10), new Insets(12, 0, 12, 12)
         },
-        { "ButtonUI.toggleWest", "ToggleButtonUI.toggleWest",
-          new Insets(8,8,8,0), new Insets(10,10,10,0), new Insets(12,12,12,0)
+        {"ButtonUI.toggleWest", "ToggleButtonUI.toggleWest",
+            new Insets(8, 8, 8, 0), new Insets(10, 10, 10, 0), new Insets(12, 12, 12, 0)
         },
-        
-        { "ButtonUI.toolBarTab", "ToggleButtonUI.toolBarTab",
-          new Insets(0,0,0,0), new Insets(0,0,0,0), new Insets(0,0,0,0)
+        {"ButtonUI.toolBarTab", "ToggleButtonUI.toolBarTab",
+            new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
         },
-        
         // Color Well Button
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_3.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF213
-        { "ButtonUI.colorWell", "ToggleButtonUI.colorWell",
-          new Insets(0,0,0,0), new Insets(0,0,0,0), new Insets(0,0,0,0)
+        {"ButtonUI.colorWell", "ToggleButtonUI.colorWell",
+            new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
         },
-        
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_3.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF198
         // FIXME - The following values are given in the AHIG.
         // In reality, the values further below seem to be more appropriate.
         // Which ones are right?
         //{ "CheckBoxUI", new Insets(7, 5, 7, 5), new Insets(8, 6, 8, 6), new Insets(8, 8, 8, 8) },
-        { "CheckBoxUI",
-          new Insets(6, 5, 6, 5), new Insets(7, 6, 7, 6), new Insets(7, 6, 7, 6)
+        {"CheckBoxUI",
+            new Insets(6, 5, 6, 5), new Insets(7, 6, 7, 6), new Insets(7, 6, 7, 6)
         },
-        
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_3.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF198
-        { "ComboBoxUI.editable",
-          new Insets(8, 5, 8, 5), new Insets(10, 6, 10, 6),
-          new Insets(12, 8, 12, 8)
+        {"ComboBoxUI.editable",
+            new Insets(8, 5, 8, 5), new Insets(10, 6, 10, 6),
+            new Insets(12, 8, 12, 8)
         },
-        { "ComboBoxUI.uneditable",
-          new Insets(6, 5, 6, 5), new Insets(8, 6, 8, 6),
-          new Insets(10, 8, 10, 8)
+        {"ComboBoxUI.uneditable",
+            new Insets(6, 5, 6, 5), new Insets(8, 6, 8, 6),
+            new Insets(10, 8, 10, 8)
         },
         // There is no spacing given for labels.
         // This comes from playing with IB.
         // We use the values here, which is the minimum of the spacing of all
         // other components.
-        { "LabelUI",
-          new Insets(8, 8, 8, 8), new Insets(8, 8, 8, 8), new Insets(8, 8, 8, 8)
+        {"LabelUI",
+            new Insets(8, 8, 8, 8), new Insets(8, 8, 8, 8), new Insets(8, 8, 8, 8)
         },
-        
         // ? spacing not given
-        { "ListUI",
-          new Insets(5, 5, 5, 5), new Insets(6, 6, 6, 6), new Insets(6, 6, 6, 6)
+        {"ListUI",
+            new Insets(5, 5, 5, 5), new Insets(6, 6, 6, 6), new Insets(6, 6, 6, 6)
         },
-        
         // ? spacing not given
-        { "PanelUI",
-          new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
+        {"PanelUI",
+            new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
         },
-        
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_5.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF106
         // ? spacing not given
-        { "ProgressBarUI",
-          new Insets(8,8,8,8), new Insets(10,10,10,10), new Insets(12,12,12,12)
+        {"ProgressBarUI",
+            new Insets(8, 8, 8, 8), new Insets(10, 10, 10, 10), new Insets(12, 12, 12, 12)
         },
-        
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_3.html#//apple_ref/doc/uid/20000957-TP30000359-BIAHBFAD
-        { "RadioButtonUI",
-          new Insets(5, 5, 5, 5), new Insets(6, 6, 6, 6), new Insets(6, 6, 6, 6)
+        {"RadioButtonUI",
+            new Insets(5, 5, 5, 5), new Insets(6, 6, 6, 6), new Insets(6, 6, 6, 6)
         },
-        
         //http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_6.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF114
         // ? spacing not given. We use the same as for text fields.
-        { "ScrollPaneUI",
-          new Insets(6, 8, 6, 8), new Insets(6, 8, 6, 8),
-          new Insets(8, 10, 8, 10)
+        {"ScrollPaneUI",
+            new Insets(6, 8, 6, 8), new Insets(6, 8, 6, 8),
+            new Insets(8, 10, 8, 10)
         },
-        
         //http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_8.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF214
         // ? spacing not given
         //http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGLayout/chapter_19_section_2.html#//apple_ref/doc/uid/20000957-TP30000360-CHDEACGD
-        { "SeparatorUI",
-          new Insets(8, 8, 8, 8), new Insets(10, 10, 10, 10),
-          new Insets(12, 12, 12, 12)
+        {"SeparatorUI",
+            new Insets(8, 8, 8, 8), new Insets(10, 10, 10, 10),
+            new Insets(12, 12, 12, 12)
         },
-        
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_4.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF115
-        { "SliderUI.horizontal",
-          new Insets(8,8,8,8), new Insets(10,10,10,10), new Insets(12,12,12,12)
+        {"SliderUI.horizontal",
+            new Insets(8, 8, 8, 8), new Insets(10, 10, 10, 10), new Insets(12, 12, 12, 12)
         },
-        { "SliderUI.vertical",
-          new Insets(8,8,8,8), new Insets(10,10,10,10), new Insets(12,12,12,12)
+        {"SliderUI.vertical",
+            new Insets(8, 8, 8, 8), new Insets(10, 10, 10, 10), new Insets(12, 12, 12, 12)
         },
-        
         //http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_4.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF204
-        { "SpinnerUI",
-          new Insets(6, 8, 6, 8), new Insets(6, 8, 6, 8),
-          new Insets(8, 10, 8, 10)
+        {"SpinnerUI",
+            new Insets(6, 8, 6, 8), new Insets(6, 8, 6, 8),
+            new Insets(8, 10, 8, 10)
         },
-        
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_7.html#//apple_ref/doc/uid/20000957-TP30000359-CHDDBIJE
         // ? spacing not given
-        { "SplitPaneUI",
-          new Insets(0,0,0,0), new Insets(0,0,0,0), new Insets(0,0,0,0)
+        {"SplitPaneUI",
+            new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
         },
         // http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_7.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF105
         // ? spacing not given
-        { "TabbedPaneUI",
-          new Insets(0,0,0,0), new Insets(0,0,0,0), new Insets(0,0,0,0)
+        {"TabbedPaneUI",
+            new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
         },
-        { "TableUI",
-          new Insets(0,0,0,0), new Insets(0,0,0,0), new Insets(0,0,0,0)
+        {"TableUI",
+            new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
         },
         // ? spacing not given
-        { "TextAreaUI", "EditorPaneUI", "TextPaneUI",
-          new Insets(0,0,0,0), new Insets(0,0,0,0), new Insets(0,0,0,0)
+        {"TextAreaUI", "EditorPaneUI", "TextPaneUI",
+            new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
         },
         //http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGControls/chapter_18_section_6.html#//apple_ref/doc/uid/20000957-TP30000359-TPXREF225
-        { "TextFieldUI", "FormattedTextFieldUI", "PasswordFieldUI",
-          new Insets(6, 8, 6, 8), new Insets(6, 8, 6, 8),
-          new Insets(8, 10, 8, 10)
+        {"TextFieldUI", "FormattedTextFieldUI", "PasswordFieldUI",
+            new Insets(6, 8, 6, 8), new Insets(6, 8, 6, 8),
+            new Insets(8, 10, 8, 10)
         },
-        
         // ? spacing not given
-        { "TreeUI",
-          new Insets(0,0,0,0), new Insets(0,0,0,0), new Insets(0,0,0,0)
-        },
-    };
+        {"TreeUI",
+            new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0), new Insets(0, 0, 0, 0)
+        },};
     private final static Object[][] unrelatedGapDefinitions = {
         // UI, mini, small, regular
-        { "ButtonUI.help",
-          new Insets(24,24,24,24), new Insets(24,24,24,24),
-          new Insets(24,24,24,24)
+        {"ButtonUI.help",
+            new Insets(24, 24, 24, 24), new Insets(24, 24, 24, 24),
+            new Insets(24, 24, 24, 24)
         },
-        { "default",
-          new Insets(10, 10, 10, 10), new Insets(12, 12, 12, 12),
-          new Insets(14, 14, 14, 14)
-        },
-    };
+        {"default",
+            new Insets(10, 10, 10, 10), new Insets(12, 12, 12, 12),
+            new Insets(14, 14, 14, 14)
+        },};
     /**
      * The indentGapDefinitions table defines the preferred indentation
      * for components that are indented after the specified component.
@@ -305,17 +277,15 @@ class AquaLayoutStyle extends LayoutStyle {
      */
     private final static Object[][] indentGapDefinitions = {
         // UI, mini, small, regular
-        
+
         // The Aqua L&F does not scale button images of check boxes and radio 
         // buttons. Therefore we use to the same horizontal indents for all sizes.
-        { "CheckBoxUI", "RadioButtonUI",
-          new Insets(16, 24, 16, 24), new Insets(20, 24, 20, 24),
-          new Insets(24, 24, 24, 24) },
-          
-        { "default",
-          new Insets(16, 16, 16, 16), new Insets(20, 20, 20, 20),
-          new Insets(24, 24, 24, 24) },
-    };
+        {"CheckBoxUI", "RadioButtonUI",
+            new Insets(16, 24, 16, 24), new Insets(20, 24, 20, 24),
+            new Insets(24, 24, 24, 24)},
+        {"default",
+            new Insets(16, 16, 16, 16), new Insets(20, 20, 20, 20),
+            new Insets(24, 24, 24, 24)},};
     /**
      * The visualMarginDefinition table defines the visually perceived
      * margin of the components.
@@ -332,49 +302,47 @@ class AquaLayoutStyle extends LayoutStyle {
      */
     private final static Object[][] visualMarginDefinitions = {
         // UI, regular
-        { "ButtonUI", "ButtonUI.text",
-          "ToggleButtonUI", "ToggleButtonUI.text",
-          new Insets(5, 3, 3, 3)
+        {"ButtonUI", "ButtonUI.text",
+            "ToggleButtonUI", "ToggleButtonUI.text",
+            new Insets(5, 3, 3, 3)
         },
-        { "ButtonUI.icon",
-          "ToggleButtonUI.icon",
-          new Insets(5, 2, 3, 2)
+        {"ButtonUI.icon",
+            "ToggleButtonUI.icon",
+            new Insets(5, 2, 3, 2)
         },
-        { "ButtonUI.toolbar",
-          "ToggleButtonUI.toolbar",
-          new Insets(0, 0, 0, 0)
+        {"ButtonUI.toolbar",
+            "ToggleButtonUI.toolbar",
+            new Insets(0, 0, 0, 0)
         },
-        { "CheckBoxUI", new Insets(4, 4, 3, 3) },
-        { "ComboBoxUI", new Insets(2, 3, 4, 3) },
-        { "DesktopPaneUI", new Insets(0, 0, 0, 0) },
-        { "EditorPaneUI", "TextAreaUI", "TextPaneUI",
-          new Insets(0, 0, 0, 0)
+        {"CheckBoxUI", new Insets(4, 4, 3, 3)},
+        {"ComboBoxUI", new Insets(2, 3, 4, 3)},
+        {"DesktopPaneUI", new Insets(0, 0, 0, 0)},
+        {"EditorPaneUI", "TextAreaUI", "TextPaneUI",
+            new Insets(0, 0, 0, 0)
         },
-        { "FormattedTextFieldUI", "PasswordFieldUI", "TextFieldUI",
-          new Insets(0, 0, 0, 0)
+        {"FormattedTextFieldUI", "PasswordFieldUI", "TextFieldUI",
+            new Insets(0, 0, 0, 0)
         },
-        { "LabelUI", new Insets(0, 0, 0, 0) },
-        { "ListUI", new Insets(0, 0, 0, 0) },
-        { "PanelUI", new Insets(0, 0, 0, 0) },
-        { "ProgressBarUI", "ProgressBarUI.horizontal", new Insets(0, 2, 4, 2) },
-        { "ProgressBarUI.vertical", new Insets(2, 0, 2, 4) },
-        { "RadioButtonUI", new Insets(4, 4, 3, 3) },
-        { "ScrollBarUI", new Insets(0, 0, 0, 0) },
-        { "ScrollPaneUI", new Insets(0, 0, 0, 0) },
-        { "SpinnerUI", new Insets(0, 0, 0, 0) },
-        { "SeparatorUI", new Insets(0, 0, 0, 0) },
-        { "SplitPaneUI", new Insets(0, 0, 0, 0) },
-        { "SliderUI", "SliderUI.horizontal", new Insets(3, 6, 3, 6) },
-        { "SliderUI.vertical", new Insets(6, 3, 6, 3) },
-        { "TabbedPaneUI", "TabbedPaneUI.top", new Insets(5, 7, 10, 7) },
-        { "TabbedPaneUI.bottom", new Insets(4, 7, 5, 7) },
-        { "TabbedPaneUI.left", new Insets(4, 6, 10, 7) },
-        { "TabbedPaneUI.right", new Insets(4, 7, 10, 6) },
-        { "TableUI", new Insets(0, 0, 0, 0) },
-        { "TreeUI", new Insets(0, 0, 0, 0) },
-        { "default", new Insets(0, 0, 0, 0) },
-    };
-
+        {"LabelUI", new Insets(0, 0, 0, 0)},
+        {"ListUI", new Insets(0, 0, 0, 0)},
+        {"PanelUI", new Insets(0, 0, 0, 0)},
+        {"ProgressBarUI", "ProgressBarUI.horizontal", new Insets(0, 2, 4, 2)},
+        {"ProgressBarUI.vertical", new Insets(2, 0, 2, 4)},
+        {"RadioButtonUI", new Insets(4, 4, 3, 3)},
+        {"ScrollBarUI", new Insets(0, 0, 0, 0)},
+        {"ScrollPaneUI", new Insets(0, 0, 0, 0)},
+        {"SpinnerUI", new Insets(0, 0, 0, 0)},
+        {"SeparatorUI", new Insets(0, 0, 0, 0)},
+        {"SplitPaneUI", new Insets(0, 0, 0, 0)},
+        {"SliderUI", "SliderUI.horizontal", new Insets(3, 6, 3, 6)},
+        {"SliderUI.vertical", new Insets(6, 3, 6, 3)},
+        {"TabbedPaneUI", "TabbedPaneUI.top", new Insets(5, 7, 10, 7)},
+        {"TabbedPaneUI.bottom", new Insets(4, 7, 5, 7)},
+        {"TabbedPaneUI.left", new Insets(4, 6, 10, 7)},
+        {"TabbedPaneUI.right", new Insets(4, 7, 10, 6)},
+        {"TableUI", new Insets(0, 0, 0, 0)},
+        {"TreeUI", new Insets(0, 0, 0, 0)},
+        {"default", new Insets(0, 0, 0, 0)},};
     /**
      * The relatedGaps map defines the preferred gaps
      * of one party of two related components.
@@ -400,7 +368,7 @@ class AquaLayoutStyle extends LayoutStyle {
      * for components that are indented after the specified component.
      */
     private final static Map VISUAL_MARGINS = createInsetsMap(visualMarginDefinitions);
-    
+
     /**
      * Creates a map for the specified definitions array.
      * <p>
@@ -408,23 +376,24 @@ class AquaLayoutStyle extends LayoutStyle {
      * a value of ComponentInsets.  Each ComponentInsets may have sub styles.
      */
     // private static Map<String,ComponentInsets> createInsetsMap(Object[][] definitions) {
-    private static Map createInsetsMap(Object[][] definitions) {
+    private static Map createInsetsMap(Object[][] definitions)
+    {
         Map map = new HashMap();
-        for (int i=0; i < definitions.length; i++) {
+        for (int i = 0; i < definitions.length; i++) {
             int keys = 0;
-            while (keys < definitions[i].length &&
-                    (definitions[i][keys] instanceof String)) {
+            while (keys < definitions[i].length
+                    && (definitions[i][keys] instanceof String)) {
                 keys++;
             }
             Insets[] values = new Insets[definitions[i].length - keys];
-            for (int j=keys; j < definitions[i].length; j++) {
-                values[j-keys] = (Insets) definitions[i][j];
+            for (int j = keys; j < definitions[i].length; j++) {
+                values[j - keys] = (Insets) definitions[i][j];
             }
-            for (int j=0; j < keys; j++) {
-                String key = (String)definitions[i][j];
+            for (int j = 0; j < keys; j++) {
+                String key = (String) definitions[i][j];
                 int subindex = key.indexOf('.');
                 if (subindex == -1) {
-                    ComponentInsets componentInsets = (ComponentInsets)map.get(key);
+                    ComponentInsets componentInsets = (ComponentInsets) map.get(key);
                     if (componentInsets == null) {
                         componentInsets = new ComponentInsets(values);
                         map.put(key, new ComponentInsets(values));
@@ -435,8 +404,7 @@ class AquaLayoutStyle extends LayoutStyle {
                 } else {
                     String subkey = key.substring(subindex + 1);
                     String parentKey = key.substring(0, subindex);
-                    ComponentInsets componentInsets = (ComponentInsets)
-                            map.get(parentKey);
+                    ComponentInsets componentInsets = (ComponentInsets) map.get(parentKey);
                     if (componentInsets == null) {
                         componentInsets = new ComponentInsets();
                         map.put(parentKey, componentInsets);
@@ -448,30 +416,32 @@ class AquaLayoutStyle extends LayoutStyle {
         }
         return map;
     }
-    
-    public static void main(String[] args) {
+
+    public static void main(String[] args)
+    {
         JButton button = new JButton();
         button.putClientProperty("JButton.buttonType", "metal");
         JButton button2 = new JButton();
         LayoutStyle style = new AquaLayoutStyle();
-        int gap = 
-        style.getPreferredGap(button, button2, LayoutStyle.RELATED, SwingConstants.EAST,
+        int gap =
+                style.getPreferredGap(button, button2, LayoutStyle.RELATED, SwingConstants.EAST,
                 null);
         System.err.println("gap= " + gap);
         button.putClientProperty("JButton.buttonType", "square");
         button2.putClientProperty("JButton.buttonType", "square");
-        gap = 
-        style.getPreferredGap(button, button2, LayoutStyle.RELATED, SwingConstants.EAST,
+        gap =
+                style.getPreferredGap(button, button2, LayoutStyle.RELATED, SwingConstants.EAST,
                 null);
         System.err.println("gap= " + gap);
     }
-    
+
     /**
      * Creates a new instance.
      */
-    public AquaLayoutStyle() {
+    public AquaLayoutStyle()
+    {
     }
-    
+
     /**
      * Returns the amount of space to use between two components.
      * The return value indicates the distance to place
@@ -536,12 +506,13 @@ class AquaLayoutStyle extends LayoutStyle {
      *         <code>component2</code> is null
      */
     public int getPreferredGap(JComponent component1, JComponent component2,
-                               int type, int position, Container parent) {
+            int type, int position, Container parent)
+    {
         // Check args
         super.getPreferredGap(component1, component2, type, position, parent);
-        
+
         int result;
-        
+
         // Compute gap
         if (type == INDENT) {
             // Compute gap
@@ -554,17 +525,17 @@ class AquaLayoutStyle extends LayoutStyle {
             int sizeStyle = getSizeStyle(component1);
             Insets gap1 = getPreferredGap(component1, type, sizeStyle);
             switch (position) {
-                case SwingConstants.NORTH :
+                case SwingConstants.NORTH:
                     result = gap1.bottom;
                     break;
-                case SwingConstants.SOUTH :
+                case SwingConstants.SOUTH:
                     result = gap1.top;
                     break;
-                case SwingConstants.EAST :
+                case SwingConstants.EAST:
                     result = gap1.left;
                     break;
-                case SwingConstants.WEST :
-                default :
+                case SwingConstants.WEST:
+                default:
                     result = gap1.right;
                     break;
             }
@@ -572,18 +543,18 @@ class AquaLayoutStyle extends LayoutStyle {
             // Compensate for visual margin
             Insets visualMargin2 = getVisualMargin(component2);
             switch (position) {
-                case SwingConstants.NORTH :
+                case SwingConstants.NORTH:
                     result -= visualMargin2.bottom;
                     break;
-                case SwingConstants.SOUTH :
+                case SwingConstants.SOUTH:
                     result -= visualMargin2.top;
                     break;
-                case SwingConstants.EAST :
+                case SwingConstants.EAST:
                     result -= visualMargin2.left;
                     break;
-                case SwingConstants.WEST :
+                case SwingConstants.WEST:
                     result -= visualMargin2.right;
-                default :
+                default:
                     break;
             }
         } else {
@@ -593,87 +564,88 @@ class AquaLayoutStyle extends LayoutStyle {
             Insets gap1 = getPreferredGap(component1, type, sizeStyle);
             Insets gap2 = getPreferredGap(component2, type, sizeStyle);
             switch (position) {
-                case SwingConstants.NORTH :
+                case SwingConstants.NORTH:
                     result = Math.max(gap1.top, gap2.bottom);
                     break;
-                case SwingConstants.SOUTH :
+                case SwingConstants.SOUTH:
                     result = Math.max(gap1.bottom, gap2.top);
                     break;
-                case SwingConstants.EAST :
+                case SwingConstants.EAST:
                     result = Math.max(gap1.right, gap2.left);
                     break;
-                case SwingConstants.WEST :
-                default :
+                case SwingConstants.WEST:
+                default:
                     result = Math.max(gap1.left, gap2.right);
                     break;
             }
-            
+
             // Compensate for visual margin
             Insets visualMargin1 = getVisualMargin(component1);
             Insets visualMargin2 = getVisualMargin(component2);
-            
+
             switch (position) {
-                case SwingConstants.NORTH :
+                case SwingConstants.NORTH:
                     result -= visualMargin1.top + visualMargin2.bottom;
                     break;
-                case SwingConstants.SOUTH :
+                case SwingConstants.SOUTH:
                     result -= visualMargin1.bottom + visualMargin2.top;
                     break;
-                case SwingConstants.EAST :
+                case SwingConstants.EAST:
                     result -= visualMargin1.right + visualMargin2.left;
                     break;
-                case SwingConstants.WEST :
+                case SwingConstants.WEST:
                     result -= visualMargin1.left + visualMargin2.right;
-                default :
+                default:
                     break;
             }
         }
-        
+
         // Aqua does not support negative gaps, because all its components are
         // opaque
         return Math.max(0, result);
     }
-    
-    private Insets getPreferredGap(JComponent component, int type, int sizeStyle) {
+
+    private Insets getPreferredGap(JComponent component, int type, int sizeStyle)
+    {
         Map gapMap;
-        
+
         switch (type) {
-            case INDENT :
+            case INDENT:
                 gapMap = INDENT_GAPS;
                 break;
-            case RELATED :
+            case RELATED:
                 gapMap = RELATED_GAPS;
                 break;
-            case UNRELATED :
-            default :
+            case UNRELATED:
+            default:
                 gapMap = UNRELATED_GAPS;
                 break;
         }
-        
+
         String uid = component.getUIClassID();
         String style = null;
         // == is ok here as Strings from Swing get interned, if for some reason
         // need .equals then must deal with null.
-        if (uid == "ButtonUI" || uid =="ToggleButtonUI") {
+        if (uid == "ButtonUI" || uid == "ToggleButtonUI") {
             style = (String) component.getClientProperty("JButton.buttonType");
-        } else if (uid =="ProgressBarUI") {
-            style = (((JProgressBar) component).getOrientation() ==
-                    JProgressBar.HORIZONTAL) ? "horizontal" : "vertical";
+        } else if (uid == "ProgressBarUI") {
+            style = (((JProgressBar) component).getOrientation()
+                    == JProgressBar.HORIZONTAL) ? "horizontal" : "vertical";
         } else if (uid == "SliderUI") {
             style = (((JSlider) component).getOrientation()
                     == JProgressBar.HORIZONTAL) ? "horizontal" : "vertical";
         } else if (uid == "TabbedPaneUI") {
             switch (((JTabbedPane) component).getTabPlacement()) {
-                case JTabbedPane.TOP :
+                case JTabbedPane.TOP:
                     style = "top";
                     break;
-                case JTabbedPane.LEFT :
+                case JTabbedPane.LEFT:
                     style = "left";
                     break;
-                case JTabbedPane.BOTTOM :
+                case JTabbedPane.BOTTOM:
                     style = "bottom";
                     break;
-                case JTabbedPane.RIGHT :
+                case JTabbedPane.RIGHT:
                     style = "right";
                     break;
             }
@@ -682,7 +654,7 @@ class AquaLayoutStyle extends LayoutStyle {
         }
         return getInsets(gapMap, uid, style, sizeStyle);
     }
-    
+
     /**
      * Returns the amount of space to position a component inside its
      * parent.
@@ -706,36 +678,37 @@ class AquaLayoutStyle extends LayoutStyle {
      *         or <code>component</code> is null
      */
     public int getContainerGap(JComponent component, int position,
-                               Container parent) {
+            Container parent)
+    {
         int result;
         int sizeStyle = Math.min(getSizeStyle(component), getSizeStyle(parent));
-        
+
         // Compute gap
         Insets gap = getContainerGap(parent, sizeStyle);
-        
+
         switch (position) {
-            case SwingConstants.NORTH :
+            case SwingConstants.NORTH:
                 result = gap.top;
                 break;
-            case SwingConstants.SOUTH :
+            case SwingConstants.SOUTH:
                 result = gap.bottom;
                 break;
-            case SwingConstants.EAST :
+            case SwingConstants.EAST:
                 result = gap.right;
                 break;
-            case SwingConstants.WEST :
-            default :
+            case SwingConstants.WEST:
+            default:
                 result = gap.left;
                 break;
         }
-        
+
         // Compensate for visual margin
         Insets visualMargin = getVisualMargin(component);
         switch (position) {
-            case SwingConstants.NORTH :
+            case SwingConstants.NORTH:
                 result -= visualMargin.top;
                 break;
-            case SwingConstants.SOUTH :
+            case SwingConstants.SOUTH:
                 result -= visualMargin.bottom;
                 // Radio buttons in Quaqua are 1 pixel too high, in order
                 // to align their baselines with other components, when no
@@ -744,22 +717,22 @@ class AquaLayoutStyle extends LayoutStyle {
                     result--;
                 }
                 break;
-            case SwingConstants.EAST :
+            case SwingConstants.EAST:
                 result -= visualMargin.left;
                 break;
-            case SwingConstants.WEST :
+            case SwingConstants.WEST:
                 result -= visualMargin.right;
-            default :
+            default:
                 break;
         }
-        
+
         // Aqua does not support negative gaps, because all its components are
         // opaque
         return Math.max(0, result);
     }
-    
-    
-    private Insets getContainerGap(Container container, int sizeStyle) {
+
+    private Insets getContainerGap(Container container, int sizeStyle)
+    {
         String uid;
         if (container instanceof JComponent) {
             uid = ((JComponent) container).getUIClassID();
@@ -774,19 +747,20 @@ class AquaLayoutStyle extends LayoutStyle {
         } else {
             uid = "default";
         }
-        
+
         // FIXME insert style code here for JInternalFrame with palette style
-        return getInsets(CONTAINER_GAPS, uid, null,  sizeStyle);
+        return getInsets(CONTAINER_GAPS, uid, null, sizeStyle);
     }
-    
+
     private Insets getInsets(Map gapMap, String uid, String style,
-            int sizeStyle) {
+            int sizeStyle)
+    {
         if (uid == null) {
             uid = "default";
         }
-        ComponentInsets componentInsets = (ComponentInsets)gapMap.get(uid);
+        ComponentInsets componentInsets = (ComponentInsets) gapMap.get(uid);
         if (componentInsets == null) {
-            componentInsets = (ComponentInsets)gapMap.get("default");
+            componentInsets = (ComponentInsets) gapMap.get("default");
             if (componentInsets == null) {
                 return EMPTY_INSETS;
             }
@@ -798,32 +772,33 @@ class AquaLayoutStyle extends LayoutStyle {
         }
         return componentInsets.getInsets(sizeStyle);
     }
-    
-    private Insets getVisualMargin(JComponent component) {
+
+    private Insets getVisualMargin(JComponent component)
+    {
         String uid = component.getUIClassID();
         String style = null;
         if (uid == "ButtonUI" || uid == "ToggleButtonUI") {
             style = (String) component.getClientProperty("JButton.buttonType");
         } else if (uid == "ProgressBarUI") {
             style = (((JProgressBar) component).getOrientation()
-                    == JProgressBar.HORIZONTAL) ? "horizontal" :
-                    "vertical";
+                    == JProgressBar.HORIZONTAL) ? "horizontal"
+                    : "vertical";
         } else if (uid == "SliderUI") {
-            style = (((JSlider) component).getOrientation() ==
-                    JProgressBar.HORIZONTAL) ? "horizontal"
+            style = (((JSlider) component).getOrientation()
+                    == JProgressBar.HORIZONTAL) ? "horizontal"
                     : "vertical";
         } else if (uid == "TabbedPaneUI") {
             switch (((JTabbedPane) component).getTabPlacement()) {
-                case JTabbedPane.TOP :
+                case JTabbedPane.TOP:
                     style = "top";
                     break;
-                case JTabbedPane.LEFT :
+                case JTabbedPane.LEFT:
                     style = "left";
                     break;
-                case JTabbedPane.BOTTOM :
+                case JTabbedPane.BOTTOM:
                     style = "bottom";
                     break;
-                case JTabbedPane.RIGHT :
+                case JTabbedPane.RIGHT:
                     style = "right";
                     break;
             }
@@ -832,16 +807,16 @@ class AquaLayoutStyle extends LayoutStyle {
         // Take into account different positions of the button icon
         if (uid == "RadioButtonUI" || uid == "CheckBoxUI") {
             switch (((AbstractButton) component).getHorizontalTextPosition()) {
-                case SwingConstants.RIGHT :
+                case SwingConstants.RIGHT:
                     gap = new Insets(gap.top, gap.right, gap.bottom, gap.left);
                     break;
-                case SwingConstants.CENTER :
+                case SwingConstants.CENTER:
                     gap = new Insets(gap.top, gap.right, gap.bottom, gap.right);
                     break;
-                    /*
+                /*
                 case SwingConstants.LEFT :
-                    break;
-                     */
+                break;
+                 */
                 default:
                     gap = new Insets(gap.top, gap.left, gap.bottom, gap.right);
             }
@@ -854,13 +829,14 @@ class AquaLayoutStyle extends LayoutStyle {
         }
         return gap;
     }
-    
+
     /**
      * Returns the size style of a specified component.
      *
      * @return REGULAR, SMALL or MINI.
      */
-    private int getSizeStyle(Component c) {
+    private int getSizeStyle(Component c)
+    {
         // Aqua components have a different style depending on the
         // font size used.
         // 13 Point = Regular
@@ -876,8 +852,7 @@ class AquaLayoutStyle extends LayoutStyle {
         int fontSize = font.getSize();
         return (fontSize >= 13) ? REGULAR : ((fontSize > 9) ? SMALL : MINI);
     }
-    
-    
+
     /**
      * ComponentInsets is used to manage the Insets for a specific Component
      * type.  Each ComponentInsets may also have children (sub) ComponentInsets.
@@ -885,43 +860,52 @@ class AquaLayoutStyle extends LayoutStyle {
      * For example, a Button may not a set of insets, as well as insets when
      * it has a style of metal.
      */
-    private static class ComponentInsets {
+    private static class ComponentInsets
+    {
         // Map<String,ComponentInsets>
+
         private Map children;
         private Insets[] insets;
-        
-        public ComponentInsets() {
+
+        public ComponentInsets()
+        {
         }
-        
-        public ComponentInsets(Insets[] insets) {
+
+        public ComponentInsets(Insets[] insets)
+        {
             this.insets = insets;
         }
-        
-        public void setInsets(Insets[] insets) {
+
+        public void setInsets(Insets[] insets)
+        {
             this.insets = insets;
         }
-        
-        public Insets[] getInsets() {
+
+        public Insets[] getInsets()
+        {
             return insets;
         }
-        
-        public Insets getInsets(int size) {
+
+        public Insets getInsets(int size)
+        {
             if (insets == null) {
                 return EMPTY_INSETS;
             }
             return insets[size];
         }
-        
-        void addSubinsets(String subkey, ComponentInsets subinsets) {
+
+        void addSubinsets(String subkey, ComponentInsets subinsets)
+        {
             if (children == null) {
                 children = new HashMap(5);
             }
             children.put(subkey, subinsets);
         }
-        
-        ComponentInsets getSubinsets(String subkey) {
-            return (children == null) ? null :
-                                        (ComponentInsets)children.get(subkey);
+
+        ComponentInsets getSubinsets(String subkey)
+        {
+            return (children == null) ? null
+                    : (ComponentInsets) children.get(subkey);
         }
     }
 }

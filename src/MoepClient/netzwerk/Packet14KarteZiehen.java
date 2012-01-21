@@ -5,20 +5,19 @@ package MoepClient.netzwerk;
  * Client -> Server
  * @author Christian Diller
  */
-
 public class Packet14KarteZiehen extends Packet
-{    
+{
+
     public Packet14KarteZiehen()
     {
-        
     }
-    
+
     @Override
     public String gibData()
     {
         return "14" + seperator;
     }
-    
+
     @Override
     public void clientEventAufrufen(Verbindung verbindung)
     {

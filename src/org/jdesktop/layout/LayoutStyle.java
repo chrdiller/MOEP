@@ -1,8 +1,7 @@
 /*
  * Copyright (C) 2005-2006 Sun Microsystems, Inc. All rights reserved. Use is
  * subject to license terms.
- */ 
-
+ */
 package org.jdesktop.layout;
 
 import java.awt.Container;
@@ -31,7 +30,9 @@ import javax.swing.plaf.UIResource;
  *
  * @version $Revision: 1.11 $
  */
-public class LayoutStyle {
+public class LayoutStyle
+{
+
     private static final boolean USE_CORE_LAYOUT_STYLE;
     /**
      * Possible argument to getPreferredGap.  Used to indicate the two componets
@@ -43,7 +44,6 @@ public class LayoutStyle {
      * are not grouped together.
      */
     public static final int UNRELATED = 1;
-    
     /**
      * Possible argument to getPreferredGap.  Used to indicate the distance
      * to indent a component is being requested.  To visually indicate
@@ -53,7 +53,6 @@ public class LayoutStyle {
      * constant to <code>getPreferredGap</code>.
      */
     public static final int INDENT = 3;
-
     private static LayoutStyle layoutStyle;
     private static LookAndFeel laf;
 
@@ -66,6 +65,7 @@ public class LayoutStyle {
         }
         USE_CORE_LAYOUT_STYLE = useCoreLayoutStyle;
     }
+
     /**
      * Sets the LayoutStyle instance to use for this look and feel.
      * You generally don't need to invoke this, instead use the getter which
@@ -74,26 +74,28 @@ public class LayoutStyle {
      * @param layoutStyle the LayoutStyle to use; a value of null indicates 
      *        the default should be used
      */
-    public static void setSharedInstance(LayoutStyle layoutStyle) {
+    public static void setSharedInstance(LayoutStyle layoutStyle)
+    {
         UIManager.getLookAndFeelDefaults().put("LayoutStyle.instance",
                 layoutStyle);
     }
-    
+
     /**
      * Factory methods for obtaining the current <code>LayoutStyle</code>
      * object appropriate for the current look and feel.
      * 
      * @return the current LayoutStyle instance
      */
-    public static LayoutStyle getSharedInstance() {
+    public static LayoutStyle getSharedInstance()
+    {
         Object layoutImpl = UIManager.get("LayoutStyle.instance");
         if (layoutImpl != null && (layoutImpl instanceof LayoutStyle)) {
-            return (LayoutStyle)layoutImpl;
+            return (LayoutStyle) layoutImpl;
         }
         LookAndFeel currentLAF = UIManager.getLookAndFeel();
         if (layoutStyle == null || currentLAF != laf) {
             laf = currentLAF;
-            String lafID= laf.getID();
+            String lafID = laf.getID();
             if (USE_CORE_LAYOUT_STYLE) {
                 if ("Aqua" == lafID) {
                     try {
@@ -108,14 +110,11 @@ public class LayoutStyle {
                 }
             } else if ("Metal" == lafID) {
                 layoutStyle = new MetalLayoutStyle();
-            }
-            else if ("Windows" == lafID) {
+            } else if ("Windows" == lafID) {
                 layoutStyle = new WindowsLayoutStyle();
-            }
-            else if ("GTK" == lafID) {
+            } else if ("GTK" == lafID) {
                 layoutStyle = new GnomeLayoutStyle();
-            }
-            else if ("Aqua" == lafID) {
+            } else if ("Aqua" == lafID) {
                 layoutStyle = new AquaLayoutStyle();
             } else {
                 layoutStyle = new LayoutStyle();
@@ -188,14 +187,15 @@ public class LayoutStyle {
      *         <code>component2</code> is null
      */
     public int getPreferredGap(JComponent component1, JComponent component2,
-                          int type, int position, Container parent) {
-        if (position != SwingConstants.NORTH &&
-              position != SwingConstants.SOUTH &&
-              position != SwingConstants.WEST &&
-              position != SwingConstants.EAST) {
+            int type, int position, Container parent)
+    {
+        if (position != SwingConstants.NORTH
+                && position != SwingConstants.SOUTH
+                && position != SwingConstants.WEST
+                && position != SwingConstants.EAST) {
             throw new IllegalArgumentException("Invalid position");
         }
-        if (component1 == null || component2== null) {
+        if (component1 == null || component2 == null) {
             throw new IllegalArgumentException("Components must be non-null");
         }
         if (type == RELATED) {
@@ -238,11 +238,12 @@ public class LayoutStyle {
      *         or <code>component</code> is null
      */
     public int getContainerGap(JComponent component, int position,
-            Container parent) {
-        if (position != SwingConstants.NORTH &&
-              position != SwingConstants.SOUTH &&
-              position != SwingConstants.WEST &&
-              position != SwingConstants.EAST) {
+            Container parent)
+    {
+        if (position != SwingConstants.NORTH
+                && position != SwingConstants.SOUTH
+                && position != SwingConstants.WEST
+                && position != SwingConstants.EAST) {
             throw new IllegalArgumentException("Invalid position");
         }
         if (component == null) {
@@ -254,7 +255,8 @@ public class LayoutStyle {
     /**
      * Returns true if <code>component</code> should be treated as a dialog.
      */
-    boolean isDialog(JComponent component) {
+    boolean isDialog(JComponent component)
+    {
         // PENDING: tag the content pane to make this easier to check for
         String name = component.getName();
         return (name != null && name.endsWith(".contentPane"));
@@ -273,7 +275,8 @@ public class LayoutStyle {
      * @return offset - border/margin around the component.
      */
     int getCBRBPadding(JComponent source, JComponent target, int position,
-                       int offset) {
+            int offset)
+    {
         offset -= getCBRBPadding(source, position);
         if (offset > 0) {
             offset -= getCBRBPadding(target, flipDirection(position));
@@ -295,29 +298,32 @@ public class LayoutStyle {
      * @param offset Ideal offset, not including border/margin
      * @return offset - border/margin around the component.
      */
-    int getCBRBPadding(JComponent source, int position, int offset) {
+    int getCBRBPadding(JComponent source, int position, int offset)
+    {
         offset -= getCBRBPadding(source, position);
         return Math.max(offset, 0);
     }
 
-    int flipDirection(int position) {
-        switch(position) {
-        case SwingConstants.NORTH:
-            return SwingConstants.SOUTH;
-        case SwingConstants.SOUTH:
-            return SwingConstants.NORTH;
-        case SwingConstants.EAST:
-            return SwingConstants.WEST;
-        case SwingConstants.WEST:
-            return SwingConstants.EAST;
+    int flipDirection(int position)
+    {
+        switch (position) {
+            case SwingConstants.NORTH:
+                return SwingConstants.SOUTH;
+            case SwingConstants.SOUTH:
+                return SwingConstants.NORTH;
+            case SwingConstants.EAST:
+                return SwingConstants.WEST;
+            case SwingConstants.WEST:
+                return SwingConstants.EAST;
         }
         assert false;
         return 0;
     }
 
-    private int getCBRBPadding(JComponent c, int position) {
-        if (c.getUIClassID() == "CheckBoxUI" ||
-              c.getUIClassID() == "RadioButtonUI") {
+    private int getCBRBPadding(JComponent c, int position)
+    {
+        if (c.getUIClassID() == "CheckBoxUI"
+                || c.getUIClassID() == "RadioButtonUI") {
             Border border = c.getBorder();
             if (border instanceof UIResource) {
                 return getInset(c, position);
@@ -326,45 +332,49 @@ public class LayoutStyle {
         return 0;
     }
 
-    private int getInset(JComponent c, int position) {
+    private int getInset(JComponent c, int position)
+    {
         Insets insets = c.getInsets();
-        switch(position) {
-        case SwingConstants.NORTH:
-            return insets.top;
-        case SwingConstants.SOUTH:
-            return insets.bottom;
-        case SwingConstants.EAST:
-            return insets.right;
-        case SwingConstants.WEST:
-            return insets.left;
+        switch (position) {
+            case SwingConstants.NORTH:
+                return insets.top;
+            case SwingConstants.SOUTH:
+                return insets.bottom;
+            case SwingConstants.EAST:
+                return insets.right;
+            case SwingConstants.WEST:
+                return insets.left;
         }
         assert false;
         return 0;
     }
 
-    private boolean isLeftAligned(AbstractButton button, int position) {
+    private boolean isLeftAligned(AbstractButton button, int position)
+    {
         if (position == SwingConstants.WEST) {
             boolean ltr = button.getComponentOrientation().isLeftToRight();
             int hAlign = button.getHorizontalAlignment();
-            return ((ltr && (hAlign == SwingConstants.LEFT ||
-                             hAlign == SwingConstants.LEADING)) ||
-                    (!ltr && (hAlign == SwingConstants.TRAILING)));
+            return ((ltr && (hAlign == SwingConstants.LEFT
+                    || hAlign == SwingConstants.LEADING))
+                    || (!ltr && (hAlign == SwingConstants.TRAILING)));
         }
         return false;
     }
 
-    private boolean isRightAligned(AbstractButton button, int position) {
+    private boolean isRightAligned(AbstractButton button, int position)
+    {
         if (position == SwingConstants.EAST) {
             boolean ltr = button.getComponentOrientation().isLeftToRight();
             int hAlign = button.getHorizontalAlignment();
-            return ((ltr && (hAlign == SwingConstants.RIGHT ||
-                             hAlign == SwingConstants.TRAILING)) ||
-                    (!ltr && (hAlign == SwingConstants.LEADING)));
+            return ((ltr && (hAlign == SwingConstants.RIGHT
+                    || hAlign == SwingConstants.TRAILING))
+                    || (!ltr && (hAlign == SwingConstants.LEADING)));
         }
         return false;
     }
 
-    private Icon getIcon(AbstractButton button) {
+    private Icon getIcon(AbstractButton button)
+    {
         Icon icon = button.getIcon();
         if (icon != null) {
             return icon;
@@ -378,7 +388,7 @@ public class LayoutStyle {
         if (key != null) {
             Object oIcon = UIManager.get(key);
             if (oIcon instanceof Icon) {
-                return (Icon)oIcon;
+                return (Icon) oIcon;
             }
         }
         return null;
@@ -389,9 +399,10 @@ public class LayoutStyle {
      * a JCheckBox or JRadioButton.  If the component is not a JCheckBox or
      * JRadioButton, 0 will be returned.
      */
-    int getButtonChildIndent(JComponent c, int position) {
+    int getButtonChildIndent(JComponent c, int position)
+    {
         if ((c instanceof JRadioButton) || (c instanceof JCheckBox)) {
-            AbstractButton button = (AbstractButton)c;
+            AbstractButton button = (AbstractButton) c;
             Insets insets = c.getInsets();
             Icon icon = getIcon(button);
             int gap = button.getIconTextGap();

@@ -1,7 +1,5 @@
 package Moep;
 
-
-
 import MoepClient.GUI.StatusBar;
 
 /**
@@ -9,26 +7,29 @@ import MoepClient.GUI.StatusBar;
  * Statusbar ändert 
  * @author Christian Diller
  */
-
-public class Statusmeldung 
+public class Statusmeldung
 {
+
     public static StatusBar statusbar;
-    
+
     public static void infoAnzeigen(String meldung)
     {
-        if(statusbar != null)
+        if (statusbar != null) {
             statusbar.setzeText(meldung);
+        }
     }
-    
+
     public static void warnungAnzeigen(String meldung)
     {
-        if(statusbar != null)
+        if (statusbar != null) {
             statusbar.setzeText("Warnung: " + meldung);
+        }
     }
-        
+
     public static void fehlerAnzeigen(String meldung)
     {
-        if(statusbar != null)
+        if (statusbar != null) {
             statusbar.setzeText("FEHLER: " + meldung);
+        }
     }
 }

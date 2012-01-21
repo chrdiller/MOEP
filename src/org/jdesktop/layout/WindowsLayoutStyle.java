@@ -1,9 +1,9 @@
 /*
  * Copyright (C) 2005-2006 Sun Microsystems, Inc. All rights reserved. Use is
  * subject to license terms.
- */ 
-
+ */
 package org.jdesktop.layout;
+
 import java.awt.Container;
 import java.awt.FontMetrics;
 import java.awt.Toolkit;
@@ -18,7 +18,9 @@ import javax.swing.UIManager;
  *
  * @version $Revision: 1.8 $
  */
-class WindowsLayoutStyle extends LayoutStyle {
+class WindowsLayoutStyle extends LayoutStyle
+{
+
     /**
      * Base dialog units along the horizontal axis.
      */
@@ -28,9 +30,9 @@ class WindowsLayoutStyle extends LayoutStyle {
      */
     private int baseUnitY;
 
-
     public int getPreferredGap(JComponent source, JComponent target,
-                          int type, int position, Container parent) {
+            int type, int position, Container parent)
+    {
         // Invoke super to check arguments.
         super.getPreferredGap(source, target, type, position, parent);
 
@@ -48,16 +50,15 @@ class WindowsLayoutStyle extends LayoutStyle {
         if (type == UNRELATED) {
             // Between unrelated controls: 7
             return getCBRBPadding(source, target, position,
-                                  dluToPixels(7, position));
-        }
-        else { //type == RELATED
+                    dluToPixels(7, position));
+        } else { //type == RELATED
             boolean sourceLabel = (source.getUIClassID() == "LabelUI");
             boolean targetLabel = (target.getUIClassID() == "LabelUI");
 
-            if (((sourceLabel && !targetLabel) ||
-                 (targetLabel && !sourceLabel)) &&
-                (position == SwingConstants.EAST ||
-                 position == SwingConstants.WEST)) {
+            if (((sourceLabel && !targetLabel)
+                    || (targetLabel && !sourceLabel))
+                    && (position == SwingConstants.EAST
+                    || position == SwingConstants.WEST)) {
                 // Between text labels and their associated controls (for
                 // example, text boxes and list boxes): 3
                 // NOTE: We're not honoring:
@@ -68,40 +69,43 @@ class WindowsLayoutStyle extends LayoutStyle {
                 // this API to return a more complicated type (Insets,
                 // or something else).
                 return getCBRBPadding(source, target, position,
-                                      dluToPixels(3, position));
+                        dluToPixels(3, position));
             }
             // Between related controls: 4
             return getCBRBPadding(source, target, position,
-                                  dluToPixels(4, position));
+                    dluToPixels(4, position));
         }
     }
 
     public int getContainerGap(JComponent component, int position,
-            Container parent) {
+            Container parent)
+    {
         super.getContainerGap(component, position, parent);
         return getCBRBPadding(component, position, dluToPixels(7, position));
     }
-    
-    private int dluToPixels(int dlu, int direction) {
+
+    private int dluToPixels(int dlu, int direction)
+    {
         if (baseUnitX == 0) {
             calculateBaseUnits();
         }
-        if (direction == SwingConstants.EAST ||
-                         direction == SwingConstants.WEST) {
+        if (direction == SwingConstants.EAST
+                || direction == SwingConstants.WEST) {
             return dlu * baseUnitX / 4;
         }
-        assert (direction == SwingConstants.NORTH ||
-                direction == SwingConstants.SOUTH);
+        assert (direction == SwingConstants.NORTH
+                || direction == SwingConstants.SOUTH);
         return dlu * baseUnitY / 8;
     }
 
-    private void calculateBaseUnits() {
+    private void calculateBaseUnits()
+    {
         // This calculation comes from:
         // http://support.microsoft.com/default.aspx?scid=kb;EN-US;125681
         FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(
-                                         UIManager.getFont("Button.font"));
+                UIManager.getFont("Button.font"));
         baseUnitX = metrics.stringWidth(
-                      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
         baseUnitX = (baseUnitX / 26 + 1) / 2;
         // The -1 comes from experimentation.
         baseUnitY = metrics.getAscent() + metrics.getDescent() - 1;

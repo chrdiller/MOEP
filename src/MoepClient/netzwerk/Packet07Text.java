@@ -6,25 +6,25 @@ package MoepClient.netzwerk;
  * Client <- Server
  * @author Christian Diller
  */
-
 public class Packet07Text extends Packet
-{    
+{
+
     private String text;
-    
+
     public Packet07Text(String _text)
     {
         text = _text;
     }
-    
+
     @Override
     public String gibData()
     {
         return "07" + seperator + text;
     }
-    
+
     @Override
     public void clientEventAufrufen(Verbindung verbindung)
     {
         verbindung.textEmpfangenEvent(text);
-    }    
+    }
 }

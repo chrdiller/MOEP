@@ -5,20 +5,19 @@ package MoepClient.netzwerk;
  * Client -> Server
  * @author Christian Diller
  */
-
 public class Packet05MoepButton extends Packet
-{    
+{
+
     public Packet05MoepButton()
     {
-
     }
-    
+
     @Override
     public String gibData()
     {
         return "05" + seperator;
     }
-    
+
     @Override
     public void clientEventAufrufen(Verbindung verbindung)
     {

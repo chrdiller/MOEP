@@ -10,12 +10,13 @@ import javax.swing.event.PopupMenuListener;
  * Server erstellen, Spieler verwalten und Spielen beitreten kann
  * @author Christian Diller
  */
-
-public class InitPanel extends JPanel 
+public class InitPanel extends JPanel
 {
+
     private int spielerzahl = 0;
-    
-    public InitPanel(MouseAdapter spielerDialog, MouseAdapter erstellen, MouseAdapter beitreten, PopupMenuListener comboBoxListener) {
+
+    public InitPanel(MouseAdapter spielerDialog, MouseAdapter erstellen, MouseAdapter beitreten, PopupMenuListener comboBoxListener)
+    {
         initComponents();
         jButton1.addMouseListener(beitreten);
         jButton2.addMouseListener(erstellen);
@@ -107,7 +108,6 @@ public class InitPanel extends JPanel
                 .addContainerGap())
         );
     }//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -123,41 +123,43 @@ public class InitPanel extends JPanel
 
     public void serverGefunden(String serverName)
     {
-        if(serverName != null)
+        if (serverName != null) {
             jComboBox1.addItem(serverName);
+        }
     }
-    
+
     public String gibServername()
     {
-        return (String)jComboBox1.getSelectedItem();
+        return (String) jComboBox1.getSelectedItem();
     }
-    
+
     public String gibErstellenServername()
     {
         return jTextField2.getText();
     }
-    
+
     public String gibName()
     {
         return jTextField1.getText();
     }
-    
+
     public JButton gibErstellenButton()
     {
         return jButton2;
     }
-    
+
     public JButton gibBeitretenButton()
     {
         return jButton1;
     }
-    
+
     public void spielerZahlAendern(int wert)
     {
-        if(wert == 0)
+        if (wert == 0) {
             spielerzahl = 0;
-        else
+        } else {
             spielerzahl += wert;
+        }
         jLabel3.setText(spielerzahl + "/4 Spieler");
     }
 }

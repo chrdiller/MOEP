@@ -11,9 +11,9 @@ import moepserver.SpielerRemote;
  * Wartet auf neue Verbindungen
  * @author Christian Diller
  */
-
 public class ServerListener extends Thread
 {
+
     private ServerSocket serverSocket;
     private Server server; //Netz muss referenziert werden, um Logins behandeln zu können
     private int listenPort;
@@ -22,8 +22,9 @@ public class ServerListener extends Thread
     public ServerListener(Server _server, int _port)
     {
         listenPort = _port;
-        if(listenPort < 0)
+        if (listenPort < 0) {
             listenPort = 11111;
+        }
         server = _server;
         this.setName("ServerListenerThread");
     }
@@ -33,48 +34,52 @@ public class ServerListener extends Thread
     {
         Socket clientSocket = null;
 
-        try             
-        {                       
+        try {
             serverSocket = new ServerSocket(listenPort);
-        } 
-        catch (Exception ex) 
-        {
+        } catch (Exception ex) {
             Statusmeldung.fehlerAnzeigen("Fehler beim Starten des Servers auf Port " + listenPort);
             return;
         }
 
-        while(true)
-        {
-            try 
-            {
+        while (true) {
+            try {
                 clientSocket = serverSocket.accept();
-                final Verbindung verbindung = new Verbindung(new VerbindungReader(clientSocket), new VerbindungWriter(clientSocket)); 
-                new Thread(){public void run(){warteAufLogin(verbindung);}}.start();                
-            } 
-            catch (Exception ex) 
-            {
-                if(!beendet)
+                final Verbindung verbindung = new Verbindung(new VerbindungReader(clientSocket), new VerbindungWriter(clientSocket));
+                new Thread()
+                {
+
+                    public void run()
+                    {
+                        warteAufLogin(verbindung);
+                    }
+                }.start();
+            } catch (Exception ex) {
+                if (!beendet) {
                     Statusmeldung.fehlerAnzeigen("Akzeptieren einer neuen Verbindung fehlgeschlagen");
-                break;                  
+                }
+                break;
             }
         }
     }
-    
+
     private void warteAufLogin(final Verbindung verbindung)
     {
-        while(!verbindung.istAktiv)
-        {
+        while (!verbindung.istAktiv) {
             //Warten...
-            try{sleep(500);}catch(Exception ex){}
+            try {
+                sleep(500);
+            } catch (Exception ex) {
+            }
         }
         server.spielerHinzufuegen(new SpielerRemote(verbindung, verbindung.loginName, verbindung.gibIP()), -1);
     }
 
     public void beenden()
     {
-        beendet = true;        
+        beendet = true;
         try {
             serverSocket.close();
-        } catch (IOException ex) { }
+        } catch (IOException ex) {
+        }
     }
 }

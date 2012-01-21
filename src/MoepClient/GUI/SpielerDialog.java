@@ -10,13 +10,13 @@ import java.awt.event.WindowEvent;
  * Der Spielerdialog, über den der Benutzer seine Spieler verwalten kann
  * @author Christian Diller
  */
-
-public class SpielerDialog extends javax.swing.JFrame 
+public class SpielerDialog extends javax.swing.JFrame
 {
 
-    public SpielerDialog(final Spielerverwaltung spieler) {
+    public SpielerDialog(final Spielerverwaltung spieler)
+    {
         initComponents();
-        this.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - this.getWidth()) / 4 ,(Toolkit.getDefaultToolkit().getScreenSize().height - this.getHeight()) / 4));
+        this.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - this.getWidth()) / 4, (Toolkit.getDefaultToolkit().getScreenSize().height - this.getHeight()) / 4));
         spielerverwaltungAnwenden(spieler);
         setVisible(true);
     }
@@ -168,54 +168,62 @@ public class SpielerDialog extends javax.swing.JFrame
     }//GEN-END:initComponents
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-        if(evt.getItem() == "KI") jTextField1.setEnabled(true);
-        else
-        {
+        if (evt.getItem() == "KI") {
+            jTextField1.setEnabled(true);
+        } else {
             jTextField1.setEnabled(false);
             jTextField1.setText("");
         }
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
-        if(evt.getItem() == "KI") jTextField2.setEnabled(true);
-        else
-        {
+        if (evt.getItem() == "KI") {
+            jTextField2.setEnabled(true);
+        } else {
             jTextField2.setEnabled(false);
             jTextField2.setText("");
         }
     }//GEN-LAST:event_jComboBox2ItemStateChanged
 
     private void jComboBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox3ItemStateChanged
-        if(evt.getItem() == "KI") jTextField3.setEnabled(true);
-        else
-        {
+        if (evt.getItem() == "KI") {
+            jTextField3.setEnabled(true);
+        } else {
             jTextField3.setEnabled(false);
             jTextField3.setText("");
         }
     }//GEN-LAST:event_jComboBox3ItemStateChanged
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        this.processWindowEvent(new WindowEvent((Window)this, WindowEvent.WINDOW_CLOSING));
+        this.processWindowEvent(new WindowEvent((Window) this, WindowEvent.WINDOW_CLOSING));
         dispose();
     }//GEN-LAST:event_jButton1MouseClicked
 
     public Spielerverwaltung gibSpielerverwaltung()
     {
         String[][] liste = new String[4][2];
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++) {
             liste[i][0] = "Remote";
+        }
         liste[0][0] = "Lokal";
         liste[0][1] = jTextField4.getText();
-        if(((String)jComboBox1.getSelectedItem()) == "KI") {liste[1][0]="KI"; liste[1][1]=jTextField1.getText();}
-        if(((String)jComboBox2.getSelectedItem()) == "KI") {liste[2][0]="KI"; liste[2][1]=jTextField2.getText();}
-        if(((String)jComboBox3.getSelectedItem()) == "KI") {liste[3][0]="KI"; liste[3][1]=jTextField3.getText();}
+        if (((String) jComboBox1.getSelectedItem()) == "KI") {
+            liste[1][0] = "KI";
+            liste[1][1] = jTextField1.getText();
+        }
+        if (((String) jComboBox2.getSelectedItem()) == "KI") {
+            liste[2][0] = "KI";
+            liste[2][1] = jTextField2.getText();
+        }
+        if (((String) jComboBox3.getSelectedItem()) == "KI") {
+            liste[3][0] = "KI";
+            liste[3][1] = jTextField3.getText();
+        }
         return new Spielerverwaltung(liste);
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jComboBox1;
@@ -233,14 +241,16 @@ public class SpielerDialog extends javax.swing.JFrame
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 
-    private void spielerverwaltungAnwenden(Spielerverwaltung sp) {
-        if(sp == null)
-            return;        
+    private void spielerverwaltungAnwenden(Spielerverwaltung sp)
+    {
+        if (sp == null) {
+            return;
+        }
         String[][] spieler = sp.gibSpielerListe();
         jTextField4.setText(sp.gibEigenenNamen());
         jComboBox1.setSelectedItem(spieler[1][0]);
         jComboBox2.setSelectedItem(spieler[2][0]);
-        jComboBox3.setSelectedItem(spieler[3][0]);        
+        jComboBox3.setSelectedItem(spieler[3][0]);
         jTextField1.setText(spieler[1][1]);
         jTextField2.setText(spieler[2][1]);
         jTextField3.setText(spieler[3][1]);

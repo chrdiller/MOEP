@@ -13,49 +13,52 @@ import java.util.concurrent.Executors;
  * Wartet auf eingehende Packets und setzt diese auf eine Liste, die dann von der Verbindung abgearbeitet wird
  * @author Christian Diller
  */
-
 public class VerbindungReader extends Thread
 {
+
     private Socket clientSocket;
     private BufferedReader input;
     protected Verbindung verbindung;
     private ExecutorService executor = Executors.newCachedThreadPool();
-    
     private boolean beendet;
-    
-    public VerbindungReader(Socket _clientSocket) {
-        
+
+    public VerbindungReader(Socket _clientSocket)
+    {
+
         clientSocket = _clientSocket;
-        try
-        {
+        try {
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             Statusmeldung.fehlerAnzeigen("Initialisieren von VerbindungReader fehlgeschlagen");
         }
     }
-    
+
     @Override
     public void run()
     {
-        try
-        {
-            while(true) {
+        try {
+            while (true) {
                 final String inputLine = input.readLine();
-                if(inputLine == null)
+                if (inputLine == null) {
                     break;
-                executor.execute(new Runnable(){public void run(){verbindung.neuesPacket(inputLine);}});
+                }
+                executor.execute(new Runnable()
+                {
+
+                    public void run()
+                    {
+                        verbindung.neuesPacket(inputLine);
+                    }
+                });
             }
             verbindung.verbindungVerlorenEvent(); //Hier kommt die Ausführung nur hin, wenn der Server die Verbindung geschlossen hat
 
             input.close();
             clientSocket.close();
-        }
-        catch(Exception ex)
-        {
-            if(!beendet)
+        } catch (Exception ex) {
+            if (!beendet) {
                 verbindung.verbindungVerlorenEvent();
+            }
         }
     }
 
@@ -65,6 +68,7 @@ public class VerbindungReader extends Thread
         try {
             input.close();
             clientSocket.close();
-        } catch (IOException ex) { }
+        } catch (IOException ex) {
+        }
     }
 }

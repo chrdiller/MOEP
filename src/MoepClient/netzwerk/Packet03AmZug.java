@@ -5,26 +5,25 @@ package MoepClient.netzwerk;
  * Client <- Server
  * @author Christian Diller
  */
-
 public class Packet03AmZug extends Packet
-{    
+{
+
     private boolean wert;
-    
+
     public Packet03AmZug(boolean _wert)
     {
         wert = _wert;
     }
-    
+
     @Override
     public String gibData()
     {
         return "03" + seperator + (wert ? "Y" : "N");
     }
-    
+
     @Override
     public void clientEventAufrufen(Verbindung verbindung)
     {
         verbindung.amZugEvent(wert);
     }
 }
-
