@@ -40,7 +40,7 @@ public class InitPanel extends JPanel
 
         jLabel1.setText("Einem Spiel beitreten:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Auswählen..." }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Auswählen...", "Online spielen" }));
         jComboBox1.setMaximumSize(new java.awt.Dimension(89, 20));
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);

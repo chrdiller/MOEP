@@ -3,8 +3,6 @@ package moepserver;
 import Moep.Karte;
 import Moep.Statusmeldung;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import moepserver.netzwerk.Packet;
 import moepserver.netzwerk.Verbindung;
 
 /**

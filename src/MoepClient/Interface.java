@@ -39,6 +39,7 @@ public class Interface
     public Interface()
     {
         server = new HashMap<String, String>();
+        server.put("Online spielen", "christian-diller.info"); //Aktiviert das Online-Feature
 
         //<editor-fold defaultstate="collapsed" desc="Mouse-Adapter">
         MouseAdapter[] adapter = new MouseAdapter[]{
@@ -128,15 +129,20 @@ public class Interface
                         return;
                     }
                     if ("Beitreten".equals(beitretenBtn.getText())) {
-                        if (!"".equals(ip.gibName()) && !"Spielername".equals(ip.gibName())) {
+                        if (!"".equals(ip.gibName()) && !"Spielername".equals(ip.gibName())&& !"Auswählen...".equals(ip.gibServername())) {
                             verbindung = new Verbindung(server.get(ip.gibServername()), Interface.this);
                             if(verbindung.anmelden(ip.gibName())) {
-                                Statusmeldung.infoAnzeigen("Willkommen auf dem MoepServer " + ip.gibServername());
+                                if(ip.gibServername() != "Online spielen")
+                                    Statusmeldung.infoAnzeigen("Willkommen auf dem MoepServer " + ip.gibServername());
+                                else
+                                    Statusmeldung.infoAnzeigen("Willkommen auf den Online-MoepServern");
                                 erstellenBtn.setEnabled(false);
                                 beitretenBtn.setText("Verlassen");
                             }
+                            else
+                                Statusmeldung.fehlerAnzeigen("Server nicht erreichbar");
                         } else {
-                            Statusmeldung.fehlerAnzeigen("Bitte erst einen Spielernamen eingeben");
+                            Statusmeldung.fehlerAnzeigen("Bitte erst Spielernamen und Server angeben");
                         }
                     } else {
                         verbindung.schliessen();

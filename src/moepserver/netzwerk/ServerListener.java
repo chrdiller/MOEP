@@ -15,7 +15,7 @@ public class ServerListener extends Thread
 {
 
     private ServerSocket serverSocket;
-    private Server server; //Netz muss referenziert werden, um Logins behandeln zu können
+    private Server server;
     private int listenPort;
     private boolean beendet = false;
 

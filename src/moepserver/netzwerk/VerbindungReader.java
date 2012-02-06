@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 
 /**
  * Wird pro Verbindung erzeugt
- * Wartet auf eingehende Packets und setzt diese auf eine Liste, die dann von der Verbindung abgearbeitet wird
+ * Wartet auf eingehende Packets und übergibt diese dem ThreadPool, welcher diese dann abarbeitet
  * @author Christian Diller
  */
 public class VerbindungReader extends Thread
@@ -42,7 +42,6 @@ public class VerbindungReader extends Thread
                 }
                 executor.execute(new Runnable()
                 {
-
                     public void run()
                     {
                         verbindung.neuesPacket(inputLine);

@@ -6,7 +6,7 @@ import java.net.Socket;
 
 /**
  * Wird pro Verbindung erzeugt
- * Arbeitet eine Liste von zu sendenden Strings ab
+ * Sendet die zu sendenden Strings
  * @author Christian Diller
  */
 
